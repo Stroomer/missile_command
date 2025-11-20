@@ -1,0 +1,16 @@
+{
+  "name": "missile_command",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.mjs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "student naam",
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^7.2.4"
+  }
+}
