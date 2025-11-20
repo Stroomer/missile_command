@@ -16,7 +16,7 @@ De volgende features zijn beschikbaar:
 
 - Basic project setup
 
-## Installatie
+## Installation
 
 Voor het installeren en draaien van dit project, volg de onderstaande stappen:
 
