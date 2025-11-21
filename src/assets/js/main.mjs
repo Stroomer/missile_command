@@ -70,7 +70,7 @@ const goodAngles = [70, 84];
 function createMissile() {
     const x       = (width / 2);
     const y       = (height / 2);
-    const colorId = randomInt(0, colors.length - 1); 
+    const colorId = randomInt(0, flashing.length - 1); 
     const vector  = randomVecFromDeg(54);
     const speed   = missileSpeed;
     const smoke   = 'todo';
@@ -83,8 +83,8 @@ function drawMissiles(buffer) {
         const m = missiles[i];
         const colorId = m.colorId + 1;
 
-        m.colorId = colorId === colors.length ? 0 : colorId;  
-        buffer.fillStyle = red;  //colors[colorId];
+        m.colorId = colorId === flashing.length ? 0 : colorId;  
+        buffer.fillStyle = red;  //flashing[colorId];
         buffer.fillRect(m.x | 0, m.y | 0, 1, 1);
     }
     ctx.drawImage(buffer.canvas, 0, 0, width, height);
