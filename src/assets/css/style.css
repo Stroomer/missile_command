@@ -1,3 +1,13 @@
-* {
-  background-color: red;
+html,
+body {
+  background-color: #888;
+}
+
+canvas {
+  /* aspect-ratio: 10 / 7;
+  width: 96%;
+  height: auto;
+  object-fit: contain; */
+  image-rendering: pixelated;
+  /* background-color: yellow; */
 }
