@@ -10,12 +10,6 @@ De volgende technieken zijn gebruikt in dit project:
 
 **Server:** Vul in
 
-## Features
-
-De volgende features zijn beschikbaar:
-
-- Basic project setup
-
 ## Installation
 
 Voor het installeren en draaien van dit project, volg de onderstaande stappen:
@@ -26,12 +20,7 @@ Voor het installeren en draaien van dit project, volg de onderstaande stappen:
 
 ## Authors
 
-- Author 1: Vul jouw naam in (role: vul jouw taken in)
-- Author 2: Lukas Stroomer (role: coach/tech assist, sprites)
-- Author 3: Jan van Os (role: coach/tech assist)
-- Author 4: Thomas Tijs (role: coach/tech assist)
-- Author 5: Martijn Kunstman (role: coach/tech assist)
-- Author 6: Koen Borghols (role: coach/tech assist)
+- Vul hier de namen van de auteur(s) in.
 
 ## License
 

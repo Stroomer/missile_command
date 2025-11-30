@@ -1,4 +1,10 @@
-/src/assets/js/main.mjs
-/src/assets/js/helpers.mjs
-/src/assets/js/drawing.mjs
-/src/assets/js/buffer.mjs
+/src/main.js
+/src/js/helpers.mjs
+/src/js/drawing.mjs
+/src/js/buffer.mjs
+/src/js/gameloop.mjs
+/src/js/constants.mjs
+/src/js/blit.mjs
+/src/js/classes/Missile.mjs
+/src/js/classes/Background.mjs
+
