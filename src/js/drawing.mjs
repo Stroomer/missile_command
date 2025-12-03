@@ -3,7 +3,6 @@ export function drawPixel(ctx, x, y, color) {
     ctx.fillRect(x | 0, y | 0, 1, 1);
 }
 
-
 export function drawRect(ctx, x, y, w, h, color) {
     const halfW = w / 2; 
     const halfH = h / 2; 
@@ -11,7 +10,6 @@ export function drawRect(ctx, x, y, w, h, color) {
     ctx.fillStyle = color;
     ctx.fillRect((x - halfW) | 0, (y - halfH) | 0, w | 0, h | 0);
 }
-
 
 export function drawCircle(ctx, cx, cy, r, color) {
     cx |= 0;
@@ -45,7 +43,6 @@ export function drawCircle(ctx, cx, cy, r, color) {
     }
 }
 
-
 export function drawCircleFill(ctx, cx, cy, r, color) {
   cx |= 0;
   cy |= 0;
@@ -72,7 +69,6 @@ export function drawCircleFill(ctx, cx, cy, r, color) {
     }
   }
 }
-
 
 export function drawSprite(ctx, src, sx, sy, dx, dy, w, h) {
     dx |= 0;

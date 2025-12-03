@@ -2,7 +2,7 @@ import { black, DEBUG } from "./constants.mjs";
 
 export function createBuffer(id, width, height) {
   const screen             = id === 'screen' ? true : false;         // check if this is the visible screen buffer
-  const alpha              = screen ? false : true;            // check if buffer should have alpha capabilities
+  const alpha              = screen ? false : true;                  // check if buffer should have alpha capabilities
   const offscreen          = typeof OffscreenCanvas !== 'undefined'; // check if offscreencanvas is available
   const willReadFrequently = true;                                   // canvas magic...?
   const desynchronized     = false;                                  // canvas magic...?

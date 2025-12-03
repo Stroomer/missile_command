@@ -7,4 +7,5 @@
 /src/js/blit.mjs
 /src/js/classes/Missile.mjs
 /src/js/classes/Background.mjs
+/src/js/classes/City.mjs
 
