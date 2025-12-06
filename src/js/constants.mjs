@@ -1,4 +1,4 @@
-export const DEBUG  = true;
+export const DEBUG  = false;
 
 export const width  = 256;
 export const height = 231;

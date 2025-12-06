@@ -1,27 +1,30 @@
-import { black, DEBUG } from "./constants.mjs";
+import { black, DEBUG, width, height } from "./constants.mjs";
 
-export function createBuffer(id, width, height) {
-  const screen             = id === 'screen' ? true : false;         // check if this is the visible screen buffer
-  const alpha              = screen ? false : true;                  // check if buffer should have alpha capabilities
+export function createBuffer(id) {
+  let canvas, ctx;
+  const isScreenBuffer     = id === 'onscreen' ? true : false;       // check if this is the visible screen buffer
+  const isAlphaBuffer      = isScreenBuffer ? false : true;          // check if buffer should have alpha capabilities
   const offscreen          = typeof OffscreenCanvas !== 'undefined'; // check if offscreencanvas is available
   const willReadFrequently = true;                                   // canvas magic...?
   const desynchronized     = false;                                  // canvas magic...?
-  const canvas             = offscreen && !screen ? new OffscreenCanvas(width, height) : document.createElement('canvas');
-  const ctx                = canvas.getContext('2d', { alpha, willReadFrequently, desynchronized });
-
-  ctx.imageSmoothingEnabled = false;
-
-  canvas.id = id;
-  canvas.width = width;
-  canvas.height = height;
-    
-  if (DEBUG) showBufferAttributes(ctx);
   
-  if (screen) {
+  if (isScreenBuffer) {
+    canvas = document.getElementById(id);
     canvas.style.display = 'block';
     canvas.style.backgroundColor = black;
-    document.body.appendChild(canvas);
+  } else {
+    canvas = offscreen ? new OffscreenCanvas(width, height) : document.createElement('canvas');
   }
+
+  canvas.width  = width;
+  canvas.height = height;
+
+  ctx = canvas.getContext('2d', { alpha:isAlphaBuffer, willReadFrequently, desynchronized });
+  ctx.imageSmoothingEnabled = false;
+
+  
+
+  if (DEBUG) showBufferAttributes(ctx);
   
   return ctx;
 }

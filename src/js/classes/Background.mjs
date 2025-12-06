@@ -1,9 +1,11 @@
-import { height, width, yellow } from "../constants.mjs";
-import { getSpriteMulti } from "../canvas.mjs";
+import { height, yellow } from "../constants.mjs";
+import { cutAndRecolor } from "../canvas.mjs";
 
 export default class Background {
     constructor(sprites) {
-        this.sprite = getSpriteMulti(sprites, 0, 0, 256, 23, [{ from: '#999999', to: '#ffff00' },]);    
+      this.sprite = cutAndRecolor(sprites, 0, 0, 256, 23, [
+        { from:'#999999', to:yellow }
+      ]);
     }
 
     update() {
@@ -11,6 +13,6 @@ export default class Background {
     }
 
     draw(ctx) {
-      ctx.drawImage(this.sprite, 0, height-23, width, 23);
+      ctx.drawImage(this.sprite, 0, height-23);
     }
 }

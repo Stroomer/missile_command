@@ -15,40 +15,44 @@ function hexToRgb(hex) {
   };
 }
 
-export function getSpriteMulti(img, sx, sy, w, h, palette) {
-  // Convert palette to RGB upfront for speed
-  const rules = palette.map((p) => ({
-    fr: hexToRgb(p.from),
-    to: hexToRgb(p.to),
-  }));
+export function cutAndRecolor(img, sx, sy, w, h, palette) {
+  const slice     = cutSprite(img, sx, sy, w, h);
+  const recolored = recolorSprite(slice, palette);
+  return recolored;
+}
 
+export function cutSprite(img, sx, sy, w, h) {
   const canvas = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : document.createElement('canvas');
-
   canvas.width = w;
   canvas.height = h;
 
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
   ctx.imageSmoothingEnabled = false;
-
-  // Draw the slice
   ctx.drawImage(img, sx, sy, w, h, 0, 0, w, h);
 
-  // Read pixels
-  const imgData = ctx.getImageData(0, 0, w, h);
-  const data = imgData.data;
+  return canvas; // ready for recolorSprite() or drawing
+}
 
-  // Per pixel
+export function recolorSprite(canvas, palette) {
+  const rules = palette.map(p => ({
+    from: hexToRgb(p.from),
+    to:   hexToRgb(p.to)
+  }));
+
+  const ctx     = canvas.getContext('2d', { willReadFrequently: true });
+  const w       = canvas.width;
+  const h       = canvas.height;
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const data    = imgData.data;
+
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i];
     const g = data[i + 1];
     const b = data[i + 2];
-
-    // Find a matching rule
     for (let j = 0; j < rules.length; j++) {
-      const { fr, to } = rules[j];
-
-      if (r === fr.r && g === fr.g && b === fr.b) {
-        data[i] = to.r;
+      const { from, to } = rules[j];
+      if (r === from.r && g === from.g && b === from.b) {
+        data[i]     = to.r;
         data[i + 1] = to.g;
         data[i + 2] = to.b;
         break;
@@ -57,5 +61,5 @@ export function getSpriteMulti(img, sx, sy, w, h, palette) {
   }
 
   ctx.putImageData(imgData, 0, 0);
-  return canvas;
+  return canvas; // recolored and ready to draw
 }

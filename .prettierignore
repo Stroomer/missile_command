@@ -4,8 +4,11 @@
 /src/js/buffer.mjs
 /src/js/gameloop.mjs
 /src/js/constants.mjs
+/src/js/canvas.mjs
 /src/js/blit.mjs
 /src/js/classes/Missile.mjs
 /src/js/classes/Background.mjs
+/src/js/classes/Alien.mjs
 /src/js/classes/City.mjs
+/src/js/classes/Game.mjs
 
