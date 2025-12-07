@@ -1,19 +1,19 @@
 import { FIXED_DT, colors, enemyMissile, blue, WIDTH, HEIGHT } from '../constants.mjs';
 import { drawPixel } from '../drawing.mjs';
 import { toUnitVector, randomInt, unitVector } from '../helpers.mjs';
+import Sprite from './Sprite.mjs';
 
-export default class Missile {
-  constructor(x, y) {
+export default class Missile extends Sprite {
+  constructor(x, y, dot) {
+    super(x, y, 1, 1);
     console.log('construct new Missile');
     
-    const { minX, minY, maxX, maxY, minSpeed } = enemyMissile; 
-    
-    this.x          = x;
-    this.y          = y;
+    this.dot        = dot;
     this.vx         = toUnitVector(0, 0, WIDTH, HEIGHT).vx;
     this.vy         = toUnitVector(0, 0, WIDTH, HEIGHT).vy;
     this.speed      = 30;
-    this.colorId    = randomInt(0, colors.length - 1);
+    
+    this.colorId = randomInt(0, colors.length - 1);
     this.color      = colors[this.colorId];
     this.smokeColor = blue;
   }

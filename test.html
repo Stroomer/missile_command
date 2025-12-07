@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Canvas Speed Test</title>
+    <style>
+      body { background:#222; color:#ddd; font-family:monospace; }
+      #results { white-space:pre; }
+    </style>
+  </head>
+  <body>
+    <canvas id="c" width="512" height="512"></canvas>
+    <div id="results"></div>
+
+    <script>
+      const canvas = document.getElementById("c");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const W = canvas.width;
+      const H = canvas.height;
+
+      const results = document.getElementById("results");
+
+      function bench(name, fn, iterations = 200) {
+        // Warm-up
+        for (let i = 0; i < 20; i++) fn();
+
+        const start = performance.now();
+        for (let i = 0; i < iterations; i++) fn();
+        const end = performance.now();
+
+        const ms = end - start;
+        const per = (ms / iterations).toFixed(3);
+        const fps = (1000 / ms * iterations).toFixed(1);
+
+        results.textContent += `${name.padEnd(40)} ${per} ms per frame   (${fps} fps)\n`;
+      }
+
+      // --- 1. fillRect
+      bench("fillRect black", () => {
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, W, H);
+      });
+
+      // --- 2. clearRect
+      bench("clearRect", () => {
+        ctx.clearRect(0, 0, W, H);
+      });
+
+      // --- 3. fillRect using globalCompositeOperation=copy
+      bench("copy+fillRect (FASTEST fill)", () => {
+        ctx.globalCompositeOperation = "copy";
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalCompositeOperation = "source-over";
+      });
+
+      // --- 4. Uint32 buffer write + putImageData
+      const img = ctx.createImageData(W, H);
+      const buf32 = new Uint32Array(img.data.buffer);
+      const BLACK32 = 0xff000000;
+
+      bench("Uint32Array.fill + putImageData", () => {
+        buf32.fill(BLACK32);
+        ctx.putImageData(img, 0, 0);
+      });
+
+      // --- 5. OffscreenCanvas background
+      const off = new OffscreenCanvas(W, H);
+      const offctx = off.getContext("2d");
+      offctx.fillStyle = "#000";
+      offctx.fillRect(0, 0, W, H);
+
+      bench("OffscreenCanvas → drawImage", () => {
+        ctx.drawImage(off, 0, 0);
+      });
+
+      // --- 6. blast copy (same canvas to itself)
+      bench("self drawImage 1:1", () => {
+        ctx.drawImage(canvas, 0, 0);
+      });
+    </script>
+  </body>
+</html>

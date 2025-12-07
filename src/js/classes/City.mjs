@@ -1,24 +1,24 @@
 
-import { cityBottomColor, cityTopColor, red } from '../constants.mjs';
+import { cutAndRecolor } from '../canvas.mjs';
+import { blue, red } from '../constants.mjs';
+import Sprite from './Sprite.mjs';
 
-export default class City {
-  constructor(x, y, sprites, layer) {
-    this.width  = 16;
-    this.height = 8;
-    this.x      = x - this.width / 2;
-    this.y      = y - this.height / 2;
+export default class City extends Sprite {
+  constructor(x, y) {
+    super(x, y, 16, 8);
+    
 
-    // this.sprite = getSpriteMulti(sprites, 36, 24, this.width, this.height, [
-    //   { from: '#999999', to: cityTopColor },
-    //   { from: '#cccccc', to: cityBottomColor },
-    // ]);
 
-    // this.draw(layer);
+    this.sprite = cutAndRecolor(this.sheet, 36, 24, this.width, this.height, [
+      { from:'#999999', to:blue },
+      { from:'#666666', to:red },
+    ]);
+    this.buffer = this.sprite.getContext('2d');
   }
 
   update() {}
 
   draw(ctx) {
-    //ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+    ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
   }
 }
