@@ -1,7 +1,7 @@
 export const DEBUG  = false;
 
-export const width  = 256;
-export const height = 231;
+export const WIDTH  = 256;
+export const HEIGHT = 231;
 
 export const black  = '#000000';
 export const grey   = '#999999';
@@ -15,7 +15,7 @@ export const orange = '#ffa500';
 export const yellow = '#ffff00';
 export const cyan   = '#00ffff';
 
-export const colors = [red, green, blue, purple, orange, yellow, cyan];
+export const colors = [red, purple, white, green, yellow, blue, orange, cyan];
 
 export const backgroundColor     = yellow;
 export const backgroundShipColor = blue;
@@ -33,7 +33,7 @@ export const DEG      = Math.PI / 180;
 
 export const enemyMissile = {
     minX: 15,
-    maxX: width - 15,
+    maxX: WIDTH - 15,
     minY: 12,
     maxY: 12,
     minSpeed: 30,

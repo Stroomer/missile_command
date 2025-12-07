@@ -10,5 +10,6 @@
 /src/js/classes/Background.mjs
 /src/js/classes/Alien.mjs
 /src/js/classes/City.mjs
+/src/js/classes/Sprite.mjs
 /src/js/classes/Game.mjs
 

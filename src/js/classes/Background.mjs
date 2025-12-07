@@ -1,4 +1,4 @@
-import { height, yellow } from "../constants.mjs";
+import { HEIGHT, yellow } from "../constants.mjs";
 import { cutAndRecolor } from "../canvas.mjs";
 
 export default class Background {
@@ -13,6 +13,6 @@ export default class Background {
     }
 
     draw(ctx) {
-      ctx.drawImage(this.sprite, 0, height-23);
+      ctx.drawImage(this.sprite, 0, HEIGHT-23);
     }
 }
