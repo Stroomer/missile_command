@@ -10,6 +10,7 @@ export default class Launcher {
   update(mouse) {
     if (!mouse.fire) return;
     this.launch(123, 209, mouse.x, mouse.y);
+    this.game.audio.playMissileLaunch();
     mouse.fire = false;
   }
 

@@ -5,13 +5,14 @@ import { start }        from './../gameloop.mjs';
 import { WIDTH, HEIGHT, colors, black, blue } from '../constants.mjs';
 
 import Crosshair from './Crosshair.mjs';
+import Audio       from './Audio.mjs';
 
 import FlashingDot from './FlashingDot.mjs';
 import Missile     from './Missile.mjs';
 import Background  from './Background.mjs';
 import Alien       from './Alien.mjs';
 import City        from './City.mjs';
-import Launcher from './Launcher.mjs';
+import Launcher    from './Launcher.mjs';
 
 const sprites = document.getElementById('sprites');
 
@@ -94,11 +95,12 @@ export default class Game {
     this.cities.push(new City(218, 216));  
       
     this.missiles = [];
-    //this.missiles.push(new Missile(10, 10, this.dot));
     
     this.aliens = [];
     this.aliens.push(new Alien(randomInt(50, WIDTH-50), 140, this.dot));
 
     this.background.draw(this.bufferBackground);
+
+    this.audio = new Audio();
   }
 }

@@ -11,6 +11,9 @@ export default class Missile extends Sprite {
     
     const { vx, vy } = getUnitVector(x0, y0, x1, y1);
 
+    // remove missile with uid tech
+
+
     this.game       = parent;
     this.dot        = parent.dot;
     this.smokeColor = blue;
@@ -18,7 +21,7 @@ export default class Missile extends Sprite {
     this.prevY      = y0;
     this.vx         = vx;
     this.vy         = vy;
-    this.speed      = 30;
+    this.speed      = 230;
     this.smokeColor = blue;
     
     this.sprite = cutAndRecolor(this.sheet, 1, 32, this.width, this.height, [
