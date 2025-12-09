@@ -1,16 +1,19 @@
+import { randomInt }    from '../helpers.mjs';
+import { mouse }        from './../mouse.mjs';
 import { createBuffer } from './../buffer.mjs';
-import { start } from './../gameloop.mjs';
-import { WIDTH, HEIGHT, colors, black } from '../constants.mjs';
+import { start }        from './../gameloop.mjs';
+import { WIDTH, HEIGHT, colors, black, blue } from '../constants.mjs';
+
+import Crosshair from './Crosshair.mjs';
 
 import FlashingDot from './FlashingDot.mjs';
 import Missile     from './Missile.mjs';
 import Background  from './Background.mjs';
 import Alien       from './Alien.mjs';
 import City        from './City.mjs';
-import { randomInt } from '../helpers.mjs';
+import Launcher from './Launcher.mjs';
 
 const sprites = document.getElementById('sprites');
-
 
 export default class Game {
   constructor() {
@@ -20,18 +23,21 @@ export default class Game {
     start(this);  
   }
 
-  update() {
+  update(dt) {
+      this.launcher.update(mouse);
+      this.crosshair.update(mouse);
       this.dot.update();
-    
+
       const missileCount = this.missiles.length;
       for (let i = 0; i < missileCount; i++) {
-        this.missiles[i].update();
+        this.missiles[i].update(dt);
       }
     
       const alienCount = this.aliens.length;
       for (let i = 0; i < alienCount; i++) {
-        this.aliens[i].update();
-      }      
+        this.aliens[i].update(dt);
+      }
+    
   }
 
   draw() {      
@@ -48,6 +54,8 @@ export default class Game {
     for (let i = 0; i < alienCount; i++) {
       this.aliens[i].draw(this.bufferEntities); // draw alien
     }
+
+    this.crosshair.draw(this.bufferEntities); // draw crosshair
 
     this.bufferOffscreen.fillStyle = black;
     this.bufferOffscreen.fillRect(0, 0, WIDTH, HEIGHT);
@@ -72,20 +80,21 @@ export default class Game {
   }
 
   createObjects() {
+    this.dot        = new FlashingDot(colors);
+    this.crosshair  = new Crosshair(blue);
     this.background = new Background(128, 220);
-    
-    this.dot = new FlashingDot(colors);
+    this.launcher   = new Launcher(20, 120, this);
     
     this.cities = [];
     this.cities.push(new City(48,  215));
     this.cities.push(new City(78,  216));
     this.cities.push(new City(108, 216));
     this.cities.push(new City(138, 216));
-    this.cities.push(new City(168, 216)); //this.bufferCities
+    this.cities.push(new City(168, 216));
     this.cities.push(new City(218, 216));  
       
     this.missiles = [];
-    this.missiles.push(new Missile(10, 10));
+    //this.missiles.push(new Missile(10, 10, this.dot));
     
     this.aliens = [];
     this.aliens.push(new Alien(randomInt(50, WIDTH-50), 140, this.dot));

@@ -1,0 +1,37 @@
+import { cutAndRecolor } from '../canvas.mjs';
+import { blue } from '../constants.mjs';
+import Sprite from './Sprite.mjs';
+
+export default class Crosshair extends Sprite {
+  constructor(color) {
+    super(30, 30, 7, 7);
+    this.sprite = cutAndRecolor(this.sheet, 1, 24, this.width, this.height, [
+      { from:'#999999', to:blue }
+    ]);
+    this.buffer = this.sprite.getContext('2d');
+    this.color = color;
+    this.visible = false;
+  }
+
+  update(mouse) {    
+    if (!mouse.visible) {
+      this.visible = false;
+      return;
+    } else {
+      this.visible = true;
+      this.x = 1 + mouse.x;
+      this.y = 1 + mouse.y;
+    }
+    
+    //super.update();
+  }
+
+  draw(ctx) {
+    if (!this.visible) return;
+
+    super.draw(ctx);
+
+    // const size = 10;
+    // const half = size / 2;
+  }
+}

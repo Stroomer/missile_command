@@ -1,6 +1,8 @@
 html,
 body {
   background-color: #888;
+  /* margin: 0 auto; */
+  overflow: hidden;
 }
 
 canvas {

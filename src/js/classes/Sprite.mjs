@@ -6,7 +6,7 @@ export default class Sprite {
     this.y      = y;
     this.width  = width;
     this.height = height;
-    this.halfW  = width / 2;
+    this.halfW  = width  / 2;
     this.halfH  = height / 2;
     this.speed  = 0;
     this.vx     = 0;
@@ -14,14 +14,14 @@ export default class Sprite {
     this.sheet  = document.getElementById('sprites');  
   }
 
-  update() {
-    this.x += this.vx * this.speed * FIXED_DT;
-    this.y += this.vy * this.speed * FIXED_DT;
+  update(dt) {
+    this.x += this.vx * this.speed * dt;  //FIXED_DT;
+    this.y += this.vy * this.speed * dt;  //FIXED_DT;
   }
 
   draw(ctx) {
-    const x = (this.x-this.halfW ) | 0;
-    const y = (this.y-this.halfH)  | 0;
+    const x = (this.x-this.halfW) | 0;
+    const y = (this.y-this.halfH) | 0;
     const w = this.width;
     const h = this.height;
 

@@ -1,6 +1,5 @@
 import { blue, red, WIDTH } from '../constants.mjs';
 import { cutAndRecolor } from '../canvas.mjs';
-import { randomInt } from '../helpers.mjs';
 import Sprite from './Sprite.mjs';
 
 export default class Alien extends Sprite {
@@ -18,28 +17,16 @@ export default class Alien extends Sprite {
     this.buffer = this.sprite.getContext('2d');
   }
 
-  update() {
-    super.update();
+  update(dt) {
+    super.update(dt);
   }
 
   draw(ctx) {
-    //super.draw();
-
-    console.log(this.buffer.canvas);
-    
-    this.drawAntenna(this.dot.color);
-
-    const w = this.width;
-    const h = this.height;
-    const x = (this.x-(w/2)) | 0;
-    const y = (this.y-(h/2)) | 0;
-    
-    ctx.drawImage(this.sprite, x, y, w, h);
-
-    // WAAROM WORDT DE BUFFER NIET LEEGGEGOOID??????
+    this.drawAntennas(this.dot.color);
+    super.draw(ctx);
   }
 
-  drawAntenna(color) {
+  drawAntennas(color) {
     const w = this.width;
     const h = this.height;
 

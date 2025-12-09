@@ -4,18 +4,13 @@ let game;
 let running     = false;
 let requestId   = null;
 let accumulator = 0;
-let last        = 0;
+let last        = performance.now();  
 
 function loop(now) {
   let dt = (now - last) / 1000;
   last = now;
-  accumulator += dt;
-
-  while (accumulator >= FIXED_DT ) {
-    game.update();
-    accumulator -= FIXED_DT;
-  }
-
+  
+  game.update(dt);
   game.draw();
   requestAnimationFrame(loop);
 }
