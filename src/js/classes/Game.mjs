@@ -14,6 +14,7 @@ import Alien       from './Alien.mjs';
 import City        from './City.mjs';
 import Launcher    from './Launcher.mjs';
 
+
 const sprites = document.getElementById('sprites');
 
 export default class Game {
