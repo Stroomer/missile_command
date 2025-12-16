@@ -1,27 +1,22 @@
 # Missile Command
 
-Vul hier een korte beschrijving van je project in.
+Building a pixelated classic arcade game using modern web technologies.
 
 ## Tech Stack
 
-De volgende technieken zijn gebruikt in dit project:
-
-**Client:** Vul in
-
-**Server:** Vul in
+**Client:** HTML, CSS, JavaScript, Vite **Server:** Node.js
 
 ## Installation
 
-Voor het installeren en draaien van dit project, volg de onderstaande stappen:
-
-- Beschrijf stap 1.
-- Beschrijf stap 2.
-- Beschrijf stap 3.
+1. Clone repo.
+2. Run `npm install` to install dependencies.
+3. Run `npm run dev` to start the development server.
+4. Open your browser and navigate to `http://localhost:5173` to play the game.
 
 ## Authors
 
-- Vul hier de namen van de auteur(s) in.
+- Lukas Stroomer
 
 ## License
 
-Vul hier de licentie-informatie in.
+This project has a license to kill.
