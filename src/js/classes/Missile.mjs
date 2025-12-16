@@ -13,39 +13,45 @@ export default class Missile extends Sprite {
 
     // remove missile with uid tech
 
-
+    this.uid        = parent.missiles.length + 1;
     this.game       = parent;
     this.dot        = parent.dot;
     this.smokeColor = blue;
+
+    this.targetX    = x1;
+    this.targetY    = y1;
+    
     this.prevX      = x0;
     this.prevY      = y0;
     this.vx         = vx;
     this.vy         = vy;
     this.speed      = 230;
     this.smokeColor = blue;
-    
-    this.sprite = cutAndRecolor(this.sheet, 1, 32, this.width, this.height, [
-      { from: '#999999', to: cyan }
-    ]);
-    this.buffer = this.sprite.getContext('2d');
+    this.sprite     = cutAndRecolor(this.sheet, 1, 32, this.width, this.height, [ { from: '#999999', to: cyan } ]);
+    this.buffer     = this.sprite.getContext('2d');
+    this.garbage    = false;
   }
 
   update(dt) {
-    // if (!withinBounds(this.x, this.y) ) {
-    //   console.log("EXIT"); 
-    // }    
+    const dx = Math.abs(this.x - this.targetX) | 0;
+    const dy = Math.abs(this.y - this.targetY) | 0;
 
+    // console.log('dx, dy', dx, dy);
+    
+
+    if (dx === 0 && dy === 0) {
+      this.garbage = true;
+      console.log('garbage!');
+    }    
 
     this.prevX = this.x;
     this.prevY = this.y;
 
+    
 
     super.update(dt);
 
     // console.log(this.x, this.y);
-    
-
-    
   }
 
   draw(smoke, missiles) {
@@ -70,8 +76,3 @@ export default class Missile extends Sprite {
     drawLineBresenham(px, py, nx, ny, smoke);
   }
 }
-
-// function plotSmokePixel(x, y) {
-//   // For performance: write to pixel buffer instead of context.fillRect
-//   smokeBuffer[y * WIDTH + x] = 255;
-// }

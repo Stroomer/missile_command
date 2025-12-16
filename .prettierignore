@@ -13,4 +13,5 @@
 /src/js/classes/Sprite.mjs
 /src/js/classes/Game.mjs
 /src/js/classes/Crosshair.mjs
+/src/js/classes/Target.mjs
 

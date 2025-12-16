@@ -25,7 +25,17 @@ export default class Game {
     start(this);  
   }
 
+  collectGarbage() {
+    this.missiles = this.missiles.filter(missile => () => { 
+      console.log(`uid = ${missile.uid}`);
+      
+      return !missile.garbage;
+    });
+  }
+
   update(dt) {
+      this.collectGarbage();
+    
       this.launcher.update(mouse);
       this.crosshair.update(mouse);
       this.dot.update();
@@ -55,6 +65,11 @@ export default class Game {
     const alienCount = this.aliens.length;
     for (let i = 0; i < alienCount; i++) {
       this.aliens[i].draw(this.bufferEntities); // draw alien
+    }
+
+    const targetCount = this.targets.length;
+    for (let i = 0; i < targetCount; i++) {
+      this.targets[i].draw(this.bufferEntities); // draw target
     }
 
     this.crosshair.draw(this.bufferEntities); // draw crosshair
@@ -96,6 +111,7 @@ export default class Game {
     this.cities.push(new City(218, 216));  
       
     this.missiles = [];
+    this.targets  = [];
     
     this.aliens = [];
     this.aliens.push(new Alien(randomInt(50, WIDTH-50), 140, this.dot));
@@ -104,4 +120,6 @@ export default class Game {
 
     this.audio = new Audio();
   }
+
+
 }

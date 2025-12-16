@@ -58,3 +58,4 @@ export function drawLineBresenham(x0, y0, x1, y1, ctx) {
 export function withinBounds(x, y) {
   return x >= 0 && x < WIDTH && y > 0 && y < HEIGHT ? true : false;
 }
+

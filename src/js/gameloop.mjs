@@ -3,7 +3,6 @@ import { FIXED_DT } from './constants.mjs';
 let game;
 let running     = false;
 let requestId   = null;
-let accumulator = 0;
 let last        = performance.now();  
 
 function loop(now) {
@@ -35,7 +34,6 @@ export function stop() {
   console.log('loop.stop');
   cancelAnimationFrame(requestId);
   last        = 0;
-  accumulator = 0;
   requestId   = null;
   game        = null;
   running     = false;
