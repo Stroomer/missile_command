@@ -14,7 +14,7 @@ export default class Alien extends Sprite {
       { from: '#999999', to: blue },
       { from: '#666666', to: red },
     ]);
-    this.buffer = this.sprite.getContext('2d');
+    this.buffer = this.sprite.getContext('2d');    
   }
 
   update(dt) {
@@ -22,7 +22,7 @@ export default class Alien extends Sprite {
   }
 
   draw(ctx) {
-    this.drawAntennas(this.dot.color);
+    this.drawAntennas(this.dot.color);    
     super.draw(ctx);
   }
 

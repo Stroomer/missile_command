@@ -6,9 +6,8 @@ export default class Background extends Sprite {
     constructor(x, y) {
       super(x, y, 256, 23);
 
-      this.sprite = cutAndRecolor(this.sheet, 0, 0, this.width, this.height, [
-        { from:'#999999', to:yellow }
-      ]);
+      this.sprite = cutAndRecolor(this.sheet, 0, 0, this.width, this.height, [ { from:'#999999', to:yellow } ]);
+      this.buffer = this.sprite.getContext('2d');
     }
 
     update() {
@@ -16,8 +15,6 @@ export default class Background extends Sprite {
     }
 
     draw(ctx) {
-      //ctx.drawImage(this.sprite, 0, HEIGHT-this.height);
-
       super.draw(ctx);
     }
 }

@@ -54,25 +54,28 @@ export default class Missile extends Sprite {
     // console.log(this.x, this.y);
   }
 
-  draw(smoke, missiles) {
-    this.drawSmoke(smoke, blue);          // draw smoke trail
-    this.drawProjectile(this.dot.color);  // draw missile as a single flashing pixel
-    super.draw(missiles);
+  draw(ctx) {
+    //this.drawSmoke(this.game.buffer.smoke); // draw smoke trail
+    this.drawMissile(this.game.buffer.missiles);  // draw missile as a single flashing pixel
+
+    super.draw(ctx); // draw missile sprite
   }
 
-  drawProjectile(color) {
-    this.buffer.fillStyle = color;
+  drawMissile(missileBuffer) {
+    this.buffer.fillStyle = this.dot.color;
     this.buffer.fillRect(0, 0, 1, 1);
+
+    missileBuffer.drawImage(this.buffer.canvas, this.x | 0, this.y | 0);
   }
 
-  drawSmoke(smoke, color) {
-    smoke.fillStyle = color;
+  drawSmoke(smokeBuffer) {
+    smokeBuffer.fillStyle = blue;
 
     const px = this.prevX | 0;
     const py = this.prevY | 0;
     const nx = this.x | 0;
     const ny = this.y | 0;
 
-    drawLineBresenham(px, py, nx, ny, smoke);
+    drawLineBresenham(px, py, nx, ny, smokeBuffer);
   }
 }

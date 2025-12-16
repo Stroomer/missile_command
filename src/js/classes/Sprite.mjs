@@ -1,5 +1,3 @@
-import { FIXED_DT } from '../constants.mjs';
-
 export default class Sprite {
   constructor(x, y, width, height) {
     this.x      = x;
@@ -15,8 +13,8 @@ export default class Sprite {
   }
 
   update(dt) {
-    this.x += this.vx * this.speed * dt;  //FIXED_DT;
-    this.y += this.vy * this.speed * dt;  //FIXED_DT;
+    this.x += this.vx * this.speed * dt;
+    this.y += this.vy * this.speed * dt;
   }
 
   draw(ctx) {
