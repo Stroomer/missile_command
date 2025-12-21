@@ -18,7 +18,7 @@ export default class Launcher {
   launch(x0, y0, x1, y1) {
     console.log('launch');
 
-    this.game.targets.push(new Target(x1, y1, this.game.dot));
     this.game.missiles.push(new Missile(x0, y0, x1, y1, this.game));
+    this.game.targets.push(new Target(x1, y1, this.game));
   }
 }
