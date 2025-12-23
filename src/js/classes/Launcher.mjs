@@ -1,5 +1,5 @@
-import Missile from './Missile.mjs';
-import Target from './Target.mjs';
+import Explosion from "./missile/Explosion.mjs";
+import Missile from "./missile/Missile.mjs";
 
 export default class Launcher {
   constructor(x, y, parent) {
@@ -10,15 +10,19 @@ export default class Launcher {
 
   update(mouse) {
     if (!mouse.fire) return;
-    this.launch(123, 209, mouse.x, mouse.y);
-    this.game.audio.playMissileLaunch();
+    const { game } = this;
+    const start    = { x:123, y:209 };
+    const target   = { x:mouse.x, y:mouse.y };
+    
+    this.launch(game, start, target);
+    game.audio.playMissileLaunch();
     mouse.fire = false;
   }
 
-  launch(x0, y0, x1, y1) {
-    console.log('launch');
-
-    this.game.missiles.push(new Missile(x0, y0, x1, y1, this.game));
-    this.game.targets.push(new Target(x1, y1, this.game));
+  launch(game, start, target) {
+    //game.missiles.push(new Missile(game, start, target));
+    const radius = { min:1, max:20 };
+    game.explosions.push(new Explosion(game, target.x, target.y, 20));
+    
   }
 }

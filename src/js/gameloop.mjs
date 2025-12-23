@@ -1,40 +1,61 @@
-import { FIXED_DT } from './constants.mjs';
+import { STEP } from "./constants.mjs";
 
 let game;
 let running     = false;
 let requestId   = null;
-let last        = performance.now();  
+let lastTime    = 0;
+let accumulator = 0;
 
 function loop(now) {
-  let dt = (now - last) / 1000;
-  last = now;
-  
-  game.update(dt);
+  if (!running) return;
+
+  let frameTime = (now - lastTime) / 1000;
+  lastTime = now;
+
+  // Prevent spiral of death
+  if (frameTime > 0.25) frameTime = 0.25;
+
+  accumulator += frameTime;
+
+  // Run fixed updates
+  while (accumulator >= STEP) {
+    game.update(STEP);
+    accumulator -= STEP;
+  }
+
+  // Render once per frame
   game.draw();
-  requestAnimationFrame(loop);
+
+  requestId = requestAnimationFrame(loop);
 }
+
 
 export function start(parent) {
   if (running) {
-    console.warning('Cannot start loop, already running!');
+    console.warn('Cannot start loop, already running!');
     return;
   }
+
   console.log('loop.start');
-  game      = parent;
-  last      = performance.now();
-  requestId = requestAnimationFrame(loop);
-  running   = true;
+  game        = parent;
+  running     = true;
+  accumulator = 0;
+  lastTime    = performance.now();
+  requestId   = requestAnimationFrame(loop);
 }
 
 export function stop() {
   if (!running) {
-    console.warning("Cannot stop loop, it's not running yet!");
+    console.warn("Cannot stop loop, it's not running yet!");
     return;
   }
+
   console.log('loop.stop');
   cancelAnimationFrame(requestId);
-  last        = 0;
+
+  running     = false;
   requestId   = null;
   game        = null;
-  running     = false;
+  accumulator = 0;
+  lastTime    = 0;
 }

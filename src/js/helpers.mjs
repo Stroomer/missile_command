@@ -1,4 +1,4 @@
-import { DEG, WIDTH, HEIGHT } from '../js/constants.mjs';
+import { DEG, WIDTH, HEIGHT, colors } from '../js/constants.mjs';
 
 export function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -6,6 +6,12 @@ export function randomInt(min, max) {
 
 export function randomVec(min, max) {
 
+}
+
+export function getRandomColor() {
+  const n = randomInt(0, colors.length - 1);
+  const color = colors[n];
+  return color;
 }
 
 // export function unitVector(degrees) {
@@ -59,3 +65,10 @@ export function withinBounds(x, y) {
   return x >= 0 && x < WIDTH && y > 0 && y < HEIGHT ? true : false;
 }
 
+export function easeOutQuad(t) {
+  return 1 - (1 - t) * (1 - t);
+}
+
+export function easeInQuad(t) {
+  return t * t;
+}

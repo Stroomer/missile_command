@@ -17,19 +17,9 @@ export const cyan   = '#00ffff';
 
 export const colors = [red, purple, white, green, yellow, blue, orange, cyan];
 
-export const backgroundColor     = yellow;
-export const backgroundShipColor = blue;
-export const cityBottomColor     = cyan;
-export const cityTopColor        = blue;
-export const enemyMissleColor    = red;
-export const playerMissleColor   = blue;
-export const aircraftColor       = blue;
-export const crosshairColor      = blue;
-
-
-
-export const FIXED_DT = 1 / 60;
-export const DEG      = Math.PI / 180;
+export const DEG  = Math.PI / 180;
+export const FPS  = 60;
+export const STEP = 1 / FPS;
 
 export const enemyMissile = {
     minX: 15,

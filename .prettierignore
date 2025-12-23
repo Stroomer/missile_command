@@ -6,12 +6,18 @@
 /src/js/constants.mjs
 /src/js/canvas.mjs
 /src/js/mouse.mjs
-/src/js/classes/Missile.mjs
+/src/js/classes/Launcher.mjs
 /src/js/classes/Background.mjs
 /src/js/classes/Alien.mjs
 /src/js/classes/City.mjs
 /src/js/classes/Sprite.mjs
 /src/js/classes/Game.mjs
 /src/js/classes/Crosshair.mjs
-/src/js/classes/Target.mjs
+
+/src/js/classes/missile/Missile.mjs
+/src/js/classes/missile/Projectile.mjs
+/src/js/classes/missile/Target.mjs
+/src/js/classes/missile/Smoke.mjs
+/src/js/classes/missile/Explosion.mjs
+
 

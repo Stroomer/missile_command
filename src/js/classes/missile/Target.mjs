@@ -1,28 +1,28 @@
-import { cutAndRecolor } from '../canvas.mjs';
-import { blue } from '../constants.mjs';
-import Sprite from './Sprite.mjs';
+import { cutAndRecolor } from '../../canvas.mjs';
+import { blue } from '../../constants.mjs';
+import { getRandomColor } from '../../helpers.mjs';
+import Sprite from '../Sprite.mjs';
 
 export default class Target extends Sprite {
-  constructor(x, y, parent) {
-    super(x, y, 5, 5);
+  constructor(missile, target) {
+    super(target.x, target.y, 5, 5);
     
-    this.game      = parent;
+    this.missile   = missile;
     this.sprite    = cutAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from:'#999999', to:blue }]);
     this.buffer    = this.sprite.getContext('2d');
     this.color     = blue;
-    this.visible   = true;
     this.positions = [0, 0, 4, 0, 1, 1, 3, 1, 2, 2, 1, 3, 3, 3, 0, 4, 4, 4];
     this.garbage   = false;
   }
 
   update(dt) {
-    this.color = this.game.dot.color;
+    this.color = getRandomColor();
   }
 
   draw(ctx) {
-    if (this.garbage) return; 
+    if (this.garbage) return;
+
     const { buffer, positions, color } = this;
-    // draw flash on local buffer
     buffer.fillStyle = color;  
     for (let i = 0; i < positions.length; i+=2) {
       const x = positions[i];
