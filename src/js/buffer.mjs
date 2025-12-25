@@ -1,4 +1,4 @@
-import { black, DEBUG, WIDTH, HEIGHT } from "./constants.mjs";
+import { BLACK, DEBUG, WIDTH, HEIGHT } from "./constants.mjs";
 
 export function createBuffer(id, w=null, h=null) {
   let canvas, ctx;
@@ -15,7 +15,7 @@ export function createBuffer(id, w=null, h=null) {
     canvas.width                 = bufferWidth;
     canvas.height                = bufferHeight;
     canvas.style.display         = 'block';
-    canvas.style.backgroundColor = black;
+    canvas.style.backgroundColor = BLACK;
   } else {
     canvas = offscreen ? new OffscreenCanvas(bufferWidth, bufferHeight) : document.createElement('canvas');
   }

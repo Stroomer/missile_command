@@ -6,11 +6,11 @@ export default class Audio {
   // ------------------------------------------
   // Random noise buffer generator
   // ------------------------------------------
-  createNoiseBuffer(type = 'white') {
+  createNoiseBuffer(type = 'WHITE') {
     const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 2, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
 
-    if (type === 'white') {
+    if (type === 'WHITE') {
       for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
     } else if (type === 'pink') {
       // quick pink noise approximation
@@ -18,10 +18,10 @@ export default class Audio {
         b1 = 0,
         b2 = 0;
       for (let i = 0; i < data.length; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.997 * b0 + white * 0.029;
-        b1 = 0.985 * b1 + white * 0.037;
-        b2 = 0.95 * b2 + white * 0.11;
+        const WHITE = Math.random() * 2 - 1;
+        b0 = 0.997 * b0 + WHITE * 0.029;
+        b1 = 0.985 * b1 + WHITE * 0.037;
+        b2 = 0.95 * b2 + WHITE * 0.11;
         data[i] = b0 + b1 + b2;
       }
     }
@@ -30,13 +30,13 @@ export default class Audio {
   }
 
   // ------------------------------------------
-  // Missile launch sound (white noise + fast decay)
+  // Missile launch sound (WHITE noise + fast decay)
   // ------------------------------------------
   playMissileLaunch() {
     console.log('play launch sound');
 
     const src = this.ctx.createBufferSource();
-    src.buffer = this.createNoiseBuffer('white');
+    src.buffer = this.createNoiseBuffer('WHITE');
 
     const filter = this.ctx.createBiquadFilter();
     filter.type = 'bandpass';
@@ -62,7 +62,7 @@ export default class Audio {
     console.log('play explosion sound');
 
     const src = this.ctx.createBufferSource();
-    src.buffer = this.createNoiseBuffer('white');
+    src.buffer = this.createNoiseBuffer('WHITE');
 
     const filter = this.ctx.createBiquadFilter();
     filter.type = 'lowpass';

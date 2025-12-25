@@ -1,5 +1,6 @@
 import Explosion from "./missile/Explosion.mjs";
 import Missile from "./missile/Missile.mjs";
+import Smoke from "./missile/Smoke.mjs";
 
 export default class Launcher {
   constructor(x, y, parent) {
@@ -21,8 +22,10 @@ export default class Launcher {
 
   launch(game, start, target) {
     //game.missiles.push(new Missile(game, start, target));
-    const radius = { min:1, max:20 };
-    game.explosions.push(new Explosion(game, target.x, target.y, 20));
+    
+    //game.explosions.push(new Explosion(game, target.x, target.y, 20));
+
+    game.smoke.push(new Smoke(game, start, target));
     
   }
 }

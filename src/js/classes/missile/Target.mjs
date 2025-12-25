@@ -1,5 +1,5 @@
 import { cutAndRecolor } from '../../canvas.mjs';
-import { blue } from '../../constants.mjs';
+import { BLUE } from '../../constants.mjs';
 import { getRandomColor } from '../../helpers.mjs';
 import Sprite from '../Sprite.mjs';
 
@@ -8,9 +8,9 @@ export default class Target extends Sprite {
     super(target.x, target.y, 5, 5);
     
     this.missile   = missile;
-    this.sprite    = cutAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from:'#999999', to:blue }]);
+    this.sprite    = cutAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from:'#999999', to:BLUE }]);
     this.buffer    = this.sprite.getContext('2d');
-    this.color     = blue;
+    this.color     = BLUE;
     this.positions = [0, 0, 4, 0, 1, 1, 3, 1, 2, 2, 1, 3, 3, 3, 0, 4, 4, 4];
     this.garbage   = false;
   }

@@ -1,6 +1,6 @@
 
 import { cutAndRecolor } from '../canvas.mjs';
-import { blue, red } from '../constants.mjs';
+import { BLUE, RED } from '../constants.mjs';
 import Sprite from './Sprite.mjs';
 
 export default class City extends Sprite {
@@ -10,8 +10,8 @@ export default class City extends Sprite {
 
 
     this.sprite = cutAndRecolor(this.sheet, 36, 24, this.width, this.height, [
-      { from:'#999999', to:blue },
-      { from:'#666666', to:red },
+      { from:'#999999', to:BLUE },
+      { from:'#666666', to:RED },
     ]);
     this.buffer = this.sprite.getContext('2d');
   }

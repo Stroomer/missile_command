@@ -2,7 +2,7 @@ import { randomInt }    from '../helpers.mjs';
 import { mouse }        from './../mouse.mjs';
 import { createBuffer } from './../buffer.mjs';
 import { start }        from './../gameloop.mjs';
-import { WIDTH, HEIGHT, colors, black, blue } from '../constants.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE } from '../constants.mjs';
 
 import Crosshair   from './Crosshair.mjs';
 import Audio       from './Audio.mjs';
@@ -38,13 +38,14 @@ export default class Game {
   update(dt) {
       this.collectGarbage();
     
-      this.colorId = randomInt(0, colors.length-1);
+      this.colorId = randomInt(0, COLORS.length-1);
     
       this.launcher.update(mouse);
       this.crosshair.update(mouse);
 
       for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].update(dt);  
       for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].update(dt);
+      for (let i = 0; i < this.smoke.length; i++)       this.smoke[i].update(dt);
       for (let i = 0; i < this.explosions.length; i++)  this.explosions[i].update(dt);
   }
 
@@ -53,11 +54,12 @@ export default class Game {
 
     offscreen.clearRect(0, 0, WIDTH, HEIGHT); // clear layer offscreen (dynamic)
         
-    offscreen.fillStyle = black;
+    offscreen.fillStyle = BLACK;
     offscreen.fillRect(0, 0, WIDTH, HEIGHT);
 
     for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].draw(offscreen);   // draw missiles
     for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].draw(offscreen);     // draw aliens        
+    for (let i = 0; i < this.smoke.length; i++)       this.smoke[i].draw(offscreen);      // draw missiles
     for (let i = 0; i < this.explosions.length; i++)  this.explosions[i].draw(offscreen); // draw missiles
     
     offscreen.drawImage(this.buffer.background.canvas, 0, 0, WIDTH, HEIGHT); // draw layer background --> offscreen    
@@ -84,9 +86,9 @@ export default class Game {
   }
 
   createObjects() {
-    this.colorId = randomInt(0, colors.length-1);
+    this.colorId = randomInt(0, COLORS.length-1);
 
-    this.crosshair  = new Crosshair(blue);
+    this.crosshair  = new Crosshair(BLUE);
     this.background = new Background(128, 220);
     this.launcher   = new Launcher(20, 120, this);
     

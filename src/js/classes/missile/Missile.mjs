@@ -1,5 +1,5 @@
 import { cutAndRecolor } from '../../canvas.mjs';
-import { blue, cyan } from '../../constants.mjs';
+import { BLUE, CYAN } from '../../constants.mjs';
 import { drawLineBresenham, getUnitVector, withinBounds } from '../../helpers.mjs';
 import Projectile from './Projectile.mjs';
 import Target from './Target.mjs';
@@ -28,7 +28,7 @@ export default class Missile {
     this.state      = FLY;
     this.projectile = new Projectile(this, start, target);
     this.target     = new Target(this, target);
-    this.smoke      = new Smoke(this, start, target);
+    //this.smoke      = new Smoke(this, start, target);
     //this.explosion  = new Explosion(this, target, 40);
   
     
@@ -40,7 +40,7 @@ export default class Missile {
     // this.speed      = 100;
     // this.vx         = vx
     // this.vy         = vy;
-    // this.sprite     = cutAndRecolor(this.sheet, 1, 32, this.width, this.height, [ { from: '#999999', to: cyan } ]);
+    // this.sprite     = cutAndRecolor(this.sheet, 1, 32, this.width, this.height, [ { from: '#999999', to: CYAN } ]);
     // this.buffer     = this.sprite.getContext('2d');
     
     this.garbage    = false;
@@ -78,10 +78,10 @@ export default class Missile {
     // const { x, y, targetX, targetY, exploded } = this;
     // const distanceX = Math.abs(x - targetX) | 0;
     // const distanceY = Math.abs(y - targetY) | 0;
-    // const triggered = distanceX <= 1 && distanceY <= 1 ? true : false;
+    // const triggeRED = distanceX <= 1 && distanceY <= 1 ? true : false;
        
     // if (!exploded) {
-    //   if (triggered) {
+    //   if (triggeRED) {
     //     this.explode();
     //     return;
     //   }  
@@ -125,7 +125,7 @@ export default class Missile {
   }
 
   drawSmoke(smokeBuffer) {
-    smokeBuffer.fillStyle = blue;
+    smokeBuffer.fillStyle = BLUE;
     const px = this.prevX | 0;
     const py = this.prevY | 0;
     const nx = this.x     | 0;

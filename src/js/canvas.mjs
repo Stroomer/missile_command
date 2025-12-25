@@ -17,8 +17,8 @@ function hexToRgb(hex) {
 
 export function cutAndRecolor(img, sx, sy, w, h, palette) {
   const slice     = cutSprite(img, sx, sy, w, h);
-  const recolored = recolorSprite(slice, palette);
-  return recolored;
+  const recoloRED = recolorSprite(slice, palette);
+  return recoloRED;
 }
 
 export function cutSprite(img, sx, sy, w, h) {
@@ -61,5 +61,5 @@ export function recolorSprite(canvas, palette) {
   }
 
   ctx.putImageData(imgData, 0, 0);
-  return canvas; // recolored and ready to draw
+  return canvas; // recoloRED and ready to draw
 }
