@@ -1,117 +1,44 @@
 import { BLUE } from '../../constants.mjs';
-import { easeOutQuad, getLineBresenham } from '../../helpers.mjs';
-
-const BLUE_TO_BLACK_16 = [
-  "#003cff", "#0036e6", "#0030cc", "#002ab3",
-  "#002499", "#001e80", "#001866", "#00124d",
-  "#000c33", "#00081f", "#00060f", "#000408",
-  "#000203", "#000102", "#000001", "#000000"
-];
+import { getLineBresenham } from '../../helpers.mjs';
 
 export default class Smoke {
-  constructor(parent, start, target, drawDuration = 0.25, fadeDuration = 5.0) {
-    this.game = parent;
+  constructor(parent, start, target, speed = 50) {
+    this.game    = parent;
+    this.pixels  = getLineBresenham(start.x, start.y, target.x, target.y);
+    this.total   = this.pixels.length;
 
-    this.drawDuration = drawDuration;
-    this.fadeDuration = fadeDuration;
-    this.time = 0;
-    this.phase = 0;
-
-    this.pixels = getLineBresenham(start.x, start.y, target.x, target.y);
-
-    this.total = this.pixels.length;
+    this.speed   = speed;          // pixels per second
+    this.progress = 0;             // float, allows smooth accumulation
     this.visibleCount = 0;
 
     this.garbage = false;
   }
 
   update(dt) {
-    this.time += dt;
+    // advance in pixels
+    this.progress += this.speed * dt;
 
-    switch (this.phase) {
-      case 0: // start drawing line
-              const t = Math.min(this.time / this.drawDuration, 1);
-              this.visibleCount = (t * this.total) | 0;
+    // clamp & convert to integer only once
+    const nextCount = this.progress | 0;
 
-              if (this.visibleCount === this.total) {
-                this.phase = 1;
-                this.time  = 0;
-              }             
-      break;
-      case 1: // hold 5 sec
-              console.log('hold', this.time);
-              
-              if (time >= 5.0) {
-                this.phase = 2;
-                this.time  = 0;
-              }
-      break;
-      
-      case 2: // start fade-out line
-              
-      break;
-      
-      case 3: // dispose line object
-      
-      break;
+    if (nextCount !== this.visibleCount) {
+      this.visibleCount = Math.min(nextCount, this.total);
     }
 
-
-    if (this.phase === 1) {
-      
+    if (this.visibleCount >= this.total) {
+      this.visibleCount = this.total;
+      this.garbage = true;
     }
-    else if (this.phase === 2) {
-      this.time = 0;
-      this.phase = 3;
-    }
-    else if (this.phase === 3) {
-      // if (this.time) {
-        
-      // }
-      
-      console.log(this.time);
-      
-    }
-    
-
-
-    
-
-    //console.log(this.visibleCount, this.total, this.time);
-    
   }
 
   draw(ctx) {
-    switch (this.phase) {
-      case 0: // start drawing line
-      case 1: // hold 5 sec
-        
-        console.log("doing");
-        
-        
-      case 2: // start fade-out line
-        
-      break;
-      
-      case 3: // dispose line object
-      
-      break;
+    ctx.fillStyle = BLUE;
+
+    // tight loop, no branching inside
+    const pixels = this.pixels;
+    for (let i = 0, n = this.visibleCount; i < n; i++) {
+      const p = pixels[i];
+      ctx.fillRect(p.x, p.y, 1, 1);
     }
-
-    // if (this.phase < 2) {
-    //   ctx.fillStyle = BLUE;
-    //   for (let i = 0; i < this.visibleCount; i++) {
-    //     const p = this.pixels[i];
-    //     ctx.fillRect(p.x, p.y, 1, 1);
-    //   }
-    // } else {
-      
-    // }
-
-
-
-    
-    
-
   }
 }
