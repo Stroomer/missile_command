@@ -17,48 +17,47 @@ const FLY     = 1;
 const EXPLODE = 2;
 
 export default class Missile {
-  
-  
   constructor(parent, start, target, speed) {
     console.log('construct new Missile', start.x, start.y, target.x, target.y);
 
-    this.game       = parent;
+    this.parent     = parent;
     this.start      = start;
     this.target     = target;
     this.speed      = speed;
     this.phase      = 0;
-    
+    this.smoke      = new Smoke(this, start, target);
     this.projectile = new Projectile(this, start, target);
     this.target     = new Target(this, target);
-    this.smoke      = new Smoke(this, start, target);
-    //this.explosion  = new Explosion(this, target, 40);
-
+    this.exploded   = false;
     
-  
-    this.garbage    = false;
+    parent.audio.playMissileLaunch();
+
+    //this.explosion  = new Explosion(this, target, 40);
+    //this.garbage    = false;
   }
 
   update(dt) {
+    // if (this.projectile.hit) {
+    //   this.target.garbage = this.projectile.garbage = true;
+    // }
+
     this.smoke.update(dt);    
-    this.target.update(dt);
     this.projectile.update(dt);
+    this.target.update(dt);
     // this.explosion.update(dt);
   }
 
   draw(ctx) {
     this.smoke.draw(ctx);
-    this.target.draw(ctx);
     this.projectile.draw(ctx);
+    this.target.draw(ctx);
     // this.explosion.draw(ctx);
-  }
-  
-  launch() {
-    console.log('--launch');   
   }
 
   explode() {
-    console.log('--explode');
+    if (this.exploded) return;
+    
+    this.parent.audio.playExplosion();
     this.exploded = true;
-    this.game.audio.playExplosion();
   }
 }

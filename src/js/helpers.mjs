@@ -85,7 +85,7 @@ export function getLineBresenham(x0, y0, x1, y1) {
 
 
 export function withinBounds(x, y) {
-  return x >= 0 && x < WIDTH && y > 0 && y < HEIGHT ? true : false;
+  return x >= 0 && x <= WIDTH && y >= 0 && y <= HEIGHT ? true : false;
 }
 
 export function easeOutQuad(t) {

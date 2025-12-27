@@ -17,21 +17,16 @@ export default class Crosshair extends Sprite {
     if (!mouse.visible) {
       this.visible = false;
       return;
-    } else {
-      this.visible = true;
-      this.x = 1 + mouse.x;
-      this.y = 1 + mouse.y;
     }
     
-    //super.update();
+    this.visible = true;
+    this.x = mouse.x + 1;
+    this.y = mouse.y + 1;
   }
 
   draw(ctx) {
     if (!this.visible) return;
 
     super.draw(ctx);
-
-    // const size = 10;
-    // const half = size / 2;
   }
 }

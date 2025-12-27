@@ -16,7 +16,7 @@ export default class Projectile extends MissileComponent {
 
     if (this.index >= this.total - 1) {
       this.index = this.total - 1;
-      this.garbage = true;
+      this.parent.explode();
     }
   }
 

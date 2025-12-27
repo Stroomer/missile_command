@@ -1,15 +1,16 @@
 export default class Sprite {
   constructor(x, y, width, height) {
-    this.x      = x;
-    this.y      = y;
-    this.width  = width;
-    this.height = height;
-    this.halfW  = width  / 2;
-    this.halfH  = height / 2;
-    this.speed  = 0;
-    this.vx     = 0;
-    this.vy     = 0;
-    this.sheet  = document.getElementById('sprites');  
+    this.x       = x;
+    this.y       = y;
+    this.width   = width;
+    this.height  = height;
+    this.halfW   = width  / 2;
+    this.halfH   = height / 2;
+    this.speed   = 0;
+    this.vx      = 0;
+    this.vy      = 0;
+    this.visible = true;
+    this.sheet   = document.getElementById('sprites');  
   }
 
   update(dt) {

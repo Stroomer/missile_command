@@ -24,19 +24,19 @@ canvas.addEventListener('mouseup', (e) => {
 });
 
 canvas.addEventListener('mousemove', (e) => {
-  const offsetX = canvas.getBoundingClientRect().left;
-  const offsetY = canvas.getBoundingClientRect().top;
+  const offsetX = canvas.getBoundingClientRect().left - 1;
+  const offsetY = canvas.getBoundingClientRect().top  - 1;
   const clientX = e.clientX;
   const clientY = e.clientY;
-  const x       = (clientX - offsetX) | 0;
-  const y       = (clientY - offsetY) | 0;
-
+  const x = (clientX - offsetX);
+  const y = (clientY - offsetY);
+  
   if (withinBounds(x, y)) {
     mouse.x = x;
     mouse.y = y;
     mouse.visible = true;
     canvas.style.cursor = 'none';
-    //console.log(x, y);
+    console.log(x, y);
   } else {
     mouse.visible = false;
     canvas.style.cursor = 'arrow';

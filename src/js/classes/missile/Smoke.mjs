@@ -14,7 +14,6 @@ export default class Smoke extends MissileComponent {
 
     if (this.visibleCount >= this.total) {
       this.visibleCount = this.total;
-      this.garbage = true;
     }
   }
 

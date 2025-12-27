@@ -91,7 +91,7 @@ export default class Game {
 
     this.crosshair  = new Crosshair(BLUE);
     this.background = new Background(128, 220);
-    this.launcher   = new Launcher(20, 120, this);
+    this.launcher   = new Launcher(this, 20, 120);
     
     this.cities = [];
     this.cities.push(new City(48,  215));
@@ -102,9 +102,9 @@ export default class Game {
     this.cities.push(new City(218, 216));  
       
     this.missiles   = [];
-    this.smoke      = [];
-    this.targets    = [];
-    this.explosions = [];
+    // this.smoke      = [];
+    // this.targets    = [];
+    // this.explosions = [];
     this.aliens     = [];
     this.aliens.push(new Alien(this, randomInt(50, WIDTH-50), 100));
 
