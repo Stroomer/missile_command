@@ -19,5 +19,6 @@
 /src/js/classes/missile/Target.mjs
 /src/js/classes/missile/Smoke.mjs
 /src/js/classes/missile/Explosion.mjs
+/src/js/classes/missile/MissileComponent.mjs
 
 

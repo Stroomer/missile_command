@@ -35,8 +35,9 @@ export default class Game {
   }
 
   update(dt) {
-      this.collectGarbage(this.smoke);
-      this.collectGarbage(this.explosions);
+      //this.collectGarbage(this.smoke);
+      //this.collectGarbage(this.targets);
+      //this.collectGarbage(this.explosions);
     
       this.colorId = randomInt(0, COLORS.length-1);
     

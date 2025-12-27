@@ -20,6 +20,9 @@ export default class Target extends Sprite {
   }
 
   draw(ctx) {
+    console.log(`garbage? ${this.garbage}`);
+    
+
     if (this.garbage) return;
 
     const { buffer, positions, color } = this;

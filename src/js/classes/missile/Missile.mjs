@@ -32,6 +32,8 @@ export default class Missile {
     this.target     = new Target(this, target);
     this.smoke      = new Smoke(this, start, target);
     //this.explosion  = new Explosion(this, target, 40);
+
+    
   
     this.garbage    = false;
   }
@@ -58,13 +60,5 @@ export default class Missile {
     console.log('--explode');
     this.exploded = true;
     this.game.audio.playExplosion();
-  }
-
-  setTarget(bool) {
-
-  }
-
-  setSmoke(bool) {
-
   }
 }

@@ -1,28 +1,16 @@
-import { getLineBresenham, getRandomColor } from '../../helpers.mjs';
+import { getRandomColor } from '../../helpers.mjs';
+import MissileComponent from './MissileComponent.mjs';
 
-export default class Projectile {
+export default class Projectile extends MissileComponent {
   constructor(parent, start, target, speed = 50) {
-    this.game   = parent;
-    this.pixels = getLineBresenham(start.x, start.y, target.x, target.y);
-    this.total  = this.pixels.length;
-
-    this.speed    = speed;   // pixels per second
-    this.progress = 0;
-    this.index    = 0;
-
-    // cache color ONCE so it doesn't flicker every frame
-    this.color  = getRandomColor();
-
-    this.garbage = false;
+    super(parent, start, target, speed);
   }
 
   update(dt) {
-    this.progress += this.speed * dt;
+    super.update(dt);
 
-    const nextIndex = this.progress | 0;
-
-    if (nextIndex !== this.index) {
-      this.index = Math.min(nextIndex, this.total - 1);
+    if (this.nextIndex !== this.index) {
+      this.index = Math.min(this.nextIndex, this.total - 1);
       this.color = getRandomColor();
     }
 
@@ -33,10 +21,6 @@ export default class Projectile {
   }
 
   draw(ctx) {
-    const p = this.pixels[this.index];
-    if (!p) return;
-
-    ctx.fillStyle = this.color;
-    ctx.fillRect(p.x, p.y, 1, 1);
+    super.drawSingle(ctx, this.index);
   }
 }
