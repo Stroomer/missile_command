@@ -36,7 +36,6 @@ canvas.addEventListener('mousemove', (e) => {
     mouse.y = y;
     mouse.visible = true;
     canvas.style.cursor = 'none';
-    console.log(x, y);
   } else {
     mouse.visible = false;
     canvas.style.cursor = 'arrow';

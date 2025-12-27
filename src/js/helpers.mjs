@@ -1,11 +1,7 @@
-import { DEG, WIDTH, HEIGHT, COLORS } from '../js/constants.mjs';
+import { WIDTH, HEIGHT, COLORS } from '../js/constants.mjs';
 
 export function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-export function randomVec(min, max) {
-
 }
 
 export function getRandomColor() {
@@ -13,14 +9,6 @@ export function getRandomColor() {
   const color = COLORS[n];
   return color;
 }
-
-// export function unitVector(degrees) {
-//   const a = degrees * DEG;
-//   const vx = Math.cos(a);
-//   const vy = Math.sin(a);
-
-//   return { vx, vy };
-// }
 
 export function getUnitVector(x1, y1, x2, y2) {
   const dx  = x2 - x1;
@@ -36,29 +24,6 @@ export function snap(obj) {
   obj.x = obj.x | 0;  
   obj.y = obj.y | 0;
   return obj;
-}
-
-export function drawLineBresenham(x0, y0, x1, y1, ctx) {
-  let dx = Math.abs(x1 - x0);
-  let dy = Math.abs(y1 - y0);
-  let sx = (x0 < x1) ? 1 : -1;
-  let sy = (y0 < y1) ? 1 : -1;
-  let err = dx - dy;
-  while (true) {
-    ctx.fillRect(x0, y0, 1, 1);
-    if (x0 === x1 && y0 === y1) break;
-    let e2 = err * 2;
-    if (e2 > -dy) {
-      err -= dy;
-      x0 += sx;
-    } 
-    if (e2 < dx) {
-      err += dx;
-      y0 += sy;
-    }
-  }
-
-  return;
 }
 
 export function getLineBresenham(x0, y0, x1, y1) {
@@ -94,4 +59,33 @@ export function easeOutQuad(t) {
 
 export function easeInQuad(t) {
   return t * t;
+}
+
+export function drawPixelCircle(ctx, cx, cy, radius, color = '#fff') {
+  ctx.fillStyle = color;
+
+  let x = radius;
+  let y = 0;
+  let err = 1 - radius;
+
+  while (x >= y) {
+    // 8-way symmetry
+    ctx.fillRect(cx + x, cy + y, 1, 1);
+    ctx.fillRect(cx + y, cy + x, 1, 1);
+    ctx.fillRect(cx - y, cy + x, 1, 1);
+    ctx.fillRect(cx - x, cy + y, 1, 1);
+    ctx.fillRect(cx - x, cy - y, 1, 1);
+    ctx.fillRect(cx - y, cy - x, 1, 1);
+    ctx.fillRect(cx + y, cy - x, 1, 1);
+    ctx.fillRect(cx + x, cy - y, 1, 1);
+
+    y++;
+
+    if (err < 0) {
+      err += 2 * y + 1;
+    } else {
+      x--;
+      err += 2 * (y - x) + 1;
+    }
+  }
 }

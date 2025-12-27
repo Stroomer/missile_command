@@ -1,4 +1,4 @@
-import { HEIGHT, YELLOW } from "../constants.mjs";
+import { YELLOW } from "../constants.mjs";
 import { cutAndRecolor } from "../canvas.mjs";
 import Sprite from './Sprite.mjs';
 

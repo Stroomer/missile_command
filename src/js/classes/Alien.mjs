@@ -3,12 +3,12 @@ import { cutAndRecolor } from '../canvas.mjs';
 import Sprite from './Sprite.mjs';
 
 export default class Alien extends Sprite {
-  constructor(game, x, y) {
+  constructor(parent, x, y) {
     super(x, y, 14, 13);
     
     console.log("alien", this.x, this.y, this.width, this.height);
 
-    this.game   = game;
+    this.parent = parent;
     this.speed  = 50;
     this.vx     = x <= WIDTH / 2 ? 1 : -1;
     this.vy     = 0;
@@ -20,7 +20,7 @@ export default class Alien extends Sprite {
   }
 
   update(dt) {
-    this.antennaColor = COLORS[this.game.colorId];
+    this.antennaColor = COLORS[this.parent.colorId];
 
     super.update(dt);
   }
