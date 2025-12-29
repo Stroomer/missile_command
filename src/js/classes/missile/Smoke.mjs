@@ -6,6 +6,11 @@ export default class Smoke extends MissileComponent {
   }
 
   update(dt) {
+    if (this.parent.exploded) {
+      this.visible = false;
+      return;
+    }
+
     super.update(dt);
     
     if (this.nextIndex !== this.visibleCount) {
@@ -18,6 +23,7 @@ export default class Smoke extends MissileComponent {
   }
 
   draw(ctx) {
+    if (!this.visible) return;
     super.drawRange(ctx, 0, this.visibleCount);
   }
 }

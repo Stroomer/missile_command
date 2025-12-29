@@ -7,6 +7,11 @@ export default class Projectile extends MissileComponent {
   }
 
   update(dt) {
+    if (this.parent.exploded) {
+      this.visible = false;
+      return;
+    }
+    
     super.update(dt);
 
     if (this.nextIndex !== this.index) {
@@ -21,6 +26,7 @@ export default class Projectile extends MissileComponent {
   }
 
   draw(ctx) {
+    if (!this.visible) return;
     super.drawSingle(ctx, this.index);
   }
 }

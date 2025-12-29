@@ -1,4 +1,6 @@
-// helper: convert "#rrggbb" or "rrggbb" to {r,g,b}
+import { BLUE, CIRCLE, COLORS, GREY } from "./constants.mjs";
+
+// convert "#rrggbb" or "rrggbb" to {r,g,b}
 function hexToRgb(hex) {
   if (hex[0] === '#') hex = hex.slice(1);
   if (hex.length === 3) {
@@ -17,10 +19,11 @@ function hexToRgb(hex) {
 
 export function cutAndRecolor(img, sx, sy, w, h, palette) {
   const slice     = cutSprite(img, sx, sy, w, h);
-  const recoloRED = recolorSprite(slice, palette);
-  return recoloRED;
+  const recolored = recolorSprite(slice, palette);
+  return recolored;
 }
 
+// cut sprite from spritesheet
 export function cutSprite(img, sx, sy, w, h) {
   const canvas = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : document.createElement('canvas');
   canvas.width = w;
@@ -30,9 +33,10 @@ export function cutSprite(img, sx, sy, w, h) {
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, sx, sy, w, h, 0, 0, w, h);
 
-  return canvas; // ready for recolorSprite() or drawing
+  return canvas;
 }
 
+// recolor sprite from grey(s) to color(s)
 export function recolorSprite(canvas, palette) {
   const rules = palette.map(p => ({
     from: hexToRgb(p.from),
@@ -61,5 +65,49 @@ export function recolorSprite(canvas, palette) {
   }
 
   ctx.putImageData(imgData, 0, 0);
-  return canvas; // recoloRED and ready to draw
+
+  return canvas;
+}
+
+export function drawCircle(ctx, size, color) {  
+  const cx     = size / 2 - 0.5;
+  const cy     = size / 2 - 0.5;
+  const r      = size / 2 - 0.5;
+
+  ctx.fillStyle = color;
+
+  for (let y = 0; y < size; y++) {
+    const dy = y - cy;
+    const dx = Math.sqrt(r * r - dy * dy);
+    const x1 = Math.ceil(cx - dx);
+    const x2 = Math.floor(cx + dx);
+
+    ctx.fillRect(x1, y, x2 - x1 + 1, 1);
+  }  
+}
+
+export function renderBufferList(buffers, color=GREY) {
+  for (let i = 0; i < buffers.length; i++) {
+    const buffer = buffers[i];
+    const radius = buffer.canvas.width;   
+    drawCircle(buffer, radius, color);
+  }
+
+  return buffers;
+}
+
+export function renderBufferListColors(buffers, colors) {
+  const arr = [];
+  for (let i = 0; i < colors.length; i++) {
+    arr.push(...buffers);
+  }
+  
+  const from = '#999999';
+  for (let i = 0; i < arr.length; i++) {
+    const sprite = arr[i].canvas;
+    const to     = COLORS[i % colors.length];
+    recolorSprite(sprite, [ { from, to } ]);
+  }
+
+  return arr;
 }

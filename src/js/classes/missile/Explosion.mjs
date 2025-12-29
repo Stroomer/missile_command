@@ -1,77 +1,60 @@
-import { cutAndRecolor } from '../../canvas.mjs';
-import { COLORS, RED } from '../../constants.mjs';
+import { COLORS, GREY } from '../../constants.mjs';
 import Sprite from "../Sprite.mjs";
-import { drawPixelCircle, easeInQuad, easeOutQuad } from '../../helpers.mjs';
+import { createBuffer, createBufferList } from '../../buffer.mjs';
+import { renderBufferList, renderBufferListColors } from '../../canvas.mjs';
+import { easeInQuad, easeOutQuad, getRandomColor } from '../../helpers.mjs';
+
+
 
 export default class Explosion extends Sprite {
-  constructor(game, x, y, radius) {
-    super(x, y, radius, radius);
+  constructor(parent, pos, radius) {
+    super(pos.x, pos.y, radius, radius);
     
-    this.game         = game;
+    this.parent       = parent;
     this.time         = 0;
     this.expandTime   = 0.3;
     this.collapseTime = 0.5;
-    this.maxRadius    = 50;
     this.phase        = 0; // 0 = expand, 1 = collapse
-    this.radius       = radius;
-    
-    
-    //this.sprites      = [];
-    
-    // for (let s = 0; s < Explosion.SPRITESHEET_SLICES.length; s++) {
-    //   const { x, y, r } = Explosion.SPRITESHEET_SLICES[s];
-    //   for (let i = 0; i < COLORS.length; i++) {
-    //     this.sprites.push(cutAndRecolor(this.sheet, x, y, r, r, [{ from: '#999999', to: COLORS[i] }]));
-    //   }
-    // }
-
-    
-    console.log('exp');
-
-
-    //////this.sprite = createBuffer('explosion', 50, 50);
-    //////this.buffer = this.sprite.getContext('2d'); 
-
-    //drawPixelCircle(ctx, cx, cy, radius, RED)
-
-
-    
-    this.garbage = false;
+    this.radius       = 40 || radius;
+    this.sprite       = createBuffer('explosion', buffers[0].canvas.width, buffers[0].canvas.height).canvas;
+    this.buffer       = this.sprite.getContext('2d'); 
+    this.garbage      = false;
   }
 
   update(dt) {
+    if (!this.parent.exploded) return;
 
-    console.log('exploding');
+    this.time += dt;
+    let t, eased;
     
+    if (this.phase === 0) {
+      t = Math.min(this.time / this.expandTime, 1);
+      eased = easeOutQuad(t);
+      if (t >= 1) {
+        this.phase = 1;
+        this.time = 0;
+      }
+    } else {
+      t = Math.min(this.time / this.collapseTime, 1);
+      eased = 1 - easeInQuad(t);
+      if (t >= 1) {
+        this.garbage = true;
 
-    // this.time += dt;
-    // let t, eased;
+        return;
+      }
+    }
 
-    // if (this.phase === 0) {
-    //   t = Math.min(this.time / this.expandTime, 1);
-    //   eased = easeOutQuad(t);
-    //   if (t >= 1) {
-    //     this.phase = 1;
-    //     this.time = 0;
-    //   }
-    // } else {
-    //   t = Math.min(this.time / this.collapseTime, 1);
-    //   eased = 1 - easeInQuad(t);
-    //   if (t >= 1) {
-    //     this.garbage = true;
-    //     return;
-    //   }
-    // }
-
-    // const { sprites } = this;
-    // const { colorId } = this.game;
-    // const maxIndex = Explosion.SPRITESHEET_SLICES.length - 1; // 🔥 SPRITE INDEX
-    // const idx = eased * maxIndex | 0;
     
-    // this.sprite = this.getSprite(sprites, idx, colorId, COLORS.length);
-    // this.collisionRadius = eased * this.maxRadius;
-
-    // super.update(dt);
+    const color    = this.parent.parent.colorId;
+    const maxIndex = 20 - 1;
+    const slot     = color * 20; 
+    const index    = slot + ((eased * maxIndex) | 0);
+    
+    this.sprite = super.getSprite(buffers, index);
+    this.buffer = this.sprite.getContext('2d');
+    //this.collisionRadius = eased * this.maxRadius;
+    
+    super.update(dt);
   }
 
   hit(obj) {
@@ -84,23 +67,27 @@ export default class Explosion extends Sprite {
 
 
   draw(ctx) {
-    //super.draw(ctx);
+    super.draw(ctx);
   }
 
-  // getSprite(sprites, size, colorId, colorsCnt) {
-  //   const sprite = sprites[(size * colorsCnt) + colorId];
-    
-  //   this.width  = sprite.width;
-  //   this.height = sprite.height;
-  //   this.halfW  = sprite.width / 2;
-  //   this.halfH  = sprite.height / 2;
-    
-  //   return sprite;
-  // }
+  
 }
 
 
+// maak een array met buffers, van 2x2 tot 40x40
+// teken een grijze circle op de buffers
+// kopieer de array x het aantal kleuren en vervang grijs voor de kleuren
 
+
+
+
+let buffers;
+
+buffers = createBufferList('explosion', 2, 2, 40, true);  // create a list of empty buffers (context)
+buffers = renderBufferList(buffers, GREY);
+buffers = renderBufferListColors(buffers, COLORS);
+
+console.log(`buffers.length = ${buffers.length}`);
 
 
 

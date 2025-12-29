@@ -15,15 +15,18 @@ export default class Target extends Sprite {
   }
 
   update(dt) {
+    if (this.parent.exploded) {
+      this.visible = false;
+      return;
+    }
+
     this.color = getRandomColor();
-    if (this.parent.exploded) this.visible = false;
   }
 
   draw(ctx) {    
     if (!this.visible) return;
 
     this.redrawColor(this.color);
-
     super.draw(ctx);
   }
 

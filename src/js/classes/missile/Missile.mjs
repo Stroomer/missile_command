@@ -39,14 +39,14 @@ export default class Missile {
     this.smoke.update(dt);    
     this.projectile.update(dt);
     this.target.update(dt);
-    //this.explosion.update(dt);
+    this.explosion.update(dt);
   }
 
   draw(ctx) {
     this.smoke.draw(ctx);
     this.projectile.draw(ctx);
     this.target.draw(ctx);
-    //this.explosion.draw(ctx);
+    this.explosion.draw(ctx);
   }
 
   explode() {

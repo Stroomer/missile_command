@@ -61,31 +61,8 @@ export function easeInQuad(t) {
   return t * t;
 }
 
-export function drawPixelCircle(ctx, cx, cy, radius, color = '#fff') {
-  ctx.fillStyle = color;
 
-  let x = radius;
-  let y = 0;
-  let err = 1 - radius;
 
-  while (x >= y) {
-    // 8-way symmetry
-    ctx.fillRect(cx + x, cy + y, 1, 1);
-    ctx.fillRect(cx + y, cy + x, 1, 1);
-    ctx.fillRect(cx - y, cy + x, 1, 1);
-    ctx.fillRect(cx - x, cy + y, 1, 1);
-    ctx.fillRect(cx - x, cy - y, 1, 1);
-    ctx.fillRect(cx - y, cy - x, 1, 1);
-    ctx.fillRect(cx + y, cy - x, 1, 1);
-    ctx.fillRect(cx + x, cy - y, 1, 1);
 
-    y++;
 
-    if (err < 0) {
-      err += 2 * y + 1;
-    } else {
-      x--;
-      err += 2 * (y - x) + 1;
-    }
-  }
-}
+

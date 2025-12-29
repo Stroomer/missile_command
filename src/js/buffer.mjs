@@ -26,6 +26,21 @@ export function createBuffer(id, w=null, h=null) {
   return ctx;
 }
 
+export function createBufferList(id, step, min, max, context=false) {
+  const buffers = [];
+  const frames  = max / step;
+
+  for (let i = 0; i < frames; i++) {
+    const size = min + (i * step);  
+    const buffer = createBuffer(`${id}_${i}`, size, size);
+    console.log(`size = ${size} x ${size}`);
+
+    buffers.push(context ? buffer : buffer.canvas);
+  }
+
+  return buffers;
+}
+
 function showBufferAttributes(ctx) {
   const supported = ctx.getContextAttributes;
   const message   = supported ? JSON.stringify(ctx.getContextAttributes()) : 'feature not supported'; 

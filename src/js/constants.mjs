@@ -17,9 +17,15 @@ export const CYAN   = '#00ffff';
 
 export const COLORS = [RED, PURPLE, WHITE, GREEN, YELLOW, BLUE, ORANGE, CYAN];
 
-export const DEG  = Math.PI / 180;
-export const FPS  = 60;
-export const STEP = 1 / FPS;
+export const DEG    = Math.PI / 180;
+export const FPS    = 60;
+export const STEP   = 1 / FPS;
+
+export const CIRCLE = 'circle';
+export const RECT   = 'rect';
+
+
+
 
 // export const enemyMissile = {
 //     minX: 15,
