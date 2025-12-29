@@ -5,7 +5,7 @@ import Sprite from '../Sprite.mjs';
 
 export default class Target extends Sprite {
   constructor(parent, target) {
-    super(target.x + 1, target.y + 1, 5, 5);
+    super(target.x, target.y, 5, 5);
     
     this.parent    = parent;
     this.sprite    = cutAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from:'#999999', to:BLUE }]);

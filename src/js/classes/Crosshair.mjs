@@ -4,7 +4,7 @@ import Sprite from './Sprite.mjs';
 
 export default class Crosshair extends Sprite {
   constructor(color) {
-    super(30, 30, 7, 7);
+    super(0, 0, 7, 7);
     
     this.sprite = cutAndRecolor(this.sheet, 1, 24, this.width, this.height, [
       { from:'#999999', to:BLUE }
@@ -21,8 +21,8 @@ export default class Crosshair extends Sprite {
     }
     
     this.visible = true;
-    this.x = mouse.x + 1;
-    this.y = mouse.y + 1;
+    this.x = mouse.x;
+    this.y = mouse.y;
   }
 
   draw(ctx) {

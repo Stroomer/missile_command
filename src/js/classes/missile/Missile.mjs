@@ -55,4 +55,6 @@ export default class Missile {
     this.parent.audio.playExplosion();
     this.exploded = true;
   }
+
+  
 }
