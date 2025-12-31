@@ -1,4 +1,3 @@
-import { WIDTH, HEIGHT } from './../js/constants.mjs';
 import { withinBounds } from './helpers.mjs';
 
 const canvas = document.getElementById('onscreen');
@@ -45,12 +44,13 @@ canvas.addEventListener('mousemove', (e) => {
   }
 });
 
-
 canvas.addEventListener('mouseout', (e) => {
   mouse.visible = false;
+  canvas.style.cursor = 'arrow';
 });
 
 canvas.addEventListener('mouseover', (e) => {
   mouse.visible = true;
+  canvas.style.cursor = 'none';
 });
 

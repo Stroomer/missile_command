@@ -1,21 +1,20 @@
-import { BLUE } from '../../constants.mjs';
 import { getLineBresenham } from '../../helpers.mjs';
 
 export default class MissileComponent {
-  constructor(parent, start, target, speed = 50) {
-    this.parent       = parent;
-    this.pixels       = getLineBresenham(start.x, start.y, target.x, target.y);
+  constructor(props) {    
+    this.parent       = props.parent;
+    this.speed        = props.speed; // pixels per second
+    this.color        = props.color;
+    this.pixels       = getLineBresenham(props.start.x, props.start.y, props.target.x, props.target.y);
     this.total        = this.pixels.length;
-    this.speed        = speed; // pixels per second
-    this.progress     = 0; // float, allows smooth accumulation
+    this.progress     = 0;
     this.visibleCount = 0;
-    this.color        = BLUE;
     this.index        = null;
     this.nextIndex    = null;
     this.visible      = true;
     
   }
-
+  
   update(dt) {
       this.progress += this.speed * dt;
       this.nextIndex = this.progress | 0;

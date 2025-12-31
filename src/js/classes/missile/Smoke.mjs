@@ -1,12 +1,12 @@
 import MissileComponent from './MissileComponent.mjs';
 
 export default class Smoke extends MissileComponent {
-  constructor(parent, start, target, speed = 50) {
-    super(parent, start, target, speed);
+  constructor(props) {
+    super(props);
   }
 
   update(dt) {
-    if (this.parent.exploded) {
+    if (this.parent.garbage) {
       this.visible = false;
       return;
     }
@@ -23,6 +23,10 @@ export default class Smoke extends MissileComponent {
   }
 
   draw(ctx) {
+
+    console.log(`smoke visible? ${this.visible}`);
+    
+
     if (!this.visible) return;
     super.drawRange(ctx, 0, this.visibleCount);
   }

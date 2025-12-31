@@ -31,12 +31,6 @@ body {
   align-items: center;
 }
 
-/* canvas {
-  width: min(100vw, 100vh);
-  height: min(100vw, 100vh);
-  image-rendering: pixelated; 
-} */
-
 canvas {
   width: 100vmin;
   height: 100vmin;

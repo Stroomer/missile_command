@@ -4,10 +4,10 @@ import { getRandomColor } from '../../helpers.mjs';
 import Sprite from '../Sprite.mjs';
 
 export default class Target extends Sprite {
-  constructor(parent, target) {
-    super(target.x, target.y, 5, 5);
+  constructor(props) {
+    super(props.target.x, props.target.y, 5, 5);
     
-    this.parent    = parent;
+    this.parent    = props.parent;
     this.sprite    = cutAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from:'#999999', to:BLUE }]);
     this.buffer    = this.sprite.getContext('2d');
     this.color     = BLUE;

@@ -35,7 +35,8 @@ export default class Game {
   }
 
   update(dt) {
-      //this.collectGarbage(this.smoke);
+      this.collectGarbage(this.missiles);
+    
       //this.collectGarbage(this.targets);
       //this.collectGarbage(this.explosions);
     

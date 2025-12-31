@@ -2,8 +2,8 @@ import { getRandomColor } from '../../helpers.mjs';
 import MissileComponent from './MissileComponent.mjs';
 
 export default class Projectile extends MissileComponent {
-  constructor(parent, start, target, speed = 50) {
-    super(parent, start, target, speed);
+  constructor(props) {
+    super(props);
   }
 
   update(dt) {

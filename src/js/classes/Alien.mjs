@@ -9,7 +9,7 @@ export default class Alien extends Sprite {
     console.log("alien", this.x, this.y, this.width, this.height);
 
     this.parent = parent;
-    this.speed  = 50;
+    this.speed  = 10;
     this.vx     = x <= WIDTH / 2 ? 1 : -1;
     this.vy     = 0;
     this.sprite = cutAndRecolor(this.sheet, 36, 33, this.width, this.height, [
