@@ -2,6 +2,7 @@ import Projectile from './Projectile.mjs';
 import Target from './Target.mjs';
 import Smoke from './Smoke.mjs';
 import Explosion from './Explosion.mjs';
+import { YELLOW } from '../../constants.mjs';
 
 // missile has:
 // 1. rocket
@@ -11,9 +12,7 @@ import Explosion from './Explosion.mjs';
 
 export default class Missile {
   constructor(props) {
-    const { parent, start, target, speed, color, radius } = props;
-    
-    
+    const { parent, start, target, speed, color, radius, isEnemyMissile } = props;
     
     this.parent     = parent;
     this.name       = 'missile';
@@ -21,6 +20,7 @@ export default class Missile {
     this.target     = target;
     this.speed      = speed;
     this.radius     = radius;
+    
     this.smoke      = new Smoke({ parent:this, start, target, speed, color });
     this.projectile = new Projectile({ parent:this, start, target, speed, color });
     this.target     = new Target({ parent:this, target });
@@ -28,6 +28,8 @@ export default class Missile {
     this.phase      = 0;
     this.exploded   = false;
     this.garbage    = false;
+    
+    this.isEnemyMissile = isEnemyMissile;
     
     parent.audio.playMissileLaunch();
   }

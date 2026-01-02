@@ -15,7 +15,7 @@ export default class Target extends Sprite {
   }
 
   update(dt) {
-    if (this.parent.exploded) {
+    if (this.parent.exploded || this.parent.isEnemyMissile) {
       this.visible = false;
       return;
     }

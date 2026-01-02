@@ -15,14 +15,16 @@ export default class Enemy {
       this.time = 0;
       if (!randomInt(0, 2)) {
         const parent = this.parent;
-        const start = { x: randomInt(30, WIDTH - 30), y: 0 };
+        const start  = { x: randomInt(30, WIDTH - 30), y: 0 };
         const target = { x: randomInt(50, WIDTH - 50) , y: HEIGHT - 20 };
-        const speed = 50;
-        const color = RED;
-        const radius = 5;
-        const props = { parent, start, target, speed, color, radius };
+        const speed  = 50;
+        const color  = RED;
+        const radius = 12;
+        const isEnemyMissile = true;
+        const props = { parent, start, target, speed, color, radius, isEnemyMissile };
         
         this.launch(props);
+
         console.log('launch!!');
       } else {
           console.log('ignore');

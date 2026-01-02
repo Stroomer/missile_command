@@ -45,13 +45,12 @@ export default class Explosion extends Sprite {
     }
     
     const color    = this.parent.parent.colorId;
-    const maxIndex = Explosion.RADIUS.MAX - 1;
-    const slot     = color * Explosion.RADIUS.MAX;  
+    const maxIndex = this.radius - 1;
+    const slot     = color * this.radius;  
     const index    = slot + ((eased * maxIndex) | 0);
     
     //console.log(Explosion.BUFFERS);
     
-
     this.sprite = super.getSprite(Explosion.BUFFERS, index);
     this.buffer = this.sprite.getContext('2d');
     this.collisionRadius = eased * this.radius;
@@ -67,33 +66,27 @@ export default class Explosion extends Sprite {
     return dx * dx + dy * dy <= r * r;
   }
 
-
   draw(ctx) {
     super.draw(ctx);
   }
-
-  
 }
   
 Explosion.RADIUS   = { MIN:4,   MAX:40 };
 Explosion.EXPAND   = { MIN:0.1, MAX:10.0 };
 Explosion.COLLAPSE = { MIN:0.1, MAX:10.0 };
-  
+
 Explosion.BUFFERS  = [];
 Explosion.BUFFERS  = createBufferList('explosion', 2, 2, 2*Explosion.RADIUS.MAX, true);  // create a list of empty buffers (context)
 Explosion.BUFFERS  = renderBufferList(Explosion.BUFFERS, GREY);
-Explosion.BUFFERS  = renderBufferListColors(Explosion.BUFFERS, COLORS);
+Explosion.BUFFERS  = renderBufferListColors(Explosion.BUFFERS, COLORS);  
 
 Explosion.DEFAULT    = {
   EXPAND:   0.3,
   COLLAPSE: 0.5,
-  RADIUS:   Explosion.RADIUS.MAX //(Explosion.RADIUS.MAX / 2) | 0,
+  RADIUS:   Explosion.RADIUS.MAX
 };
 
 console.log(`buffers.length = ${Explosion.BUFFERS.length}`);
-console.log(Explosion.BUFFERS[0]);
-
-
 
 
 Explosion.VALIDATE = (props) => {
