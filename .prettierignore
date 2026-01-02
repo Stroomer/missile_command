@@ -9,10 +9,12 @@
 /src/js/classes/Launcher.mjs
 /src/js/classes/Background.mjs
 /src/js/classes/Alien.mjs
+/src/js/classes/Aircraft.mjs
 /src/js/classes/City.mjs
 /src/js/classes/Sprite.mjs
 /src/js/classes/Game.mjs
 /src/js/classes/Crosshair.mjs
+/src/js/classes/Enemy.mjs
 
 /src/js/classes/missile/Missile.mjs
 /src/js/classes/missile/Projectile.mjs

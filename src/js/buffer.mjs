@@ -46,3 +46,62 @@ function showBufferAttributes(ctx) {
   const message   = supported ? JSON.stringify(ctx.getContextAttributes()) : 'feature not supported'; 
   console.log(message);
 }
+
+// export function flip(ctx) {
+
+
+
+//   const { width, height } = ctx.canvas;
+//   const srcImg            = ctx.getImageData(0, 0, width, height);
+//   const src               = new Uint32Array(srcImg.data.buffer);
+//   const out               = new Uint32Array(src.length);
+
+//   for (let y = 0; y < height; y++) {
+//     const row = y * width;
+//     for (let x = 0; x < width; x++) {
+//       out[row + x] = src[row + (width - 1 - x)];
+//     }
+//   }
+
+//   const outCanvas = new OffscreenCanvas(width, height);
+//   const outCtx = outCanvas.getContext('2d');
+//   const outImg = new ImageData(new Uint8ClampedArray(out.buffer), width, height);
+
+//   outCtx.putImageData(outImg, 0, 0);
+//   return outCanvas;
+// }
+
+export function flip(canvas) {
+  const width  = canvas.width;
+  const height = canvas.height;
+
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+  const srcImg = ctx.getImageData(0, 0, width, height);
+  const src    = new Uint32Array(srcImg.data.buffer);
+  const dst    = new Uint32Array(src.length);
+
+  for (let y = 0; y < height; y++) {
+    const row = y * width;
+    let left  = row;
+    let right = row + width - 1;
+
+    while (left <= right) {
+      const a = src[left];
+      const b = src[right];
+      dst[left++]  = b;
+      dst[right--] = a;
+    }
+  }
+
+  const outCanvas = new OffscreenCanvas(width, height);
+  const outCtx    = outCanvas.getContext('2d');
+
+  outCtx.putImageData(
+    new ImageData(new Uint8ClampedArray(dst.buffer), width, height),
+    0,
+    0
+  );
+
+  return outCanvas;
+}

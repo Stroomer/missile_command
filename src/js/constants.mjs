@@ -23,7 +23,10 @@ export const STEP   = 1 / FPS;
 
 export const CIRCLE = 'circle';
 export const RECT   = 'rect';
+export const LEFT   = 'left';
+export const RIGHT  = 'right';
 
+export const DIRECTION = { LEFT:-1, RIGHT:1, UP:-1, DOWN:1 };
 
 
 

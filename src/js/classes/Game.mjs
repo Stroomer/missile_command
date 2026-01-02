@@ -8,8 +8,10 @@ import Crosshair   from './Crosshair.mjs';
 import Audio       from './Audio.mjs';
 import Background  from './Background.mjs';
 import Alien       from './Alien.mjs';
+import Aircraft    from './Aircraft.mjs';
 import City        from './City.mjs';
 import Launcher    from './Launcher.mjs';
+import Enemy from './Enemy.mjs';
 
 
 const sprites = document.getElementById('sprites');
@@ -37,16 +39,17 @@ export default class Game {
   update(dt) {
       this.collectGarbage(this.missiles);
     
-      //this.collectGarbage(this.targets);
-      //this.collectGarbage(this.explosions);
-    
       this.colorId = randomInt(0, COLORS.length-1);
     
       this.launcher.update(mouse);
       this.crosshair.update(mouse);
-
+    
+      this.enemy.update(dt);  
+    
       for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].update(dt);  
       for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].update(dt);
+      for (let i = 0; i < this.aircrafts.length; i++)   this.aircrafts[i].update(dt);
+    
       // for (let i = 0; i < this.targets.length; i++)     this.targets[i].update(dt);
       // for (let i = 0; i < this.smoke.length; i++)       this.smoke[i].update(dt);
       // for (let i = 0; i < this.explosions.length; i++)  this.explosions[i].update(dt);
@@ -60,8 +63,10 @@ export default class Game {
     offscreen.fillStyle = BLACK;
     offscreen.fillRect(0, 0, WIDTH, HEIGHT);
 
-    for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].draw(offscreen);   // draw missiles
-    for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].draw(offscreen);     // draw aliens        
+    for (let i = 0; i < this.missiles.length; i++)       this.missiles[i].draw(offscreen);   // draw missiles
+    for (let i = 0; i < this.aliens.length; i++)         this.aliens[i].draw(offscreen);     // draw aliens        
+    for (let i = 0; i < this.aircrafts.length; i++)      this.aircrafts[i].draw(offscreen);  // draw aliens 
+    
     // for (let i = 0; i < this.targets.length; i++)     this.targets[i].draw(offscreen);    // draw missiles
     // for (let i = 0; i < this.smoke.length; i++)       this.smoke[i].draw(offscreen);      // draw missiles
     // for (let i = 0; i < this.explosions.length; i++)  this.explosions[i].draw(offscreen); // draw missiles
@@ -92,7 +97,8 @@ export default class Game {
 
     this.crosshair  = new Crosshair(BLUE);
     this.background = new Background(128, 220);
-    this.launcher   = new Launcher(this, 20, 120);
+    this.launcher   = new Launcher(this);
+    this.enemy      = new Enemy(this);
     
     this.cities = [];
     this.cities.push(new City(48,  215));
@@ -103,11 +109,11 @@ export default class Game {
     this.cities.push(new City(218, 216));  
       
     this.missiles   = [];
-    // this.smoke      = [];
-    // this.targets    = [];
-    // this.explosions = [];
     this.aliens     = [];
-    this.aliens.push(new Alien(this, randomInt(50, WIDTH-50), 100));
+    this.aliens.push(new Alien(this, randomInt(50, WIDTH - 50), 100));
+    
+    this.aircrafts  = [];
+    this.aircrafts.push(new Aircraft(this));
 
     this.background.draw(this.buffer.background);
 

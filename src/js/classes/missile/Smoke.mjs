@@ -23,10 +23,6 @@ export default class Smoke extends MissileComponent {
   }
 
   draw(ctx) {
-
-    console.log(`smoke visible? ${this.visible}`);
-    
-
     if (!this.visible) return;
     super.drawRange(ctx, 0, this.visibleCount);
   }

@@ -7,19 +7,14 @@ import { easeInQuad, easeOutQuad } from '../../helpers.mjs';
 
 
 export default class Explosion extends Sprite {
-  static BUFFERS       = [];
-  static MAX_SIZE      = 80;
-  static MAX_RADIUS    = Explosion.MAX_SIZE / 2;
-  static DEFAULT_PROPS = {};
-
-  constructor(props) {  
+  constructor(props) {
+    props = Explosion.VALIDATE(props);
     super(props.target.x, props.target.y, props.radius, props.radius);
     
     this.parent       = props.parent;
     this.radius       = props.radius;
-    this.expandTime   = props.expandTime   || Explosion.DEFAULT_PROPS.expandTime;
-    this.collapseTime = props.collapseTime || Explosion.DEFAULT_PROPS.collapseTime;
-    this.maxRadius    = props.radius       || Explosion.DEFAULT_PROPS.maxRadius;   
+    this.expandTime   = props.expandTime;
+    this.collapseTime = props.collapseTime;   
     this.time         = 0;
     this.phase        = 0; // 0 = expand, 1 = collapse
     this.sprite       = createBuffer('explosion', props.radius, props.radius).canvas;
@@ -50,13 +45,16 @@ export default class Explosion extends Sprite {
     }
     
     const color    = this.parent.parent.colorId;
-    const maxIndex = Explosion.MAX_RADIUS - 1;
-    const slot     = color * Explosion.MAX_RADIUS; 
+    const maxIndex = Explosion.RADIUS.MAX - 1;
+    const slot     = color * Explosion.RADIUS.MAX;  
     const index    = slot + ((eased * maxIndex) | 0);
     
+    //console.log(Explosion.BUFFERS);
+    
+
     this.sprite = super.getSprite(Explosion.BUFFERS, index);
     this.buffer = this.sprite.getContext('2d');
-    this.collisionRadius = eased * this.maxRadius;
+    this.collisionRadius = eased * this.radius;
     
     super.update(dt);
   }
@@ -76,18 +74,48 @@ export default class Explosion extends Sprite {
 
   
 }
+  
+Explosion.RADIUS   = { MIN:4,   MAX:40 };
+Explosion.EXPAND   = { MIN:0.1, MAX:10.0 };
+Explosion.COLLAPSE = { MIN:0.1, MAX:10.0 };
+  
+Explosion.BUFFERS  = [];
+Explosion.BUFFERS  = createBufferList('explosion', 2, 2, 2*Explosion.RADIUS.MAX, true);  // create a list of empty buffers (context)
+Explosion.BUFFERS  = renderBufferList(Explosion.BUFFERS, GREY);
+Explosion.BUFFERS  = renderBufferListColors(Explosion.BUFFERS, COLORS);
 
-Explosion.BUFFERS = createBufferList('explosion', 2, 2, Explosion.MAX_SIZE, true);  // create a list of empty buffers (context)
-Explosion.BUFFERS = renderBufferList(Explosion.BUFFERS, GREY);
-Explosion.BUFFERS = renderBufferListColors(Explosion.BUFFERS, COLORS);
+Explosion.DEFAULT    = {
+  EXPAND:   0.3,
+  COLLAPSE: 0.5,
+  RADIUS:   Explosion.RADIUS.MAX //(Explosion.RADIUS.MAX / 2) | 0,
+};
 
 console.log(`buffers.length = ${Explosion.BUFFERS.length}`);
+console.log(Explosion.BUFFERS[0]);
 
-Explosion.DEFAULT_PROPS = {
-  expandTime:   0.3,
-  collapseTime: 0.5,
-  maxRadius:    Explosion.MAX_RADIUS,
-};
+
+
+
+Explosion.VALIDATE = (props) => {
+  const { start, target, radius, expandTime, collapseTime } = props;
+  
+  if (!start)                                throw Error("No start-location specified");
+  if (!target)                               throw Error("No target-location specified");
+  
+  if (!expandTime)                           props.expandTime = Explosion.DEFAULT.EXPAND;
+  if (expandTime < Explosion.EXPAND.MIN)     props.expandTime = Explosion.EXPAND.MIN;  
+  if (expandTime > Explosion.EXPAND.MAX)     props.expandTime = Explosion.EXPAND.MAX;  
+
+  if (!collapseTime)                         props.collapseTime = Explosion.DEFAULT.COLLAPSE;
+  if (collapseTime < Explosion.COLLAPSE.MIN) props.collapseTime = Explosion.COLLAPSE.MIN;  
+  if (collapseTime > Explosion.COLLAPSE.MAX) props.collapseTime = Explosion.COLLAPSE.MAX;
+  
+  if (!radius)                               props.radius = Explosion.DEFAULT.RADIUS;
+  if (radius < Explosion.RADIUS.MIN)         props.radius = Explosion.RADIUS.MIN;
+  if (radius > Explosion.RADIUS.MAX)         props.radius = Explosion.RADIUS.MAX;
+  
+  return props;
+}
 
 
 

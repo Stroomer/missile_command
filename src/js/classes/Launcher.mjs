@@ -1,10 +1,8 @@
-import { RED, YELLOW } from "../constants.mjs";
+import { BLUE, RED, YELLOW } from "../constants.mjs";
 import Missile from "./missile/Missile.mjs";
 
 export default class Launcher {
-  constructor(parent, x, y) {
-    this.x      = x;
-    this.y      = y;
+  constructor(parent) {
     this.parent = parent;
   }
 
@@ -17,7 +15,7 @@ export default class Launcher {
     const start      = { x:123, y:209 };
     const target     = { x:mouse.x, y:mouse.y };
     const speed      = 110;
-    const color      = RED;
+    const color      = BLUE ;
     const radius     = 40;
     const props      = { parent, start, target, speed, color, radius };
 

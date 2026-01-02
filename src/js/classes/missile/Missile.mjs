@@ -1,5 +1,3 @@
-import { cutAndRecolor } from '../../canvas.mjs';
-import { BLUE, CYAN } from '../../constants.mjs';
 import Projectile from './Projectile.mjs';
 import Target from './Target.mjs';
 import Smoke from './Smoke.mjs';
@@ -14,10 +12,11 @@ import Explosion from './Explosion.mjs';
 export default class Missile {
   constructor(props) {
     const { parent, start, target, speed, color, radius } = props;
-
+    
     
     
     this.parent     = parent;
+    this.name       = 'missile';
     this.start      = start;
     this.target     = target;
     this.speed      = speed;
@@ -25,7 +24,7 @@ export default class Missile {
     this.smoke      = new Smoke({ parent:this, start, target, speed, color });
     this.projectile = new Projectile({ parent:this, start, target, speed, color });
     this.target     = new Target({ parent:this, target });
-    this.explosion  = new Explosion({ parent:this, target, radius });
+    this.explosion  = new Explosion({ parent:this, start, target, radius });
     this.phase      = 0;
     this.exploded   = false;
     this.garbage    = false;

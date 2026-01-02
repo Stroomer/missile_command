@@ -17,24 +17,52 @@ function hexToRgb(hex) {
   };
 }
 
-export function cutAndRecolor(img, sx, sy, w, h, palette) {
-  const slice     = cutSprite(img, sx, sy, w, h);
+export function copyAndRecolor(img, sx, sy, w, h, palette) {
+  const slice     = copySprite(img, sx, sy, w, h);
   const recolored = recolorSprite(slice, palette);
   return recolored;
 }
 
 // cut sprite from spritesheet
-export function cutSprite(img, sx, sy, w, h) {
-  const canvas = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : document.createElement('canvas');
-  canvas.width = w;
-  canvas.height = h;
+// export function copySprite(canvas, sx, sy, w, h) {
+//   const sprite = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : document.createElement('canvas');
+//   sprite.width = w;
+//   sprite.height = h;
 
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+//   const ctx = sprite.getContext('2d', { willReadFrequently: true });
+//   ctx.imageSmoothingEnabled = false;
+//   ctx.drawImage(canvas, sx, sy, w, h, 0, 0, w, h);
+
+//   return sprite;
+// }
+
+export function copySprite(source, sx = 0, sy = 0, w, h) {
+  let srcCanvas;  // --- Normalize source ---
+
+  if (source instanceof CanvasRenderingContext2D)              srcCanvas = source.canvas;
+  else if(source instanceof OffscreenCanvasRenderingContext2D) srcCanvas = source.canvas;  
+  else                                                         srcCanvas = source;
+  
+  if (!srcCanvas) throw new TypeError('Invalid source provided to copySprite');
+
+  const srcW = srcCanvas.width  || srcCanvas.naturalWidth;  // --- Resolve width / height ---
+  const srcH = srcCanvas.height || srcCanvas.naturalHeight;
+
+  if (w == null) w = srcW;
+  if (h == null) h = srcH;
+
+  const sprite = typeof OffscreenCanvas !== 'undefined' ? new OffscreenCanvas(w, h) : Object.assign(document.createElement('canvas'), { width: w, height: h }); // --- Create target canvas ---
+  const ctx = sprite.getContext('2d', { willReadFrequently: true });
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(img, sx, sy, w, h, 0, 0, w, h);
 
-  return canvas;
+  ctx.drawImage(srcCanvas, sx, sy, w, h, 0, 0, w, h); // --- Draw ---
+
+  //console.log(sprite);
+
+  return sprite;
 }
+
+
 
 // recolor sprite from grey(s) to color(s)
 export function recolorSprite(canvas, palette) {
