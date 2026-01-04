@@ -114,28 +114,28 @@ export function drawCircle(ctx, size, color) {
   }  
 }
 
-export function renderBufferList(buffers, color=GREY) {
-  for (let i = 0; i < buffers.length; i++) {
-    const buffer = buffers[i];
-    const radius = buffer.canvas.width;   
-    drawCircle(buffer, radius, color);
-  }
+// export function renderBufferList(buffers, color=GREY) {
+//   for (let i = 0; i < buffers.length; i++) {
+//     const buffer = buffers[i];
+//     const radius = buffer.canvas.width;   
+//     drawCircle(buffer, radius, color);
+//   }
 
-  return buffers;
-}
+//   return buffers;
+// }
 
-export function renderBufferListColors(buffers, colors) {
-  const arr = [];
-  for (let i = 0; i < colors.length; i++) {
-    arr.push(...buffers);
-  }
+// export function renderBufferListColors(buffers, colors) {
+//   const arr = [];
+//   for (let i = 0; i < colors.length; i++) {
+//     arr.push(...buffers);
+//   }
   
-  const from = '#999999';
-  for (let i = 0; i < arr.length; i++) {
-    const sprite = arr[i].canvas;
-    const to     = COLORS[i % colors.length];
-    recolorSprite(sprite, [ { from, to } ]);
-  }
+//   const from = '#999999';
+//   for (let i = 0; i < arr.length; i++) {
+//     const sprite = arr[i].canvas;
+//     const to     = COLORS[i % colors.length];
+//     recolorSprite(sprite, [ { from, to } ]);
+//   }
 
-  return arr;
-}
+//   return arr;
+// }

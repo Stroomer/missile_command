@@ -7,7 +7,7 @@ import { YELLOW } from '../../constants.mjs';
 // missile has:
 // 1. rocket
 // 2. smoke trail
-// 3. target coordinates
+// 3. target coordinate
 // 4. explosion effect
 
 export default class Missile {
@@ -24,7 +24,7 @@ export default class Missile {
     this.smoke      = new Smoke({ parent:this, start, target, speed, color });
     this.projectile = new Projectile({ parent:this, start, target, speed, color });
     this.target     = new Target({ parent:this, target });
-    this.explosion  = new Explosion({ parent:this, start, target, radius });
+    this.explosion  = new Explosion({ parent:this, start, target, radius, expandTime:0.2, collapseTime:0.5 });
     this.phase      = 0;
     this.exploded   = false;
     this.garbage    = false;

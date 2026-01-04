@@ -61,8 +61,6 @@ export function easeInQuad(t) {
   return t * t;
 }
 
-
-
-
-
-
+export function even(num) {
+  return (num & 1) === 0
+}

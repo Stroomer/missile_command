@@ -26,16 +26,18 @@ export function createBuffer(id, w=null, h=null) {
   return ctx;
 }
 
-export function createBufferList(id, step, min, max, context=false) {
+
+
+export function createBufferList(id, sizes) {
   const buffers = [];
-  const frames  = max / step;
 
-  for (let i = 0; i < frames; i++) {
-    const size = min + (i * step);  
-    const buffer = createBuffer(`${id}_${i}`, size, size);
-    console.log(`size = ${size} x ${size}`);
-
-    buffers.push(context ? buffer : buffer.canvas);
+  for (let i = 0; i < sizes.length; i++) {
+    const label  = `${id}_${i}`;
+    const size   = sizes[i];  
+    const buffer = createBuffer(label, size, size);
+    
+    buffers.push(buffer);
+    console.log(`label = ${label}, size = ${size} x ${size}`); 
   }
 
   return buffers;
@@ -46,30 +48,6 @@ function showBufferAttributes(ctx) {
   const message   = supported ? JSON.stringify(ctx.getContextAttributes()) : 'feature not supported'; 
   console.log(message);
 }
-
-// export function flip(ctx) {
-
-
-
-//   const { width, height } = ctx.canvas;
-//   const srcImg            = ctx.getImageData(0, 0, width, height);
-//   const src               = new Uint32Array(srcImg.data.buffer);
-//   const out               = new Uint32Array(src.length);
-
-//   for (let y = 0; y < height; y++) {
-//     const row = y * width;
-//     for (let x = 0; x < width; x++) {
-//       out[row + x] = src[row + (width - 1 - x)];
-//     }
-//   }
-
-//   const outCanvas = new OffscreenCanvas(width, height);
-//   const outCtx = outCanvas.getContext('2d');
-//   const outImg = new ImageData(new Uint8ClampedArray(out.buffer), width, height);
-
-//   outCtx.putImageData(outImg, 0, 0);
-//   return outCanvas;
-// }
 
 export function flip(canvas) {
   const width  = canvas.width;

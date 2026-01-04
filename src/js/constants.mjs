@@ -28,15 +28,4 @@ export const RIGHT  = 'right';
 
 export const DIRECTION = { LEFT:-1, RIGHT:1, UP:-1, DOWN:1 };
 
-
-
-// export const enemyMissile = {
-//     minX: 15,
-//     maxX: WIDTH - 15,
-//     minY: 12,
-//     maxY: 12,
-//     minSpeed: 30,
-//     maxSpeed: 40,
-//     minAngle: 5,
-//     maxAngle: 43,
-// }; 
+export const HAS_OFFSCREEN_CANVAS_CAPABILITIES = typeof OffscreenCanvas !== 'undefined';

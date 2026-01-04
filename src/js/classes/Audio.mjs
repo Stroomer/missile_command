@@ -33,8 +33,7 @@ export default class Audio {
   // Missile launch sound (WHITE noise + fast decay)
   // ------------------------------------------
   playMissileLaunch() {
-    console.log('play launch sound');
-
+    //console.log('play launch sound');
     const src = this.ctx.createBufferSource();
     src.buffer = this.createNoiseBuffer('WHITE');
 
@@ -59,8 +58,7 @@ export default class Audio {
   // Explosion (low-pass + sweeping pitch)
   // ------------------------------------------
   playExplosion() {
-    console.log('play explosion sound');
-
+    //console.log('play explosion sound');
     const src = this.ctx.createBufferSource();
     src.buffer = this.createNoiseBuffer('WHITE');
 

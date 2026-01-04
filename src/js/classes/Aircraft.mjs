@@ -1,4 +1,4 @@
-import { BLUE, COLORS, DIRECTION, GREEN, RED, WIDTH } from '../constants.mjs';
+import { DIRECTION, GREEN, WIDTH } from '../constants.mjs';
 import { copyAndRecolor, copySprite } from '../canvas.mjs';
 import Sprite from './Sprite.mjs';
 import { flip } from '../buffer.mjs';
@@ -8,18 +8,16 @@ export default class Aircraft extends Sprite {
   constructor(parent, x=-8+(randomInt(0, 1)*(WIDTH+16)) , y=120) {
     super(x, y, 16, 11);
 
-    console.log('aircraft', this.x, this.y, this.width, this.height);
-
     const halfScreen = WIDTH / 2;
 
-    this.parent = parent;
-    this.speed = 30 + randomInt(0, 30);
-    this.dirX = x < halfScreen ? DIRECTION.RIGHT : DIRECTION.LEFT;
-    this.dirY = 0;
-    this.sprite = copyAndRecolor(this.sheet, 19, 24, this.width, this.height, [{ from: '#999999', to: GREEN }]);
+    this.parent  = parent;
+    this.speed   = 30 + randomInt(0, 30);
+    this.dirX    = x < halfScreen ? DIRECTION.RIGHT : DIRECTION.LEFT;
+    this.dirY    = 0;
+    this.sprite  = copyAndRecolor(this.sheet, 19, 24, this.width, this.height, [{ from: '#999999', to: GREEN }]);
     this.sprites = [copySprite(this.sprite), flip(copySprite(this.sprite))];
-    this.sprite = this.sprites[this.dirX === DIRECTION.LEFT ? 1 : 0];
-    this.buffer = this.sprite.getContext('2d');
+    this.sprite  = this.sprites[this.dirX === DIRECTION.LEFT ? 1 : 0];
+    this.buffer  = this.sprite.getContext('2d');
   }
 
   update(dt) {
