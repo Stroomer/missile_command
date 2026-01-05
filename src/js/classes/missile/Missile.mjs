@@ -24,7 +24,7 @@ export default class Missile {
     this.smoke      = new Smoke({ parent:this, start, target, speed, color });
     this.projectile = new Projectile({ parent:this, start, target, speed, color });
     this.target     = new Target({ parent:this, target });
-    this.explosion  = new Explosion({ parent:this, start, target, radius, expandTime:0.2, collapseTime:0.5 });
+    this.explosion  = new Explosion({ parent:this, start, target, radius, expandTime:2.2, collapseTime:3.5 });
     this.phase      = 0;
     this.exploded   = false;
     this.garbage    = false;

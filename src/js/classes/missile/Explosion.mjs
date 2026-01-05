@@ -1,7 +1,7 @@
 import Sprite from "../Sprite.mjs";
-import { COLORS, GREY } from '../../constants.mjs';
+import { COLORS, GREY, YELLOW } from '../../constants.mjs';
 import { createBuffer, createBufferList } from '../../buffer.mjs';
-import { drawCircle } from '../../canvas.mjs';
+import { drawCircle, recolorSprite } from '../../canvas.mjs';
 import { easeInQuad, easeOutQuad, even } from '../../helpers.mjs';
 
 
@@ -44,13 +44,10 @@ export default class Explosion extends Sprite {
       }
     }
     
-    const color    = this.parent.parent.colorId;
-    const maxIndex = Explosion.BUFFERS.length - 1;
-    const slot     = 0;  //color * 24;  
-    const index    = ((eased * maxIndex) | 0);
-    //const index    = (eased * maxIndex) | 0;
-    
-    console.log(`maxIndex: ${maxIndex}   index: ${index}`);
+    const n = this.parent.parent.colorId;
+    const maxIndex = 32 - 1;
+    const group    = n * 32;  
+    const index    = group + ((eased * maxIndex) | 0);
     
     this.sprite = super.getSprite(Explosion.BUFFERS, index);
     this.buffer = this.sprite.getContext('2d');
@@ -72,22 +69,39 @@ export default class Explosion extends Sprite {
   }
 }
 
-Explosion.GET_MULTICOLOR_BUFFERS = function() {
-  let template;
-  const buffers = [];                                                          // create empty array for end-result
-  const sizeList = Array.from({ length: 32 }, (_, i) => (i + 1) * 2);           // create array with integers for buffersize
+Explosion.GET_BUFFERS = function() {
+  let buffers = [];
+  const GROUP_SIZE = 32;
+  const STEP       = 2;
+  const SIZE_LIST  = Array.from({ length:GROUP_SIZE }, (_, i) => (i + 1) * STEP); // create array with integers for buffersize
   
-  template = createBufferList('explosion', sizeList);
-  template = template.map(buffer => {
+  buffers = createBufferList('explosion', SIZE_LIST);
+  buffers = buffers.map(buffer => {
     drawCircle(buffer, buffer.canvas.width, GREY);
     return buffer;
   });
- 
-  return template;
+  buffers = COLORS.flatMap(() => [...buffers]);
+  buffers.forEach((buffer, index) => {
+  const group = (index / GROUP_SIZE) | 0;
+  const from = '#999999';
+  const to = COLORS[index % COLORS.length];
+  
+  console.log(`group = ${group}`);
+      
+    
+  if (!to) {
+    throw new Error(`Invalid color for group ${group}`);
+  }
+    
+    
+  recolorSprite(buffer.canvas, [{ from, to }]);
+});
+
+
+  return buffers;
 }
 
-Explosion.BUFFERS = Explosion.GET_MULTICOLOR_BUFFERS();
-
+Explosion.BUFFERS = Explosion.GET_BUFFERS();
 
 
 
