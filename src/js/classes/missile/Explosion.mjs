@@ -2,7 +2,7 @@ import Sprite from "../Sprite.mjs";
 import { COLORS, GREY, YELLOW } from '../../constants.mjs';
 import { createBuffer, createBufferList } from '../../buffer.mjs';
 import { drawCircle, recolorSprite } from '../../canvas.mjs';
-import { easeInQuad, easeOutQuad, even } from '../../helpers.mjs';
+import { easeInQuad, easeOutQuad, even, randomInt } from '../../helpers.mjs';
 
 
 
@@ -44,13 +44,17 @@ export default class Explosion extends Sprite {
       }
     }
     
-    const n = this.parent.parent.colorId;
+
+
+
+    //const n = this.parent.parent.colorId;
     const maxIndex = 32 - 1;
-    const group    = n * 32;  
-    const index    = group + ((eased * maxIndex) | 0);
+    const group    = randomInt(0,7) * 32;  
+    const index = group + ((eased * maxIndex) | 0);
     
     this.sprite = super.getSprite(Explosion.BUFFERS, index);
     this.buffer = this.sprite.getContext('2d');
+
     //this.collisionRadius = eased * this.radius;
     
     super.update(dt);
@@ -71,6 +75,7 @@ export default class Explosion extends Sprite {
 
 Explosion.GET_BUFFERS = function() {
   let buffers = [];
+
   const GROUP_SIZE = 32;
   const STEP       = 2;
   const SIZE_LIST  = Array.from({ length:GROUP_SIZE }, (_, i) => (i + 1) * STEP); // create array with integers for buffersize
@@ -82,21 +87,10 @@ Explosion.GET_BUFFERS = function() {
   });
   buffers = COLORS.flatMap(() => [...buffers]);
   buffers.forEach((buffer, index) => {
-  const group = (index / GROUP_SIZE) | 0;
-  const from = '#999999';
-  const to = COLORS[index % COLORS.length];
-  
-  console.log(`group = ${group}`);
-      
-    
-  if (!to) {
-    throw new Error(`Invalid color for group ${group}`);
-  }
-    
-    
-  recolorSprite(buffer.canvas, [{ from, to }]);
-});
-
+    const group = (index / GROUP_SIZE) | 0;
+    const to = COLORS[index % COLORS.length];  
+    recolorSprite(buffer.canvas, [{ from:GREY, to }]);
+  });
 
   return buffers;
 }

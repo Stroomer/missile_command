@@ -49,10 +49,6 @@ export default class Game {
       for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].update(dt);  
       for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].update(dt);
       for (let i = 0; i < this.aircrafts.length; i++)   this.aircrafts[i].update(dt);
-    
-      // for (let i = 0; i < this.targets.length; i++)     this.targets[i].update(dt);
-      // for (let i = 0; i < this.smoke.length; i++)       this.smoke[i].update(dt);
-      // for (let i = 0; i < this.explosions.length; i++)  this.explosions[i].update(dt);
   }
 
   draw() {    
@@ -62,23 +58,16 @@ export default class Game {
         
     offscreen.fillStyle = BLACK;
     offscreen.fillRect(0, 0, WIDTH, HEIGHT);
+    
+    offscreen.drawImage(this.buffer.background.canvas, 0, 0, WIDTH, HEIGHT); // draw layer background --> offscreen    
 
     for (let i = 0; i < this.missiles.length; i++)       this.missiles[i].draw(offscreen);   // draw missiles
     for (let i = 0; i < this.aliens.length; i++)         this.aliens[i].draw(offscreen);     // draw aliens        
     for (let i = 0; i < this.aircrafts.length; i++)      this.aircrafts[i].draw(offscreen);  // draw aliens 
     
-    // for (let i = 0; i < this.targets.length; i++)     this.targets[i].draw(offscreen);    // draw missiles
-    // for (let i = 0; i < this.smoke.length; i++)       this.smoke[i].draw(offscreen);      // draw missiles
-    // for (let i = 0; i < this.explosions.length; i++)  this.explosions[i].draw(offscreen); // draw missiles
+    this.crosshair.draw(offscreen); // draw layer crosshair  --> offscreen
     
-    offscreen.drawImage(this.buffer.background.canvas, 0, 0, WIDTH, HEIGHT); // draw layer background --> offscreen    
-    offscreen.drawImage(this.buffer.targets.canvas,    0, 0, WIDTH, HEIGHT); // draw layer smoke      --> offscreen
-    offscreen.drawImage(this.buffer.smoke.canvas,      0, 0, WIDTH, HEIGHT); // draw layer smoke      --> offscreen
-    offscreen.drawImage(this.buffer.explosions.canvas, 0, 0, WIDTH, HEIGHT); // draw layer explosions --> offscreen    
-    
-    this.crosshair.draw(offscreen);                                          // draw layer crosshair  --> offscreen
-    
-    onscreen.drawImage(offscreen.canvas, 0, 0, WIDTH, HEIGHT);   // draw layer offscreen  --> onscreen
+    onscreen.drawImage(offscreen.canvas, 0, 0, WIDTH, HEIGHT); // draw layer offscreen  --> onscreen
   }
     
   createBuffers() {
