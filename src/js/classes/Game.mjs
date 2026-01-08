@@ -1,4 +1,4 @@
-import { randomInt }    from '../helpers.mjs';
+import { aabb, randomInt }    from '../helpers.mjs';
 import { mouse }        from './../mouse.mjs';
 import { createBuffer } from './../buffer.mjs';
 import { start }        from './../gameloop.mjs';
@@ -37,18 +37,29 @@ export default class Game {
   }
 
   update(dt) {
-      this.collectGarbage(this.missiles);
-    
-      this.colorId = randomInt(0, COLORS.length-1);
-    
-      this.launcher.update(mouse);
-      this.crosshair.update(mouse);
-    
-      this.enemy.update(dt);  
-    
-      for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].update(dt);  
-      for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].update(dt);
-      for (let i = 0; i < this.aircrafts.length; i++)   this.aircrafts[i].update(dt);
+    this.collectGarbage(this.missiles);
+  
+    this.colorId = randomInt(0, COLORS.length-1);
+  
+    this.launcher.update(mouse);
+    this.crosshair.update(mouse);
+  
+    this.enemy.update(dt);  
+  
+    for (let i = 0; i < this.missiles.length; i++)    this.missiles[i].update(dt);  
+    for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].update(dt);
+    for (let i = 0; i < this.aircrafts.length; i++)   this.aircrafts[i].update(dt);
+
+    for (let i = 0; i < this.missiles.length; i++) {
+      
+      // console.log(this.missiles[i].explosion);
+      // console.log(this.aliens[0]);
+      
+      
+      if (aabb(this.missiles[i].explosion, this.aliens[0])) {
+        this.aliens[0].freeze = true;
+      }
+    }
   }
 
   draw() {    

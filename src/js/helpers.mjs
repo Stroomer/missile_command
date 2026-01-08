@@ -64,3 +64,10 @@ export function easeInQuad(t) {
 export function even(num) {
   return (num & 1) === 0
 }
+
+export function aabb(a, b) {
+  return (
+    Math.abs(a.x - b.x) < (a.halfW + b.halfW) &&
+    Math.abs(a.y - b.y) < (a.halfH + b.halfH)
+  );
+}

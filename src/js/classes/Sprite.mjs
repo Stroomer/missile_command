@@ -27,9 +27,7 @@ export default class Sprite {
     ctx.drawImage(this.sprite, x, y, w, h);
   }
 
-  getSprite(sprites, index) {
-    const sprite = sprites[index].canvas;
-       
+  getSprite(sprite) {   
     this.width  = sprite.width;
     this.height = sprite.height;
     this.halfW  = sprite.width / 2;

@@ -12,24 +12,21 @@ import { YELLOW } from '../../constants.mjs';
 
 export default class Missile {
   constructor(props) {
-    const { parent, start, target, speed, color, radius, isEnemyMissile } = props;
+    const { parent, start, target, speed, color, radius, isEnemy } = props;
     
     this.parent     = parent;
-    this.name       = 'missile';
     this.start      = start;
     this.target     = target;
     this.speed      = speed;
     this.radius     = radius;
-    
     this.smoke      = new Smoke({ parent:this, start, target, speed, color });
     this.projectile = new Projectile({ parent:this, start, target, speed, color });
     this.target     = new Target({ parent:this, target });
-    this.explosion  = new Explosion({ parent:this, start, target, radius, expandTime:2.2, collapseTime:3.5 });
+    this.explosion  = new Explosion({ parent:this, start, target, radius, expandTime:3.25, collapseTime:2.60 });
     this.phase      = 0;
     this.exploded   = false;
     this.garbage    = false;
-    
-    this.isEnemyMissile = isEnemyMissile;
+    this.isEnemy    = isEnemy;
     
     parent.audio.playMissileLaunch();
   }
@@ -53,6 +50,4 @@ export default class Missile {
     this.parent.audio.playExplosion();
     this.exploded = true;
   }
-
-  
 }

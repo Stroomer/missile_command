@@ -1,25 +1,27 @@
 import Sprite from "../Sprite.mjs";
-import { COLORS, GREY, YELLOW } from '../../constants.mjs';
-import { createBuffer, createBufferList } from '../../buffer.mjs';
-import { drawCircle, recolorSprite } from '../../canvas.mjs';
-import { easeInQuad, easeOutQuad, even, randomInt } from '../../helpers.mjs';
+import { COLORS, YELLOW } from '../../constants.mjs';
+import { createBuffer } from '../../buffer.mjs';
+import { drawCircle } from '../../canvas.mjs';
+import { easeInQuad, easeOutQuad } from '../../helpers.mjs';
 
 
 
 export default class Explosion extends Sprite {
   constructor(props) {
     props = Explosion.VALIDATE(props);
-    super(props.target.x, props.target.y, props.radius, props.radius);
+    super(props.target.x, props.target.y, 1, 1);
     
     this.parent       = props.parent;
-    this.radius       = props.radius;
     this.expandTime   = props.expandTime;
     this.collapseTime = props.collapseTime;   
-    this.time         = 0;
-    this.phase        = 0; // 0 = expand, 1 = collapse
-    this.sprite       = createBuffer('explosion', props.radius, props.radius).canvas;
+    this.radius       = props.radius;
+    this.maxIndex     = Explosion.CALCULATE_MAX_INDEX(Explosion.BUFFERS, props.radius);
+    this.sprite       = createBuffer('explosion', 1, 1).canvas;
     this.buffer       = this.sprite.getContext('2d'); 
     this.garbage      = false;
+    this.time         = 0;
+    this.phase        = 0; // 0 = expand, 1 = collapse
+    this.collisionRadius = 0;
   }
 
   update(dt) {
@@ -34,108 +36,109 @@ export default class Explosion extends Sprite {
       if (t >= 1) {
         this.phase = 1;
         this.time = 0;
+        console.log(`this.width = ${this.width}`);
+        
       }
     } else {
-      t = Math.min(this.time / this.collapseTime, 1);
-      eased = 1 - easeInQuad(t);
-      if (t >= 1) {
-        this.parent.garbage = true;
-        return;
-      }
+      // t = Math.min(this.time / this.collapseTime, 1);
+      // eased = 1 - easeInQuad(t);
+      // if (t >= 1) {
+      //   this.parent.garbage = true;
+      //   return;
+      // }
+
+      this.freeze = true;
+
+      return;
     }
+
+    const color  = this.parent.parent.colorId;
+    const index  = (eased * this.maxIndex) | 0;
+    const buffer = Explosion.BUFFERS[color][index];
     
-
-
-
-    //const n = this.parent.parent.colorId;
-    const maxIndex = 32 - 1;
-    const group    = randomInt(0,7) * 32;  
-    const index = group + ((eased * maxIndex) | 0);
+    this.sprite = super.getSprite(buffer.canvas);
+    this.collisionRadius = eased * this.radius;
     
-    this.sprite = super.getSprite(Explosion.BUFFERS, index);
-    this.buffer = this.sprite.getContext('2d');
+    //console.log(this.radius);
+      
 
-    //this.collisionRadius = eased * this.radius;
-    
     super.update(dt);
   }
 
-  hit(obj) {
-    const dx = obj.x - this.x;
-    const dy = obj.y - this.y;
-    const r  = this.collisionRadius + obj.radius;
+  // hit(obj) {
+  //   const dx = obj.x - this.x;
+  //   const dy = obj.y - this.y;
+  //   const r  = this.collisionRadius + obj.radius;
 
-    return dx * dx + dy * dy <= r * r;
-  }
+  //   return dx * dx + dy * dy <= r * r;
+  // }
 
   draw(ctx) {
+
+    // console.log(this.buffer);
+    
+    ctx.save();
+    ctx.fillStyle = YELLOW; 
+    ctx.fillRect(this.x-this.halfW, this.y-this.halfH, this.width, this.height);
+    ctx.restore();
+
     super.draw(ctx);
   }
 }
 
-Explosion.GET_BUFFERS = function() {
+Explosion.GET_BUFFERS = function () {
+  const GROUP_SIZE  = 32;
+  const COLORS_SIZE = COLORS.length;
+
   let buffers = [];
 
-  const GROUP_SIZE = 32;
-  const STEP       = 2;
-  const SIZE_LIST  = Array.from({ length:GROUP_SIZE }, (_, i) => (i + 1) * STEP); // create array with integers for buffersize
+  for (let c = 0; c < COLORS_SIZE; c++) {
+    const group = new Array(GROUP_SIZE);
+    const color = COLORS[c];
+
+    for (let b = 0; b < GROUP_SIZE; b++) {
+      const size   = 2 + (b * 2);
+      const buffer = createBuffer(`explosion_col${c}_size${b}`, size, size);
+      drawCircle(buffer, size, color);
+      console.log(`Buffer ${size} x ${size}`);
+      group[b] = buffer;
+    }
+    
+    buffers[c] = group;
+  }
+
+  Explosion.MIN_RADIUS = 2;
+  Explosion.MAX_RADIUS = buffers[0][buffers[0].length - 1].canvas.width / 2;
+
+  console.log(Explosion.MAX_RADIUS);
   
-  buffers = createBufferList('explosion', SIZE_LIST);
-  buffers = buffers.map(buffer => {
-    drawCircle(buffer, buffer.canvas.width, GREY);
-    return buffer;
-  });
-  buffers = COLORS.flatMap(() => [...buffers]);
-  buffers.forEach((buffer, index) => {
-    const group = (index / GROUP_SIZE) | 0;
-    const to = COLORS[index % COLORS.length];  
-    recolorSprite(buffer.canvas, [{ from:GREY, to }]);
-  });
 
   return buffers;
 }
 
+Explosion.CALCULATE_MAX_INDEX = function (buffersCollection, radius) {
+  const bufferWidth  = radius * 2;
+  const buffers      = buffersCollection[0];
+  const buffersCount = buffers.length;
+
+  let max_index = 0;
+  for (let i = 0; i < buffersCount; i++) {
+    max_index = i;
+    if (buffers[i].canvas.width === bufferWidth) {
+      console.log(`Buffersize ${buffers[i].canvas.width} is gelijk aan ${bufferWidth}, dus ${i} is de maxIndex!`);
+      break;
+    }
+  }
+
+  return max_index;
+} 
+
+Explosion.SMALL  = 8;
+Explosion.MEDIUM = 16;
+Explosion.LARGE  = 24;
+Explosion.GIANT  = 32;
+
 Explosion.BUFFERS = Explosion.GET_BUFFERS();
-
-
-
-
-
-
-// Loop door alle kleuren heen
-// for (let i = 0; i < COLORS.length; i++) {
-//   const template = [...Explosion.TEMPLATE];  // Kloon de grijze buffers TEMPLATE
-//   const from     = '#999999';
-  
-//   for (let b = 0; b < template.length; b++) {
-//     const canvas = template[b].canvas;
-//     const to     = COLORS[b % COLORS.length];
-
-//     recolorSprite(canvas, [ { from, to } ]);    
-//   }
-
-//   Explosion.BUFFERS.push( ...template );
-// }
-
-
-
-
-// export function render(buffers, colors) {
-//   const arr = [];
-//   for (let i = 0; i < colors.length; i++) {
-//     arr.push(...buffers);
-//   }
-  
-//   const from = '#999999';
-//   for (let i = 0; i < arr.length; i++) {
-//     const sprite = arr[i].canvas;
-//     const to     = COLORS[i % colors.length];
-//     recolorSprite(sprite, [ { from, to } ]);
-//   }
-
-//   return arr;
-// }
-
 
 
 Explosion.VALIDATE = (props) => {
@@ -146,9 +149,8 @@ Explosion.VALIDATE = (props) => {
   if (!expandTime)                           throw Error("No expandTime specified");
   if (!collapseTime)                         throw Error("No collapseTime specified");
   if (!radius)                               throw Error("No radius specified");
-    
+  
+  if (radius > Explosion.MAX_RADIUS)         throw Error("Radius is exceeding maximum buffersize of "+Explosion.MAX_RADIUS);
+
   return props;
 }
-
-
-

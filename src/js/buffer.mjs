@@ -23,24 +23,8 @@ export function createBuffer(id, w=null, h=null) {
   ctx = canvas.getContext('2d', { alpha:isAlphaBuffer, willReadFrequently, desynchronized });
   ctx.imageSmoothingEnabled = false;
   if (DEBUG) showBufferAttributes(ctx);
+  
   return ctx;
-}
-
-
-
-export function createBufferList(id, sizes) {
-  const buffers = [];
-
-  for (let i = 0; i < sizes.length; i++) {
-    const label  = `${id}_${i}`;
-    const size   = sizes[i];  
-    const buffer = createBuffer(label, size, size);
-    
-    buffers.push(buffer);
-    console.log(`label = ${label}, size = ${size} x ${size}`); 
-  }
-
-  return buffers;
 }
 
 function showBufferAttributes(ctx) {
