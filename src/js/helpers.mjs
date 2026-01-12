@@ -66,8 +66,11 @@ export function even(num) {
 }
 
 export function aabb(a, b) {
+  const dx = Math.abs(a.x - b.x);
+  const dy = Math.abs(a.y - b.y);
+
   return (
-    Math.abs(a.x - b.x) < (a.halfW + b.halfW) &&
-    Math.abs(a.y - b.y) < (a.halfH + b.halfH)
+    dx < a.halfW + b.halfW &&
+    dy < a.halfH + b.halfH
   );
 }

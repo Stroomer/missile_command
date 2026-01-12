@@ -1,8 +1,8 @@
 import { YELLOW } from "../constants.mjs";
 import { copyAndRecolor } from "../canvas.mjs";
-import Sprite from './Sprite.mjs';
+import SpritesheetSprite from './core/SpritesheetSprite.mjs';
 
-export default class Background extends Sprite {
+export default class Background extends SpritesheetSprite {
     constructor(x, y) {
       super(x, y, 256, 23);
 

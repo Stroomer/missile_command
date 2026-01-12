@@ -30,7 +30,7 @@ export function createBuffer(id, w=null, h=null) {
 function showBufferAttributes(ctx) {
   const supported = ctx.getContextAttributes;
   const message   = supported ? JSON.stringify(ctx.getContextAttributes()) : 'feature not supported'; 
-  console.log(message);
+  // console.log(message);
 }
 
 export function flip(canvas) {

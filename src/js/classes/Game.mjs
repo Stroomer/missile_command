@@ -50,16 +50,13 @@ export default class Game {
     for (let i = 0; i < this.aliens.length; i++)      this.aliens[i].update(dt);
     for (let i = 0; i < this.aircrafts.length; i++)   this.aircrafts[i].update(dt);
 
-    for (let i = 0; i < this.missiles.length; i++) {
-      
-      // console.log(this.missiles[i].explosion);
-      // console.log(this.aliens[0]);
-      
-      
-      if (aabb(this.missiles[i].explosion, this.aliens[0])) {
-        this.aliens[0].freeze = true;
-      }
-    }
+    // for (let i = 0; i < this.missiles.length; i++) {
+    //   if (aabb(this.missiles[i].explosion, this.aliens[0])) {
+    //     this.aliens[0].freeze = true;
+    //     console.log('boem');
+        
+    //   }
+    // }
   }
 
   draw() {    
@@ -110,7 +107,7 @@ export default class Game {
       
     this.missiles   = [];
     this.aliens     = [];
-    this.aliens.push(new Alien(this, randomInt(50, WIDTH - 50), 100));
+    this.aliens.push(new Alien(this, WIDTH/2, HEIGHT/2));
     
     this.aircrafts  = [];
     this.aircrafts.push(new Aircraft(this));

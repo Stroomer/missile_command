@@ -9,13 +9,15 @@ export default class Launcher {
   update(mouse) {
     if (!mouse.fire || !mouse.visible) return;
 
-    const parent     = this.parent;
-    const start      = { x:123, y:209 };
-    const target     = { x:mouse.x, y:mouse.y };
-    const speed      = 110;
-    const color      = BLUE ;
-    const radius     = 32;
-    const props      = { parent, start, target, speed, color, radius };
+    const parent       = this.parent;
+    const start        = { x:123, y:209 };
+    const target       = { x:mouse.x, y:mouse.y };
+    const speed        = 110;
+    const color        = BLUE ;
+    const radius       = 32;
+    const expandTime   = 3.25;
+    const collapseTime = 2.60;
+    const props        = { parent, start, target, speed, color, radius, expandTime, collapseTime };
 
     this.launch(props);
 
@@ -23,6 +25,6 @@ export default class Launcher {
   }
 
   launch(props) {
-    props.parent.missiles.push(new Missile(props));
+    this.parent.missiles.push(new Missile(props));
   }
 }

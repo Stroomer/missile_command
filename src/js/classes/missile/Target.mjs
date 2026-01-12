@@ -1,9 +1,9 @@
 import { copyAndRecolor } from '../../canvas.mjs';
 import { BLUE } from '../../constants.mjs';
 import { getRandomColor } from '../../helpers.mjs';
-import Sprite from '../Sprite.mjs';
+import SpritesheetSprite from '../core/SpritesheetSprite.mjs';
 
-export default class Target extends Sprite {
+export default class Target extends SpritesheetSprite {
   constructor(props) {
     super(props.target.x, props.target.y, 5, 5);
     

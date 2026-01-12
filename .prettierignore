@@ -11,7 +11,7 @@
 /src/js/classes/Alien.mjs
 /src/js/classes/Aircraft.mjs
 /src/js/classes/City.mjs
-/src/js/classes/Sprite.mjs
+/src/js/classes/SpritesheetSprite.mjs
 /src/js/classes/Game.mjs
 /src/js/classes/Crosshair.mjs
 /src/js/classes/Enemy.mjs
@@ -21,6 +21,9 @@
 /src/js/classes/missile/Target.mjs
 /src/js/classes/missile/Smoke.mjs
 /src/js/classes/missile/Explosion.mjs
-/src/js/classes/missile/MissileComponent.mjs
+/src/js/classes/missile/Fuze.mjs
+
+/src/js/classes/core/SpritesheetSprite.mjs
+/src/js/classes/core/GeneratedSprite.mjs
 
 

@@ -1,48 +1,51 @@
-import Projectile from './Projectile.mjs';
-import Target from './Target.mjs';
-import Smoke from './Smoke.mjs';
-import Explosion from './Explosion.mjs';
-import { YELLOW } from '../../constants.mjs';
+import Fuze from '../missile/Fuze.mjs';
+import Target from '../missile/Target.mjs';
+import Smoke from '../missile/Smoke.mjs';
+import Explosion from '../missile/Explosion.mjs';
+import { getLineBresenham } from '../../helpers.mjs';
 
-// missile has:
-// 1. rocket
-// 2. smoke trail
-// 3. target coordinate
-// 4. explosion effect
+// WERK DE "MISSILE_COMPONENT" EN DE PROJECTILE WEG
+// CHECK DE COLLISION IN MISSILE
+// FOCUS OP 1 PIXEL EN NA EXPLODEREN OP N PIXELS TER GROOTTE VAN EXPLOSION-RADIUS
 
 export default class Missile {
   constructor(props) {
-    const { parent, start, target, speed, color, radius, isEnemy } = props;
+    this.parent    = props.parent; 
+    this.pixels    = getLineBresenham(props.start.x, props.start.y, props.target.x, props.target.y); 
+    this.start     = props.start;
+    this.target    = props.target;
+    this.speed     = props.speed;
+    this.radius    = props.radius;
+        
+    props.parent   = this;
+    props.pixels   = this.pixels;
     
-    this.parent     = parent;
-    this.start      = start;
-    this.target     = target;
-    this.speed      = speed;
-    this.radius     = radius;
-    this.smoke      = new Smoke({ parent:this, start, target, speed, color });
-    this.projectile = new Projectile({ parent:this, start, target, speed, color });
-    this.target     = new Target({ parent:this, target });
-    this.explosion  = new Explosion({ parent:this, start, target, radius, expandTime:3.25, collapseTime:2.60 });
-    this.phase      = 0;
-    this.exploded   = false;
-    this.garbage    = false;
-    this.isEnemy    = isEnemy;
+    this.fuze      = new Fuze(props);
+    this.smoke     = new Smoke(props);
+    this.target    = new Target(props);
+    this.explosion = new Explosion(props);
+    this.elements  = [this.smoke, this.fuze, this.target, this.explosion];
+    this.exploded  = false;
+    this.garbage   = false;
+    this.isEnemy   = false;
     
-    parent.audio.playMissileLaunch();
+    //this.phase = 1;
+    
+    //console.log(Missile.PHASES[0]);
+        
+    this.parent.audio.playMissileLaunch();
   }
 
   update(dt) {
-    this.smoke.update(dt);    
-    this.projectile.update(dt);
-    this.target.update(dt);
-    this.explosion.update(dt);
+    for (const element of this.elements) {
+      element.update(dt);  
+    }
   }
 
   draw(ctx) {
-    this.smoke.draw(ctx);
-    this.projectile.draw(ctx);
-    this.target.draw(ctx);
-    this.explosion.draw(ctx);
+    for (const element of this.elements) {
+      element.draw(ctx);  
+    }
   }
 
   explode() {
@@ -51,3 +54,5 @@ export default class Missile {
     this.exploded = true;
   }
 }
+
+Missile.PHASES = ['launch', 'cruise', 'detonate', 'explode', 'implode', 'gone'];

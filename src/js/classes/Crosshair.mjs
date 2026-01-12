@@ -1,8 +1,8 @@
 import { copyAndRecolor } from '../canvas.mjs';
 import { BLUE } from '../constants.mjs';
-import Sprite from './Sprite.mjs';
+import SpritesheetSprite from './core/SpritesheetSprite.mjs';
 
-export default class Crosshair extends Sprite {
+export default class Crosshair extends SpritesheetSprite {
   constructor(color) {
     super(0, 0, 7, 7);
     
