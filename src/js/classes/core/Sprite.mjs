@@ -1,10 +1,10 @@
-export default class SpritesheetSprite {
+export default class Sprite {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
-    this.halfW = (width / 2) | 0;
+    this.halfW = (width / 2)  | 0;
     this.halfH = (height / 2) | 0;
     this.speed = 0;
     this.dirX = 0;
@@ -28,11 +28,15 @@ export default class SpritesheetSprite {
   }
 
   getSprite(sprite) {
-    this.width = sprite.width;
+    this.width  = sprite.width;
     this.height = sprite.height;
-    this.halfW = sprite.width / 2;
-    this.halfH = sprite.height / 2;
+    this.halfW  = sprite.width / 2;
+    this.halfH  = sprite.height / 2;
 
     return sprite;
+  }
+
+  setBoundingBox() {
+    
   }
 }

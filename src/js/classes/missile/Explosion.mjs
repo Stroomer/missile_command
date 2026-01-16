@@ -1,11 +1,11 @@
-import SpritesheetSprite from '../core/SpritesheetSprite.mjs';
+import Sprite from '../core/Sprite.mjs';
 import { COLORS, DEBUG } from '../../constants.mjs';
 import { createBuffer } from '../../buffer.mjs';
 import { drawCircle } from '../../canvas.mjs';
 import { easeOutQuad, easeInQuad } from '../../helpers.mjs';
 import { drawBoundingBox } from '../../debug.mjs';
 
-export default class Explosion extends SpritesheetSprite {
+export default class Explosion extends Sprite {
   constructor(props) {
 
     props = Explosion.VALIDATE(props);
@@ -19,25 +19,25 @@ export default class Explosion extends SpritesheetSprite {
     this.maxIndex        = Explosion.CALCULATE_MAX_INDEX(Explosion.BUFFERS, props.radius);
     this.sprite          = createBuffer('explosion', 1, 1).canvas;
     this.buffer          = this.sprite.getContext('2d');
-    this.garbage         = false;
     this.time            = 0;
-    this.phase           = 0; // 0 = expand, 1 = collapse
     this.collisionRadius = 0;
-    this.debug           = true;
+    this.garbage         = false;
+    this.visible         = false;
+    this.expanding       = true;
   }
 
   update(dt) {
-    if (!this.parent.exploded) return;
+    if(!this.visible) return;
 
     this.time += dt;
     let t, eased;
 
-    if (this.phase === 0) {
+    if (this.expanding) {
       t = Math.min(this.time / this.expandTime, 1);
       eased = easeOutQuad(t);
       if (t >= 1) {
-        this.phase = 1;
         this.time = 0;
+        this.expanding = false;
       }
     } else {
       t = Math.min(this.time / this.collapseTime, 1);
@@ -48,22 +48,26 @@ export default class Explosion extends SpritesheetSprite {
       }
     }
 
-    const color = this.parent.parent.colorId;
-    const index = (eased * this.maxIndex) | 0;
+    const color  = this.parent.parent.colorId;
+    const index  = (eased * this.maxIndex) | 0;
     const buffer = Explosion.BUFFERS[color][index];
 
-    this.sprite = super.getSprite(buffer.canvas);
+    this.sprite          = super.getSprite(buffer.canvas);
     this.collisionRadius = eased * this.radius;
 
     super.update(dt);
+
+    const box = this.parent.box;
+    
+    box.x      = this.x;
+    box.y      = this.y;
+    box.width  = this.width;
+    box.height = this.height;
   }
 
   draw(ctx) {
-    if(!this.parent.exploded) return; 
-
-    // if (DEBUG) {  
-    //   drawBoundingBox(ctx, this);
-    // }
+    if(!this.visible) return; 
+    //if (DEBUG)        drawBoundingBox(ctx, this);
 
     super.draw(ctx);
   }

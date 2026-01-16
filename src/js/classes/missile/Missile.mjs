@@ -14,9 +14,11 @@ export default class Missile {
     this.pixels    = getLineBresenham(props.start.x, props.start.y, props.target.x, props.target.y); 
     this.start     = props.start;
     this.target    = props.target;
+    this.x         = props.start.x;
+    this.y         = props.start.y;
     this.speed     = props.speed;
     this.radius    = props.radius;
-        
+    
     props.parent   = this;
     props.pixels   = this.pixels;
     
@@ -28,11 +30,10 @@ export default class Missile {
     this.exploded  = false;
     this.garbage   = false;
     this.isEnemy   = false;
+    this.phase = Missile.CRUISING;
     
-    //this.phase = 1;
+    this.box       = { x:props.start.x, y:props.start.y, width:1, height:1 };
     
-    //console.log(Missile.PHASES[0]);
-        
     this.parent.audio.playMissileLaunch();
   }
 
@@ -49,10 +50,29 @@ export default class Missile {
   }
 
   explode() {
-    if (this.exploded) return;
     this.parent.audio.playExplosion();
-    this.exploded = true;
+    this.target.visible    = false;
+    this.explosion.visible = true;
+    this.exploded          = true;
+    console.log('EXPLODING!!');
   }
+
+  // setBoundingBox() { 
+  //   if(!this.exploded) {
+  //     this.box.x      = this.x;
+  //     this.box.y      = this.y;
+  //     this.box.width  = 
+  //     this.box.height =   
+  //   } else {
+      
+  //   }
+  // }
 }
 
-Missile.PHASES = ['launch', 'cruise', 'detonate', 'explode', 'implode', 'gone'];
+Missile.LAUNCHING  = 0;
+Missile.CRUISING   = 1;
+Missile.EXPLODING  = 2;
+Missile.IMPLODING  = 3;
+Missile.DISSOLVING = 4;
+
+Missile.PHASES = [Missile.LAUNCHING, Missile.CRUISING, Missile.EXPLODING, Missile.IMPLODING, Missile.DISSOLVING];

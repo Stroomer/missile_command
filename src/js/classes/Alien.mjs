@@ -1,10 +1,10 @@
 import { BLUE, COLORS, ORANGE, RED, WIDTH, YELLOW } from '../constants.mjs';
 import { copyAndRecolor } from '../canvas.mjs';
-import SpritesheetSprite from './core/SpritesheetSprite.mjs';
+import Sprite from './core/Sprite.mjs';
 import { randomInt } from '../helpers.mjs';
 import Explosion from './missile/Explosion.mjs';
 
-export default class Alien extends SpritesheetSprite {
+export default class Alien extends Sprite {
   constructor(parent, x, y, width=14, height=13, speed=50) {
     super(x | 0, y | 0, width, height);
     
@@ -45,7 +45,7 @@ export default class Alien extends SpritesheetSprite {
   }
 }
 
-class Body extends SpritesheetSprite {
+class Body extends Sprite {
   constructor(parent, x, y, width, height) {
     super(x, y, width, height);
     console.log(x, y);

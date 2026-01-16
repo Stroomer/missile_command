@@ -1,9 +1,9 @@
 
 import { BLUE, RED } from '../constants.mjs';
 import { copyAndRecolor } from '../canvas.mjs';
-import SpritesheetSprite from './core/SpritesheetSprite.mjs';
+import Sprite from './core/Sprite.mjs';
 
-export default class City extends SpritesheetSprite {
+export default class City extends Sprite {
   constructor(x, y) {
     super(x, y, 16, 8);
     

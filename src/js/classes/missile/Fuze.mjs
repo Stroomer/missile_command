@@ -10,24 +10,42 @@ export default class Fuze {
     this.progress      = 0;
     this.visiblePixels = 0;
     this.index         = 0;
-    this.visible       = true;
+    this.x             = null;
+    this.y             = null;
+    this.width         = null;
+    this.height        = null;
+    this.exploded      = false;
   }
 
   update(dt) {
-    const next = (this.progress += this.speed * dt) | 0;
-    this.index = next < this.lastIndex ? next : this.lastIndex;
+    if (this.exploded) return;
 
-    if (this.index === this.lastIndex) {
+    const next    = (this.progress += this.speed * dt) | 0;
+    const colorId = this.parent.parent.colorId;
+    
+    this.color = COLORS[colorId];
+
+    if (next < this.lastIndex) {
+      this.index = next;
+      
+      const pixel = this.pixels[next];
+      const box   = this.parent.box;
+    
+      box.x      = pixel.x;
+      box.y      = pixel.y;
+      box.width  = 1;
+      box.height = 1;     
+    } else {
+      this.index    = this.lastIndex;
+      this.exploded = true;
+      
       this.parent.explode();
-      return;
     }
-
-    const parentColor = this.parent.parent.colorId;
-    this.color = COLORS[parentColor];
-  }
-
+    
+  }  
+  
   draw(ctx) {
-    if (!this.visible) return;
+    if (this.exploded) return;
 
     const p = this.pixels[this.index];
     if (p === undefined) return;

@@ -1,10 +1,10 @@
 import { DIRECTION, GREEN, WIDTH } from '../constants.mjs';
 import { copyAndRecolor, copySprite } from '../canvas.mjs';
-import SpritesheetSprite from './core/SpritesheetSprite.mjs';
+import Sprite from './core/Sprite.mjs';
 import { flip } from '../buffer.mjs';
 import { randomInt } from '../helpers.mjs';
 
-export default class Aircraft extends SpritesheetSprite {
+export default class Aircraft extends Sprite {
   constructor(parent, x=-8+(randomInt(0, 1)*(WIDTH+16)) , y=120) {
     super(x, y, 16, 11);
 
