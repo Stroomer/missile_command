@@ -1,78 +1,104 @@
-import Fuze from '../missile/Fuze.mjs';
-import Target from '../missile/Target.mjs';
-import Smoke from '../missile/Smoke.mjs';
-import Explosion from '../missile/Explosion.mjs';
+import Explosion from '../Explosion.mjs';
 import { getLineBresenham } from '../../helpers.mjs';
+import { game } from '../../../main.mjs';
+import { BLUE, COLORS } from '../../constants.mjs';
+import Sprite from '../core/Sprite.mjs';
+import Target from '../Target.mjs';
 
-// WERK DE "MISSILE_COMPONENT" EN DE PROJECTILE WEG
-// CHECK DE COLLISION IN MISSILE
-// FOCUS OP 1 PIXEL EN NA EXPLODEREN OP N PIXELS TER GROOTTE VAN EXPLOSION-RADIUS
-
-export default class Missile {
+export default class Missile extends Sprite {
   constructor(props) {
-    this.parent    = props.parent; 
-    this.pixels    = getLineBresenham(props.start.x, props.start.y, props.target.x, props.target.y); 
-    this.start     = props.start;
-    this.target    = props.target;
-    this.x         = props.start.x;
-    this.y         = props.start.y;
-    this.speed     = props.speed;
-    this.radius    = props.radius;
     
-    props.parent   = this;
-    props.pixels   = this.pixels;
+    props.name = "missile";
+
+    super(props);
+
+    console.log(props);
     
-    this.fuze      = new Fuze(props);
-    this.smoke     = new Smoke(props);
-    this.target    = new Target(props);
-    this.explosion = new Explosion(props);
-    this.elements  = [this.smoke, this.fuze, this.target, this.explosion];
-    this.exploded  = false;
-    this.garbage   = false;
-    this.isEnemy   = false;
-    this.phase = Missile.CRUISING;
-    
-    this.box       = { x:props.start.x, y:props.start.y, width:1, height:1 };
+    this.parent        = game;
+    this.pixels        = getLineBresenham(this.x, this.y, props.destX, props.destY);
+    this.lastIndex     = this.pixels.length - 1;
+    this.progress      = 0;
+    this.visiblePixels = 0;
+    this.visible       = true;
+    this.target        = this.setTarget(props.destX, props.destY);
+    this.exploded      = false;
+    this.garbage       = false;
+    this.explosion     = false;
     
     this.parent.audio.playMissileLaunch();
   }
 
+  setTarget(x, y) {
+    this.parent.targets.push(new Target({ x, y }));
+    return this.parent.targets[this.parent.targets.length - 1];
+  }
+
+  setExplosion(x, y) {
+    this.parent.explosions.push(new Explosion({ x, y }));
+    return this.parent.explosions[this.parent.explosions.length - 1];
+  }
+
   update(dt) {
-    for (const element of this.elements) {
-      element.update(dt);  
+    this.progress += (this.speed * dt);
+    
+    const next    = this.progress | 0;
+    const index   = next < this.lastIndex ? next : this.lastIndex;
+    const pixel   = this.pixels[index];
+    const colorId = this.parent.colorId;  
+
+    this.x = pixel.x;
+    this.y = pixel.y;    
+    this.color = this.target.color = COLORS[colorId];
+    this.visiblePixels = index;    
+    
+    if (!this.exploded) {
+      if (next >= this.lastIndex) {
+        this.explosion = this.setExplosion(this.x, this.y);
+        this.exploded = true;
+      }  
+    } else {
+      if (!this.explosion.visible) {
+        console.log('yo');
+
+        this.garbage = this.target.garbage = true;
+        
+      }
     }
+
+
+    
   }
 
   draw(ctx) {
-    for (const element of this.elements) {
-      element.draw(ctx);  
+    if (!this.visible || this.visiblePixels === 0) return;
+
+    // draw smoke
+    ctx.fillStyle = BLUE;
+    for (let i = 0; i < this.visiblePixels; i++) {
+      const pixel = this.pixels[i];
+      ctx.fillRect(pixel.x, pixel.y, 1, 1);
     }
+
+    // draw missile
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, 1, 1);
   }
 
   explode() {
-    this.parent.audio.playExplosion();
-    this.target.visible    = false;
-    this.explosion.visible = true;
+    console.log('explode()');
+    
+    //this.target.visible    = false;
+    this.smoke.visible     = false;
     this.exploded          = true;
-    console.log('EXPLODING!!');
+    //this.explosion.visible = true;
+    //this.explosion.phase = Explosion.STATE.EXPLODE;
+    
+    this.setExplosion?.(this.x, this.y);
+    
+    this.parent.audio.playExplosion();
   }
 
-  // setBoundingBox() { 
-  //   if(!this.exploded) {
-  //     this.box.x      = this.x;
-  //     this.box.y      = this.y;
-  //     this.box.width  = 
-  //     this.box.height =   
-  //   } else {
-      
-  //   }
+  // getBox() {   
+  //   return !this.exploded ? this.getBox() : this.explosion.getBox();
   // }
 }
-
-Missile.LAUNCHING  = 0;
-Missile.CRUISING   = 1;
-Missile.EXPLODING  = 2;
-Missile.IMPLODING  = 3;
-Missile.DISSOLVING = 4;
-
-Missile.PHASES = [Missile.LAUNCHING, Missile.CRUISING, Missile.EXPLODING, Missile.IMPLODING, Missile.DISSOLVING];

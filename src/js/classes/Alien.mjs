@@ -1,68 +1,75 @@
-import { BLUE, COLORS, ORANGE, RED, WIDTH, YELLOW } from '../constants.mjs';
+import { BLUE, COLORS, RED, WIDTH } from '../constants.mjs';
 import { copyAndRecolor } from '../canvas.mjs';
 import Sprite from './core/Sprite.mjs';
-import { randomInt } from '../helpers.mjs';
-import Explosion from './missile/Explosion.mjs';
+import { randomInt, randomPick } from '../helpers.mjs';
+import { game } from '../../main.mjs';
 
 export default class Alien extends Sprite {
-  constructor(parent, x, y, width=14, height=13, speed=50) {
-    super(x | 0, y | 0, width, height);
+  constructor(props = {}) {
+    props.name   = "alien";
+    props.x      = randomPick([-14, WIDTH + 14]);
+    props.y      = randomInt(30, 120);
+    props.width  = 14;
+    props.height = 13;
+    props.speed  = randomPick([10, 20, 30]);
+    props.dirX   = props.x < 0 ? 1 : -1;
+
+    super(props);
     
-    this.parent = parent;
-    this.dirX      = x <= WIDTH / 2 ? 1 : -1;
-    this.dirY      = 0;
-    this.speed     = 10 + randomInt(0, 10);
-    this.sprite    = copyAndRecolor(this.sheet, 36, 33, width, height, [
+    this.antenna    = new Antenna(this, this.width, this.height);
+    this.freeze     = false;
+    this.exploded   = false;
+    this.garbage    = false;
+    this.time       = 0;
+    this.freezeTime = 1.5;
+
+    this.sprite     = copyAndRecolor(this.sheet, 36, 33, this.width, this.height, [
       { from: '#999999', to: BLUE },
       { from: '#666666', to: RED },
     ]);
-    this.buffer    = this.sprite.getContext('2d');
-    this.antenna   = new Antenna(this, width, height);
-    //this.explosion = new Explosion({ parent:this, x, y, radius:2*this.body.width, expandTime:3.25, collapseTime:2.60 });
-    this.phase     = 0;
-    this.speed     = speed;
-    this.freeze    = false;
-    this.exploded  = false;
-    this.garbage   = false;
+    this.buffer     = this.sprite.getContext('2d');
   }
 
   update(dt) {
-    
+    if (!this.visible) return; 
 
     this.antenna.update(dt);
-    if(!this.freeze) super.update(dt);
+    
+    if (!this.freeze) {
+      super.update(dt);
+    } else if (!this.exploded) {
+      // this.cluster.x = this.x;
+      // this.cluster.y = this.y;
+      // this.cluster.exploded = true;
+      
+      console.log(this.parent);
+      
+     
 
-    //this.explosion.update(dt);
+
+      this.exploded = true;
+    } else {
+      //this.cluster.update(dt);
+
+      
+
+      this.time += dt;
+      if (this.time > this.freezeTime) this.garbage = true;  
+    }
   }
 
   draw(ctx) {
+    if (!this.visible) return; 
 
-    this.antenna.draw(this.buffer);    
+    this.antenna.draw(this.buffer);
     super.draw(ctx);
 
-    //this.body.draw(ctx);
-    //this.explosion.draw(ctx);
-  }
-}
-
-class Body extends Sprite {
-  constructor(parent, x, y, width, height) {
-    super(x, y, width, height);
-    console.log(x, y);
+    if (!this.exploded) return;
+    //this.cluster.draw(ctx);
   }
 
-  update(dt) {     
-    // this.parent.antenna.update(dt);
-    // if(!this.parent.freeze) super.update(dt);
-  }
-
-  draw(ctx) {
-    // ctx.save();
-    // ctx.fillStyle = YELLOW;
-    // ctx.fillRect(this.x-this.halfW, (this.y-this.halfH) | 0, this.width, this.height);
-    // ctx.restore();
-    // this.parent.antenna.draw(this.buffer);    
-    // super.draw(ctx);
+  hit() {
+    this.freeze = true;
   }
 }
 
@@ -75,7 +82,8 @@ class Antenna {
   }
 
   update(dt) {
-    this.color = COLORS[this.parent.parent.colorId];
+    const colorId = this.parent.parent.colorId;
+    this.color = COLORS[colorId];
   }
 
   draw(buffer) {

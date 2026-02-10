@@ -3,15 +3,20 @@ import { BLUE } from '../constants.mjs';
 import Sprite from './core/Sprite.mjs';
 
 export default class Crosshair extends Sprite {
-  constructor(color) {
-    super(0, 0, 7, 7);
+  constructor(props) {
+    props.name = "crosshair";
+    props.x      = -10;
+    props.y      = -10;
+    props.width  = 7;
+    props.height = 7;
+    
+    super(props);
     
     this.sprite = copyAndRecolor(this.sheet, 1, 24, this.width, this.height, [
       { from:'#999999', to:BLUE }
     ]);
     this.buffer = this.sprite.getContext('2d');
-    this.color = color;
-    this.visible = false;
+    this.color = props.color;
   }
 
   update(mouse) {    

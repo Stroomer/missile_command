@@ -4,6 +4,10 @@ export function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+export function randomPick(array) {
+  return array[randomInt(0, array.length-1)];
+}
+
 export function getRandomColor() {
   const n = randomInt(0, COLORS.length - 1);
   const color = COLORS[n];
@@ -66,11 +70,10 @@ export function even(num) {
 }
 
 export function aabb(a, b) {
-  const dx = Math.abs(a.x - b.x);
-  const dy = Math.abs(a.y - b.y);
-
-  return (
-    dx < a.halfW + b.halfW &&
-    dy < a.halfH + b.halfH
+  return !(
+    a.x + a.width  <= b.x ||
+    a.x >= b.x + b.width ||
+    a.y + a.height <= b.y ||
+    a.y >= b.y + b.height
   );
 }

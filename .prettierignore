@@ -20,8 +20,10 @@
 /src/js/classes/missile/Projectile.mjs
 /src/js/classes/missile/Target.mjs
 /src/js/classes/missile/Smoke.mjs
-/src/js/classes/missile/Explosion.mjs
+/src/js/classes/Explosion.mjs
 /src/js/classes/missile/Fuze.mjs
+
+/src/js/classes/ClusterExplosion.mjs
 
 /src/js/classes/core/Sprite.mjs
 /src/js/classes/core/GeneratedSprite.mjs

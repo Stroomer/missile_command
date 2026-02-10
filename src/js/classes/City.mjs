@@ -4,8 +4,12 @@ import { copyAndRecolor } from '../canvas.mjs';
 import Sprite from './core/Sprite.mjs';
 
 export default class City extends Sprite {
-  constructor(x, y) {
-    super(x, y, 16, 8);
+  constructor(props) {
+    props.name   = "city";
+    props.width  = 16;
+    props.height = 8;
+
+    super(props);
     
     this.sprite = copyAndRecolor(this.sheet, 36, 24, this.width, this.height, [
       { from:'#999999', to:BLUE },

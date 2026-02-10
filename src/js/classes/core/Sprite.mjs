@@ -1,15 +1,30 @@
+import { game } from '../../../main.mjs';
+import { createBuffer } from '../../buffer.mjs';
+import { HALF_H, HALF_W } from '../../constants.mjs';
+
 export default class Sprite {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.halfW = (width / 2)  | 0;
-    this.halfH = (height / 2) | 0;
-    this.speed = 0;
-    this.dirX = 0;
-    this.dirY = 0;
+  constructor(props) {
+    // console.log(props);
+
+    switch(props.name) {
+      case "missile": props.speed = 110; break;
+    }
+
+    this.name    = props.name;
+    this.parent  = props.parent || game;
+    this.x       = (props.x | 0) || HALF_W;
+    this.y       = (props.y | 0) || HALF_H;
+    this.width   = props.width   || 1;
+    this.height  = props.height  || 1;
+    this.halfW   = this.width===1  ? 0 : Math.floor(this.width/2);
+    this.halfH   = this.height===1 ? 0 : Math.floor(this.height/2);
+    this.speed   = props.speed || 0;
+    this.dirX    = props.dirX  || 0;
+    this.dirY    = props.dirY  || 0;
     this.visible = true;
+    this.sprite  = createBuffer(this.name, this.width, this.height).canvas;
+    this.buffer  = this.sprite.getContext('2d');
+    this.box     = { x: this.x, y: this.y, width: this.width, height: this.height };
     this.sheet   = document.getElementById('sprites');
   }
 
@@ -27,16 +42,25 @@ export default class Sprite {
     ctx.drawImage(this.sprite, x, y, w, h);
   }
 
-  getSprite(sprite) {
+  setBox(sprite) {
+    this.sprite = sprite;
     this.width  = sprite.width;
     this.height = sprite.height;
     this.halfW  = sprite.width / 2;
     this.halfH  = sprite.height / 2;
 
-    return sprite;
+    if (this.halfW===0 || this.halfH===0) {
+      throw Error("Something went wrong here...");
+    }
+
   }
 
-  setBoundingBox() {
-    
+  getBox() {
+    this.box.x      = (this.x - this.halfW) | 0;
+    this.box.y      = (this.y - this.halfH) | 0;
+    this.box.width  = this.width;
+    this.box.height = this.height;
+
+    return this.box;
   }
 }
