@@ -19,7 +19,7 @@ export default class Aircraft extends Sprite {
     this.parent     = props.parent;
     this.freeze     = false;
     this.exploded   = false;
-    this.garbage    = false;
+    
     
     this.time = 0;
     this.freezeTime = 1.5;
@@ -31,7 +31,7 @@ export default class Aircraft extends Sprite {
   }
 
   update(dt) {
-    if (!this.visible) return; 
+    if (this.garbage) return; 
 
     this.sprite = this.sprites[this.dirX === DIRECTION.LEFT ? 1 : 0];
     this.buffer = this.sprite.getContext('2d');
@@ -45,7 +45,7 @@ export default class Aircraft extends Sprite {
   }
 
   draw(ctx) {
-    if (!this.visible) return; 
+    if (this.garbage) return; 
 
     super.draw(ctx);
   }

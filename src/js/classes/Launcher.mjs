@@ -1,6 +1,6 @@
 import { BLUE } from "../constants.mjs";
 import Explosion from "./Explosion.mjs";
-import Missile from "./missile/Missile.mjs";
+import Missile from "./Missile.mjs";
 
 export default class Launcher {
   constructor(parent) {

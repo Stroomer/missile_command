@@ -16,12 +16,9 @@
 /src/js/classes/Crosshair.mjs
 /src/js/classes/Enemy.mjs
 
-/src/js/classes/missile/Missile.mjs
-/src/js/classes/missile/Projectile.mjs
-/src/js/classes/missile/Target.mjs
-/src/js/classes/missile/Smoke.mjs
+/src/js/classes/Missile.mjs
+/src/js/classes/Target.mjs
 /src/js/classes/Explosion.mjs
-/src/js/classes/missile/Fuze.mjs
 
 /src/js/classes/ClusterExplosion.mjs
 

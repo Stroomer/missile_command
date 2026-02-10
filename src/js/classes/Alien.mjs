@@ -19,7 +19,6 @@ export default class Alien extends Sprite {
     this.antenna    = new Antenna(this, this.width, this.height);
     this.freeze     = false;
     this.exploded   = false;
-    this.garbage    = false;
     this.time       = 0;
     this.freezeTime = 1.5;
 
@@ -31,7 +30,7 @@ export default class Alien extends Sprite {
   }
 
   update(dt) {
-    if (!this.visible) return; 
+    if (this.garbage) return; 
 
     this.antenna.update(dt);
     
@@ -42,7 +41,7 @@ export default class Alien extends Sprite {
       // this.cluster.y = this.y;
       // this.cluster.exploded = true;
       
-      console.log(this.parent);
+      //console.log(this.parent);
       
      
 
@@ -59,7 +58,7 @@ export default class Alien extends Sprite {
   }
 
   draw(ctx) {
-    if (!this.visible) return; 
+    if (this.garbage) return; 
 
     this.antenna.draw(this.buffer);
     super.draw(ctx);

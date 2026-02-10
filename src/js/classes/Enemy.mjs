@@ -1,6 +1,6 @@
 import { HEIGHT, RED, WIDTH } from '../constants.mjs';
 import { randomInt } from '../helpers.mjs';
-import Missile from './missile/Missile.mjs';
+import Missile from './Missile.mjs';
 
 export default class Enemy {
   constructor(parent) {

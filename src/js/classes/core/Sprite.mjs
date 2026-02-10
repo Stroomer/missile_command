@@ -4,24 +4,23 @@ import { HALF_H, HALF_W } from '../../constants.mjs';
 
 export default class Sprite {
   constructor(props) {
-    // console.log(props);
-
     switch(props.name) {
       case "missile": props.speed = 110; break;
     }
 
-    this.name    = props.name;
-    this.parent  = props.parent || game;
-    this.x       = (props.x | 0) || HALF_W;
-    this.y       = (props.y | 0) || HALF_H;
-    this.width   = props.width   || 1;
-    this.height  = props.height  || 1;
-    this.halfW   = this.width===1  ? 0 : Math.floor(this.width/2);
-    this.halfH   = this.height===1 ? 0 : Math.floor(this.height/2);
-    this.speed   = props.speed || 0;
-    this.dirX    = props.dirX  || 0;
-    this.dirY    = props.dirY  || 0;
-    this.visible = true;
+    this.name   = props.name    || "no_name";
+    this.parent = props.parent  || game;
+    this.x      =(props.x | 0)  || HALF_W;
+    this.y      =(props.y | 0)  || HALF_H;
+    this.width  = props.width   || 1;
+    this.height = props.height  || 1;
+    this.speed  = props.speed   || 0;
+    this.dirX   = props.dirX    || 0;
+    this.dirY   = props.dirY    || 0;
+    this.halfW  = this.width  === 1 ? 0 : Math.floor(this.width/2);
+    this.halfH  = this.height === 1 ? 0 : Math.floor(this.height/2);
+
+    this.garbage = false;
     this.sprite  = createBuffer(this.name, this.width, this.height).canvas;
     this.buffer  = this.sprite.getContext('2d');
     this.box     = { x: this.x, y: this.y, width: this.width, height: this.height };

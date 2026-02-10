@@ -21,8 +21,6 @@ export default class Explosion extends Sprite {
     this.phase           = Explosion.STATE.EXPLODE;
     this.time            = 0;
     this.collisionRadius = 0;
-    this.garbage         = false;
-    this.visible         = true;
     this.box             = { x:this.x, y:this.y, width:this.width, height:this.height };
     this.sprite          = createBuffer('explosion', 1, 1).canvas;
     this.buffer          = this.sprite.getContext('2d');
@@ -30,7 +28,7 @@ export default class Explosion extends Sprite {
   }
 
   update(dt) {
-    if(!this.visible) return;
+    if(this.garbage) return;
     
     this.time += dt;
     let t, eased;
@@ -57,29 +55,15 @@ export default class Explosion extends Sprite {
         eased = 1 - easeInQuad(t);
         if (t >= 1) {
           this.phase = Explosion.STATE.REMOVE;
-          // this.garbage = true;
-          
-
-          console.log("REMOVE");
+          this.garbage = true;
         }
         break;
       case Explosion.STATE.REMOVE:
-        this.visible  = false;
-        //this.garbage = true;
-
-
-        //this.parent.garbage = true;
-
-        
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAA");
-        
-
+        return;
         break;
       default: return;    
     }
 
-    
-    
     const color  = this.parent.colorId;
     const index  = (eased * this.maxIndex) | 0;
     const buffer = Explosion.BUFFERS[color][index];
@@ -92,7 +76,7 @@ export default class Explosion extends Sprite {
   }
 
   draw(ctx) {
-    if(!this.visible) return; 
+    if(this.garbage) return; 
     super.draw(ctx);
   }
 }

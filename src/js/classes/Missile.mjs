@@ -1,9 +1,9 @@
-import Explosion from '../Explosion.mjs';
-import { getLineBresenham } from '../../helpers.mjs';
-import { game } from '../../../main.mjs';
-import { BLUE, COLORS } from '../../constants.mjs';
-import Sprite from '../core/Sprite.mjs';
-import Target from '../Target.mjs';
+import Explosion from './Explosion.mjs';
+import { getLineBresenham } from '../helpers.mjs';
+import { game } from '../../main.mjs';
+import { BLUE, COLORS } from '../constants.mjs';
+import Sprite from './core/Sprite.mjs';
+import Target from './Target.mjs';
 
 export default class Missile extends Sprite {
   constructor(props) {
@@ -12,14 +12,13 @@ export default class Missile extends Sprite {
 
     super(props);
 
-    console.log(props);
+    // console.log(props);
     
     this.parent        = game;
     this.pixels        = getLineBresenham(this.x, this.y, props.destX, props.destY);
     this.lastIndex     = this.pixels.length - 1;
     this.progress      = 0;
     this.visiblePixels = 0;
-    this.visible       = true;
     this.target        = this.setTarget(props.destX, props.destY);
     this.exploded      = false;
     this.garbage       = false;
@@ -46,31 +45,24 @@ export default class Missile extends Sprite {
     const pixel   = this.pixels[index];
     const colorId = this.parent.colorId;  
 
-    this.x = pixel.x;
-    this.y = pixel.y;    
-    this.color = this.target.color = COLORS[colorId];
+    this.x             = pixel.x;
+    this.y             = pixel.y;    
+    this.color         = this.target.color = COLORS[colorId];
     this.visiblePixels = index;    
     
-    if (!this.exploded) {
-      if (next >= this.lastIndex) {
-        this.explosion = this.setExplosion(this.x, this.y);
-        this.exploded = true;
-      }  
-    } else {
-      if (!this.explosion.visible) {
-        console.log('yo');
-
-        this.garbage = this.target.garbage = true;
-        
-      }
+    if (!this.exploded && next >= this.lastIndex) {
+      this.explosion = this.setExplosion(this.x, this.y);
+      this.exploded = this.target.garbage = true;
+      this.parent.audio.playExplosion();
     }
 
-
-    
+    if (this.exploded && this.explosion.garbage) {
+      this.garbage = true;
+    }
   }
 
   draw(ctx) {
-    if (!this.visible || this.visiblePixels === 0) return;
+    if (this.garbage || this.visiblePixels === 0) return;
 
     // draw smoke
     ctx.fillStyle = BLUE;
@@ -82,20 +74,6 @@ export default class Missile extends Sprite {
     // draw missile
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, 1, 1);
-  }
-
-  explode() {
-    console.log('explode()');
-    
-    //this.target.visible    = false;
-    this.smoke.visible     = false;
-    this.exploded          = true;
-    //this.explosion.visible = true;
-    //this.explosion.phase = Explosion.STATE.EXPLODE;
-    
-    this.setExplosion?.(this.x, this.y);
-    
-    this.parent.audio.playExplosion();
   }
 
   // getBox() {   

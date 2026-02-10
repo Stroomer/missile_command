@@ -1,19 +1,14 @@
 import { copyAndRecolor } from '../canvas.mjs';
-import { BLUE, COLORS, RED } from '../constants.mjs';
+import { BLUE } from '../constants.mjs';
 import Sprite from '../classes/core/Sprite.mjs';
 
 export default class Target extends Sprite {
   constructor(props) {
-    props.name = 'target';
-    //props.x = props.destX;
-    //props.y = props.destY;
-    props.width = 5;
+    props.name   = 'target';
+    props.width  = 5;
     props.height = 5;
 
-    console.log('tarrrrrrget');
-    console.log(props);
-
-    super(props); // "target", props.target.x, props.target.y, 5, 5
+    super(props);
 
     this.parent = props.parent;
     this.color = props.color;
@@ -27,7 +22,7 @@ export default class Target extends Sprite {
   }
 
   draw(ctx) {
-    if (!this.visible) return;
+    if (this.garbage) return;
 
     this.buffer.fillStyle = this.color;
     for (let i = 0; i < this.positions.length; i += 2) {
