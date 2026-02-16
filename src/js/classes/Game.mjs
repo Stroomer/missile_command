@@ -159,7 +159,7 @@ export default class Game {
     this.aircrafts.push( new Aircraft );
 
     this.explosions = [];
-    this.explosions.push( new Explosion );
+    this.explosions.push(new Explosion({ delay:3.0 }) );
 
     this.background.draw(this.buffer.background);
 
