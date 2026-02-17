@@ -38,6 +38,11 @@ export default class Missile extends Sprite {
   }
 
   update(dt) {
+    if (this.exploded) {
+      this.garbage = this.explosion.garbage;
+      return;
+    } 
+      
     this.progress += (this.speed * dt);
     
     const next    = this.progress | 0;
@@ -50,14 +55,8 @@ export default class Missile extends Sprite {
     this.color         = this.target.color = COLORS[colorId];
     this.visiblePixels = index;    
     
-    if (!this.exploded && next >= this.lastIndex) {
-      this.explosion = this.setExplosion(this.x, this.y);
-      this.exploded = this.target.garbage = true;
-      this.parent.audio.playExplosion();
-    }
-
-    if (this.exploded && this.explosion.garbage) {
-      this.garbage = true;
+    if (next >= this.lastIndex) {
+      this.hit();
     }
   }
 
@@ -76,7 +75,10 @@ export default class Missile extends Sprite {
     ctx.fillRect(this.x, this.y, 1, 1);
   }
 
-  // getBox() {   
-  //   return !this.exploded ? this.getBox() : this.explosion.getBox();
-  // }
+  hit() {    
+    if (this.exploded) return;
+
+    this.explosion = this.setExplosion(this.x, this.y);
+    this.exploded = this.target.garbage = true;
+  }
 }

@@ -16,13 +16,9 @@ export default class Aircraft extends Sprite {
     
     super(props);
 
-    this.parent     = props.parent;
     this.freeze     = false;
-    this.exploded   = false;
-    
-    
     this.time = 0;
-    this.freezeTime = 1.5;
+    this.freezeTime = 0.7;
     
     this.sprite     = copyAndRecolor(this.sheet, 19, 24, this.width, this.height, [{ from: '#999999', to: GREEN }]);
     this.sprites    = [copySprite(this.sprite), flip(copySprite(this.sprite))];
@@ -51,6 +47,9 @@ export default class Aircraft extends Sprite {
   }
 
   hit() {
+    if (this.freeze) return;
+
     this.freeze = true;
+    this.parent.spawnExplosionBatch(this);
   }
 }

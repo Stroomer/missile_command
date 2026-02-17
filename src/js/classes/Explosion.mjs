@@ -18,7 +18,7 @@ export default class Explosion extends Sprite {
     this.collapseTime = props.collapseTime || 0.3;
     this.delay = props.delay || 0;
     this.radius = props.radius || Explosion.GIANT;
-    this.phase = this.delay > 0 ? Explosion.STATE.SLEEP : Explosion.STATE.EXPLODE;
+    this.phase = Explosion.STATE.SLEEP;
     this.time = 0;
     this.maxIndex = this.radius - 1;
   }
@@ -32,6 +32,7 @@ export default class Explosion extends Sprite {
     if (this.phase === Explosion.STATE.SLEEP) {
       if (this.time >= this.delay) {
         this.time = 0;
+        this.parent.audio.playExplosion();
         this.phase = Explosion.STATE.EXPLODE;
       }
       return;

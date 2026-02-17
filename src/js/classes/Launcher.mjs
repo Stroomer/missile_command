@@ -23,7 +23,6 @@ export default class Launcher {
 
     //this.launch(props);
 
-
     this.launch({
       parent: this.parent,
       x: 123,
@@ -36,9 +35,6 @@ export default class Launcher {
       expandTime: 0.2,
       collapseTime: 0.3,
     });
-
-
-
 
     mouse.fire = false;
   }

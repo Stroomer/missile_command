@@ -18,11 +18,10 @@ export default class Alien extends Sprite {
     
     this.antenna    = new Antenna(this, this.width, this.height);
     this.freeze     = false;
-    this.exploded   = false;
     this.time       = 0;
-    this.freezeTime = 1.5;
+    this.freezeTime = 0.7;
 
-    this.sprite     = copyAndRecolor(this.sheet, 36, 33, this.width, this.height, [
+    this.sprite = copyAndRecolor(this.sheet, 36, 33, this.width, this.height, [
       { from: '#999999', to: BLUE },
       { from: '#666666', to: RED },
     ]);
@@ -37,21 +36,8 @@ export default class Alien extends Sprite {
     if (!this.freeze) {
       super.update(dt);
     } else if (!this.exploded) {
-      // this.cluster.x = this.x;
-      // this.cluster.y = this.y;
-      // this.cluster.exploded = true;
-      
-      //console.log(this.parent);
-      
-     
-
-
       this.exploded = true;
     } else {
-      //this.cluster.update(dt);
-
-      
-
       this.time += dt;
       if (this.time > this.freezeTime) this.garbage = true;  
     }
@@ -62,13 +48,19 @@ export default class Alien extends Sprite {
 
     this.antenna.draw(this.buffer);
     super.draw(ctx);
-
-    if (!this.exploded) return;
-    //this.cluster.draw(ctx);
   }
 
   hit() {
+    if (this.freeze) return; 
+    
+    
+    
+
+
     this.freeze = true;
+    this.parent.spawnExplosionBatch(this);
+
+
   }
 }
 
