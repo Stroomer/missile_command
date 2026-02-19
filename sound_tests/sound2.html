@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <body>
+    <button id="start">Start Aircraft</button>
+    <button id="stop">Stop</button>
+
+    <script>
+      let audioCtx;
+      let mainOsc, detuneOsc, lfo, gainNode, filter;
+
+      document.getElementById("start").onclick = () => {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Main oscillator (core tone)
+        mainOsc = audioCtx.createOscillator();
+        mainOsc.type = "sawtooth";
+        mainOsc.frequency.value = 110; // low engine rumble
+
+        // Slight detune for roughness
+        detuneOsc = audioCtx.createOscillator();
+        detuneOsc.type = "square";
+        detuneOsc.frequency.value = 112;
+
+        // Gain
+        gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0.2;
+
+        // Low frequency modulation (engine wobble)
+        lfo = audioCtx.createOscillator();
+        lfo.type = "sine";
+        lfo.frequency.value = 5; // slow wobble
+
+        const lfoGain = audioCtx.createGain();
+        lfoGain.gain.value = 0.10;
+
+        // Filter to soften highs (arcade tone)
+        filter = audioCtx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 1000;
+        filter.Q.value = 1;
+
+        // Routing
+        lfo.connect(lfoGain);
+        lfoGain.connect(gainNode.gain);
+
+        mainOsc.connect(filter);
+        detuneOsc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        // Start
+        mainOsc.start();
+        detuneOsc.start();
+        lfo.start();
+      };
+
+      document.getElementById("stop").onclick = () => {
+        mainOsc?.stop();
+        detuneOsc?.stop();
+        lfo?.stop();
+      };
+    </script>
+  </body>
+</html>

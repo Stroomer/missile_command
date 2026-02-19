@@ -1,65 +1,60 @@
-import { aabb, randomInt, randomPick } from '../helpers.mjs';
-import { mouse }        from './../mouse.mjs';
-import { createBuffer } from './../buffer.mjs';
-import { start }        from './../gameloop.mjs';
-import { WIDTH, HEIGHT, COLORS, BLACK, BLUE } from '../constants.mjs';
+import { aabb, randomInt, randomPick } from '../../functions.mjs';
+import { mouse } from '../../mouse.mjs';
+import { createBuffer } from '../../buffer.mjs';
+import { start } from '../../gameloop.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE } from '../../constants.mjs';
 
-import Crosshair   from './Crosshair.mjs';
-import Audio       from './Audio.mjs';
-import Background  from './Background.mjs';
-import Alien       from './Alien.mjs';
-import Aircraft    from './Aircraft.mjs';
-import City        from './City.mjs';
-import Launcher    from './Launcher.mjs';
-import Enemy from './Enemy.mjs';
-import { drawBoundingBox } from '../debug.mjs';
-import Explosion from './Explosion.mjs';
-import SpatialGrid from './SpatialGrid.mjs';
-import PerformanceMonitor from '../PerformanceMonitor.mjs';
-
-
+import Crosshair from '../entities/Crosshair.mjs';
+import Background from '../entities/Background.mjs';
+import Launcher from '../core/Launcher.mjs';
+import Enemy from '../Enemy.mjs';
+import { drawBoundingBox } from '../../debug.mjs';
+import Explosion from '../entities/Explosion.mjs';
+import SpatialGrid from '../core/SpatialGrid.mjs';
+import PerformanceMonitor from '../helper/PerformanceMonitor.mjs';
+import Factory from '../core/Factory.mjs';
+import Audio from './Audio.mjs';
 
 const sprites = document.getElementById('sprites');
 
-
 export default class Game {
   constructor() {
-    console.log("Create Game-object");
+    console.log('Create Game-object');
   }
 
   init() {
-    console.log("Init Game-object");
+    console.log('Init Game-object');
 
-    this.createBuffers(); 
+    this.createBuffers();
     this.createObjects();
-          
+
     start(this);
   }
 
   // Spawn 4 staggered explosions, one per quadrant of the entity box
   spawnExplosionBatch(entity) {
-    const box   = entity.getBox();
-    const cx    = box.x + (box.width  >> 1);
-    const cy    = box.y + (box.height >> 1);
-    const qx    = box.width  >> 2;
-    const qy    = box.height >> 2;
+    const box = entity.getBox();
+    const cx = box.x + (box.width >> 1);
+    const cy = box.y + (box.height >> 1);
+    const qx = box.width >> 2;
+    const qy = box.height >> 2;
     const twist = Math.max(4, qx);
     const sizes = [Explosion.SMALL, Explosion.MEDIUM];
-    let delay   = 0.2;
+
+    let delay = 0.2;
 
     for (let i = 0; i < 4; i++) {
-      const sx  = (i & 1) * 2 - 1;   // -1, 1, -1, 1
-      const sy  = (i >> 1) * 2 - 1;  // -1, -1, 1, 1
-      const exp = new Explosion({
+      const sx = (i & 1) * 2 - 1;
+      const sy = (i >> 1) * 2 - 1;
+      const exp = this.factory.createExplosion({
         x: cx + sx * qx + randomInt(-twist, twist),
         y: cy + sy * qy + randomInt(-twist, twist),
-        radius:       randomPick(sizes),
+        radius: randomPick(sizes),
         delay,
-        expandTime:   0.15,
+        expandTime: 0.15,
         collapseTime: 0.25,
       });
       exp.secondary = true;
-      this.explosions.push(exp);
       delay += randomInt(5, 10) / 100;
     }
   }
@@ -89,7 +84,7 @@ export default class Game {
   update(dt) {
     const updateStart = this.perfMonitor.startMeasure();
 
-    this.colorId = randomInt(0, COLORS.length-1);
+    this.colorId = randomInt(0, COLORS.length - 1);
 
     // Update singleton entities
     this.launcher.update(mouse);
@@ -97,13 +92,7 @@ export default class Game {
     this.enemy.update(dt);
 
     // Unified update + garbage collection for all entity arrays
-    const entityLists = [
-      this.missiles,
-      this.aliens,
-      this.aircrafts,
-      this.explosions,
-      this.targets
-    ];
+    const entityLists = [this.missiles, this.aliens, this.aircrafts, this.explosions, this.targets];
 
     for (let i = 0; i < entityLists.length; i++) {
       this.updateEntities(entityLists[i], dt);
@@ -143,7 +132,7 @@ export default class Game {
     // Record draw time
     this.perfMonitor.drawTime = this.perfMonitor.endMeasure(drawStart);
   }
-  
+
   clearScreen() {
     this.offscreen.fillStyle = BLACK;
     this.offscreen.fillRect(0, 0, WIDTH, HEIGHT);
@@ -159,7 +148,7 @@ export default class Game {
     const aircrafts = this.aircrafts;
 
     if (!ctx) {
-      for (let i = 0; i < aliens.length; i++)    this.spatialGrid.insert(aliens[i]);
+      for (let i = 0; i < aliens.length; i++) this.spatialGrid.insert(aliens[i]);
       for (let i = 0; i < aircrafts.length; i++) this.spatialGrid.insert(aircrafts[i]);
     }
 
@@ -179,9 +168,7 @@ export default class Game {
           if (!ctx) {
             entity.hit();
             missile.hit();
-          }
-          else
-          {
+          } else {
             drawBoundingBox(ctx, entityBox);
             drawBoundingBox(ctx, missileBox);
           }
@@ -209,29 +196,27 @@ export default class Game {
           if (!ctx) {
             entity.hit();
             //this.spawnExplosionBatch(entity);
-          }
-          else
-          {
+          } else {
             drawBoundingBox(ctx, entityBox);
             drawBoundingBox(ctx, explosionBox);
           }
         }
       }
     }
-  }  
+  }
 
   createBuffers() {
     this.buffer = {};
-    this.buffer.onscreen   = createBuffer('onscreen');
-    this.buffer.offscreen  = createBuffer('offscreen');
+    this.buffer.onscreen = createBuffer('onscreen');
+    this.buffer.offscreen = createBuffer('offscreen');
     this.buffer.background = createBuffer('background');
-    this.buffer.missiles   = createBuffer('missiles');
-    this.buffer.targets    = createBuffer('targets');
-    this.buffer.smoke      = createBuffer('smoke');
+    this.buffer.missiles = createBuffer('missiles');
+    this.buffer.targets = createBuffer('targets');
+    this.buffer.smoke = createBuffer('smoke');
     this.buffer.explosions = createBuffer('explosions');
 
     this.offscreen = this.buffer.offscreen;
-    this.onscreen  = this.buffer.onscreen;  
+    this.onscreen = this.buffer.onscreen;
   }
 
   createObjects() {
@@ -244,32 +229,37 @@ export default class Game {
     // Cell size of 32 works well for this game's entity sizes
     this.spatialGrid = new SpatialGrid(32);
 
-    this.crosshair = new Crosshair({ color:BLUE });
-    this.background = new Background({ x: 128, y: 220 });
+    // Initialize entity factory for centralized entity creation
+    this.factory = new Factory(this);
+
+    // Initialize audio factory for centralized sound creation
+    this.audio = new Audio(this);
+
+    // Initialize entity arrays (factory will push to these)
+    this.cities = [];
+    this.missiles = [];
+    this.targets = [];
+    this.aliens = [];
+    this.aircrafts = [];
+    this.explosions = [];
+
+    this.crosshair = new Crosshair({ parent: this, color: BLUE });
+    this.background = new Background({ parent: this, x: 128, y: 220 });
     this.launcher = new Launcher(this);
     this.enemy = new Enemy(this);
-    
-    this.cities = [];
-    this.cities.push(new City({x:48,  y:215}));
-    this.cities.push(new City({x:78,  y:216}));
-    this.cities.push(new City({x:108, y:216}));
-    this.cities.push(new City({x:138, y:216}));
-    this.cities.push(new City({x:168, y:216}));
-    this.cities.push(new City({x:218, y:216}));
-      
-    this.missiles = [];
-    this.targets  = [];
-    
-    this.aliens = [];
-    this.aliens.push( new Alien );
-    
-    this.aircrafts  = [];
-    this.aircrafts.push( new Aircraft );
 
-    this.explosions = [];
-    
+    // Create cities using factory
+    this.factory.createCity({ x: 48, y: 215 });
+    this.factory.createCity({ x: 78, y: 216 });
+    this.factory.createCity({ x: 108, y: 216 });
+    this.factory.createCity({ x: 138, y: 216 });
+    this.factory.createCity({ x: 168, y: 216 });
+    this.factory.createCity({ x: 218, y: 216 });
+
+    // Create initial entities
+    this.factory.createAlien();
+    this.factory.createAircraft();
+
     this.background.draw(this.buffer.background);
-
-    this.audio = new Audio();
   }
 }

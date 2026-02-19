@@ -1,14 +1,15 @@
-import { copyAndRecolor } from '../canvas.mjs';
-import { BLUE } from '../constants.mjs';
-import Sprite from '../classes/core/Sprite.mjs';
+import { copyAndRecolor } from '../../canvas.mjs';
+import { BLUE } from '../../constants.mjs';
+import Sprite from '../core/Sprite.mjs';
 
 export default class Target extends Sprite {
   constructor(props) {
-    props.name   = 'target';
-    props.width  = 5;
-    props.height = 5;
-
-    super(props);
+    super({
+      ...props,
+      name: 'target',
+      width: 5,
+      height: 5,
+    });
 
     this.parent = props.parent;
     this.color = props.color;

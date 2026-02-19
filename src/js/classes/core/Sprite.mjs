@@ -1,15 +1,12 @@
-import { game } from '../../../main.mjs';
 import { createBuffer } from '../../buffer.mjs';
 import { HALF_H, HALF_W } from '../../constants.mjs';
 
 export default class Sprite {
   constructor(props) {
-    switch(props.name) {
-      case "missile": props.speed = 110; break;
-    }
+    if (!props.parent) throw new Error(`Sprite "${props.name}" requires a parent reference`);
 
+    this.parent = props.parent;
     this.name   = props.name    || "no_name";
-    this.parent = props.parent  || game;
     this.x      =(props.x | 0)  || HALF_W;
     this.y      =(props.y | 0)  || HALF_H;
     this.width  = props.width   || 1;

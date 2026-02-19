@@ -1,4 +1,4 @@
-import { withinBounds } from './helpers.mjs';
+import { withinBounds } from '../js/functions.mjs';
 
 const canvas = document.getElementById('onscreen');
 

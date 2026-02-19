@@ -1,6 +1,5 @@
 import { HEIGHT, RED, WIDTH } from '../constants.mjs';
-import { randomInt } from '../helpers.mjs';
-import Missile from './Missile.mjs';
+import { randomInt } from '../functions.mjs';
 
 export default class Enemy {
   constructor(parent) {
@@ -33,6 +32,6 @@ export default class Enemy {
   }
 
   launch(props) {
-    props.parent.missiles.push(new Missile(props));
+    props.parent.factory.createMissile(props);
   }
 }

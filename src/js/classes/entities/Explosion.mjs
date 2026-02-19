@@ -1,17 +1,18 @@
-import Sprite from '../classes/core/Sprite.mjs';
-import { COLORS, HALF_H, HALF_W } from '../constants.mjs';
-import { createBuffer } from '../buffer.mjs';
-import { drawCircle } from '../canvas.mjs';
-import { easeOutQuad, easeInQuad } from '../helpers.mjs';
+import Sprite from '../core/Sprite.mjs';
+import { COLORS, HALF_H, HALF_W } from '../../constants.mjs';
+import { createBuffer } from '../../buffer.mjs';
+import { drawCircle } from '../../canvas.mjs';
+import { easeOutQuad, easeInQuad } from '../../functions.mjs';
 
 export default class Explosion extends Sprite {
-  constructor(props = {}) {
+  constructor(props) {
     super({
-      name: "explosion",
+      ...props,
+      name: 'explosion',
       x: props.x || props.destX || HALF_W,
       y: props.y || props.destY || HALF_H,
       width: 1,
-      height: 1
+      height: 1,
     });
 
     this.expandTime = props.expandTime || 0.2;
@@ -87,16 +88,16 @@ Explosion.GET_BUFFERS = function () {
   return buffers;
 };
 
-Explosion.MICRO  = 2;
-Explosion.SMALL  = 8;
+Explosion.MICRO = 2;
+Explosion.SMALL = 8;
 Explosion.MEDIUM = 16;
-Explosion.LARGE  = 24;
-Explosion.GIANT  = 32;
+Explosion.LARGE = 24;
+Explosion.GIANT = 32;
 
 Explosion.STATE = {
   SLEEP: 0,
   EXPLODE: 1,
-  IMPLODE: 2
+  IMPLODE: 2,
 };
 
 Explosion.BUFFERS = Explosion.GET_BUFFERS();

@@ -1,5 +1,5 @@
 import './css/style.css';
-import Game from './js/classes/Game.mjs';
+import Game from './js/classes/core/Game.mjs';
 
 const game = new Game();
 game.init();
