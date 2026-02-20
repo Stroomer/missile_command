@@ -7,8 +7,8 @@ export default class Sprite {
 
     this.parent = props.parent;
     this.name   = props.name    || "no_name";
-    this.x      =(props.x | 0)  || HALF_W;
-    this.y      =(props.y | 0)  || HALF_H;
+    this.x      = (props.x | 0);
+    this.y      = (props.y | 0);
     this.width  = props.width   || 1;
     this.height = props.height  || 1;
     this.speed  = props.speed   || 0;
@@ -17,11 +17,17 @@ export default class Sprite {
     this.halfW  = this.width  === 1 ? 0 : Math.floor(this.width/2);
     this.halfH  = this.height === 1 ? 0 : Math.floor(this.height/2);
 
+    if (this.name === 'depot') {
+      console.log(this.halfW, this.halfH);
+      
+    }
+
+
     this.garbage = false;
     this.sprite  = Buffer.create(this.name, this.width, this.height).canvas;
     this.buffer  = this.sprite.getContext('2d');
     this.box     = { x: this.x, y: this.y, width: this.width, height: this.height };
-    this.sheet   = document.getElementById('sprites');
+    this.sheet = document.getElementById('sprites');
   }
 
   update(dt) {

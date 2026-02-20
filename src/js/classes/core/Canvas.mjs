@@ -17,21 +17,21 @@ export default class Canvas {
   }
 
   static copyAndRecolor(img, sx, sy, w, h, palette) {
-    const slice     = Canvas.copySprite(img, sx, sy, w, h);
+    const slice = Canvas.copySprite(img, sx, sy, w, h);
     const recolored = Canvas.recolorSprite(slice, palette);
     return recolored;
   }
 
   static copySprite(source, sx = 0, sy = 0, w, h) {
-    let srcCanvas;  // --- Normalize source ---
+    let srcCanvas; // --- Normalize source ---
 
-    if (source instanceof CanvasRenderingContext2D)              srcCanvas = source.canvas;
-    else if(source instanceof OffscreenCanvasRenderingContext2D) srcCanvas = source.canvas;
-    else                                                         srcCanvas = source;
+    if (source instanceof CanvasRenderingContext2D) srcCanvas = source.canvas;
+    else if (source instanceof OffscreenCanvasRenderingContext2D) srcCanvas = source.canvas;
+    else srcCanvas = source;
 
     if (!srcCanvas) throw new TypeError('Invalid source provided to copySprite');
 
-    const srcW = srcCanvas.width  || srcCanvas.naturalWidth;  // --- Resolve width / height ---
+    const srcW = srcCanvas.width || srcCanvas.naturalWidth; // --- Resolve width / height ---
     const srcH = srcCanvas.height || srcCanvas.naturalHeight;
 
     if (w == null) w = srcW;
@@ -48,16 +48,16 @@ export default class Canvas {
 
   // recolor sprite from grey(s) to color(s)
   static recolorSprite(canvas, palette) {
-    const rules = palette.map(p => ({
+    const rules = palette.map((p) => ({
       from: Canvas.hexToRgb(p.from),
-      to:   Canvas.hexToRgb(p.to)
+      to: Canvas.hexToRgb(p.to),
     }));
 
-    const ctx     = canvas.getContext('2d', { willReadFrequently: true });
-    const w       = canvas.width;
-    const h       = canvas.height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const w = canvas.width;
+    const h = canvas.height;
     const imgData = ctx.getImageData(0, 0, w, h);
-    const data    = imgData.data;
+    const data = imgData.data;
 
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i];
@@ -66,7 +66,7 @@ export default class Canvas {
       for (let j = 0; j < rules.length; j++) {
         const { from, to } = rules[j];
         if (r === from.r && g === from.g && b === from.b) {
-          data[i]     = to.r;
+          data[i] = to.r;
           data[i + 1] = to.g;
           data[i + 2] = to.b;
           break;
@@ -80,9 +80,9 @@ export default class Canvas {
   }
 
   static drawCircle(ctx, size, color) {
-    const cx     = size / 2 - 0.5;
-    const cy     = size / 2 - 0.5;
-    const r      = size / 2 - 0.5;
+    const cx = size / 2 - 0.5;
+    const cy = size / 2 - 0.5;
+    const r = size / 2 - 0.5;
 
     ctx.fillStyle = color;
 
@@ -95,4 +95,10 @@ export default class Canvas {
       ctx.fillRect(x1, y, x2 - x1 + 1, 1);
     }
   }
+
+  // static applyIntegerScale(canvas) {
+  //   const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / canvas.width, window.innerHeight / canvas.height)));
+  //   canvas.style.width = canvas.width * scale + 'px';
+  //   canvas.style.height = canvas.height * scale + 'px';
+  // }
 }

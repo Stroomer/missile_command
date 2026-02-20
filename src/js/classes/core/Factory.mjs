@@ -4,7 +4,7 @@ import Missile from '../entities/Missile.mjs';
 import Explosion from '../entities/Explosion.mjs';
 import Target from '../entities/Target.mjs';
 import City from '../entities/City.mjs';
-import Ammo from '../entities/Ammo.mjs';
+import Depot from '../entities/Depot.mjs';
 
 /**
  * EntityFactory - Centralized entity creation
@@ -55,9 +55,9 @@ export default class Factory {
     return city;
   }
 
-  createAmmo(props = {}) {
-    const ammo = new Ammo({ ...props, parent: this.game });
-    this.game.ammo.push(ammo);
-    return ammo;
+  createDepot(props = {}) {
+    const depot = new Depot({ ...props, parent: this.game });
+    this.game.depots.push(depot);
+    return depot;
   }
 }
