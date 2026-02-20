@@ -1,5 +1,5 @@
 import { BLUE, RED } from '../../constants.mjs';
-import { copyAndRecolor } from '../../canvas.mjs';
+import Canvas from '../core/Canvas.mjs';
 import Sprite from '../core/Sprite.mjs';
 
 export default class City extends Sprite {
@@ -11,7 +11,7 @@ export default class City extends Sprite {
       height: 8,
     });
 
-    this.sprite = copyAndRecolor(this.sheet, 36, 24, this.width, this.height, [
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 36, 24, this.width, this.height, [
       { from: '#999999', to: BLUE },
       { from: '#666666', to: RED },
     ]);

@@ -1,4 +1,4 @@
-import { copyAndRecolor } from '../../canvas.mjs';
+import Canvas from '../core/Canvas.mjs';
 import { BLUE } from '../../constants.mjs';
 import Sprite from '../core/Sprite.mjs';
 
@@ -13,7 +13,7 @@ export default class Target extends Sprite {
 
     this.parent = props.parent;
     this.color = props.color;
-    this.sprite = copyAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from: '#999999', to: BLUE }]);
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 9, 24, this.width, this.height, [{ from: '#999999', to: BLUE }]);
     this.buffer = this.sprite.getContext('2d');
     this.positions = [0, 0, 4, 0, 1, 1, 3, 1, 2, 2, 1, 3, 3, 3, 0, 4, 4, 4];
   }

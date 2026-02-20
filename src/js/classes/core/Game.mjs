@@ -1,9 +1,10 @@
-import { aabb, randomInt, randomPick } from '../../functions.mjs';
-import { mouse } from '../../mouse.mjs';
-import { createBuffer } from '../../buffer.mjs';
+import { randomInt, randomPick } from '../../functions.mjs';
+import Mouse from '../input/Mouse.mjs';
+import Buffer from '../core/Buffer.mjs';
 import { start } from '../../gameloop.mjs';
-import { WIDTH, HEIGHT, COLORS, BLACK, BLUE } from '../../constants.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H } from '../../constants.mjs';
 
+import Collision from '../core/Collision.mjs';
 import Crosshair from '../entities/Crosshair.mjs';
 import Background from '../entities/Background.mjs';
 import Launcher from '../core/Launcher.mjs';
@@ -14,6 +15,7 @@ import SpatialGrid from '../core/SpatialGrid.mjs';
 import PerformanceMonitor from '../helper/PerformanceMonitor.mjs';
 import Factory from '../core/Factory.mjs';
 import Audio from './Audio.mjs';
+import Ammo from '../entities/Ammo.mjs';
 
 const sprites = document.getElementById('sprites');
 
@@ -87,12 +89,12 @@ export default class Game {
     this.colorId = randomInt(0, COLORS.length - 1);
 
     // Update singleton entities
-    this.launcher.update(mouse);
-    this.crosshair.update(mouse);
+    this.launcher.update();
+    this.crosshair.update();
     this.enemy.update(dt);
 
     // Unified update + garbage collection for all entity arrays
-    const entityLists = [this.missiles, this.aliens, this.aircrafts, this.explosions, this.targets];
+    const entityLists = [this.missiles, this.aliens, this.aircrafts, this.explosions, this.targets, this.ammo];
 
     for (let i = 0; i < entityLists.length; i++) {
       this.updateEntities(entityLists[i], dt);
@@ -121,6 +123,8 @@ export default class Game {
     this.drawEntities(this.aircrafts, this.offscreen);
     this.drawEntities(this.explosions, this.offscreen);
     this.drawEntities(this.targets, this.offscreen);
+
+    this.drawEntities(this.ammo, this.offscreen);
 
     this.crosshair.draw(this.offscreen);
 
@@ -164,7 +168,7 @@ export default class Game {
         const entity = nearbyEntities[j];
         const entityBox = entity.getBox();
 
-        if (aabb(missileBox, entityBox)) {
+        if (Collision.AABB(missileBox, entityBox)) {
           if (!ctx) {
             entity.hit();
             missile.hit();
@@ -192,7 +196,7 @@ export default class Game {
         const entity = nearbyEntities[j];
         const entityBox = entity.getBox();
 
-        if (aabb(explosionBox, entityBox)) {
+        if (Collision.AABB(explosionBox, entityBox)) {
           if (!ctx) {
             entity.hit();
             //this.spawnExplosionBatch(entity);
@@ -207,13 +211,12 @@ export default class Game {
 
   createBuffers() {
     this.buffer = {};
-    this.buffer.onscreen = createBuffer('onscreen');
-    this.buffer.offscreen = createBuffer('offscreen');
-    this.buffer.background = createBuffer('background');
-    this.buffer.missiles = createBuffer('missiles');
-    this.buffer.targets = createBuffer('targets');
-    this.buffer.smoke = createBuffer('smoke');
-    this.buffer.explosions = createBuffer('explosions');
+    this.buffer.onscreen = Buffer.create('onscreen');
+
+    this.buffer.offscreen = Buffer.create('offscreen');
+    this.buffer.background = Buffer.create('background');
+
+    //this.buffer.ui = Buffer.create('ui');
 
     this.offscreen = this.buffer.offscreen;
     this.onscreen = this.buffer.onscreen;
@@ -242,6 +245,7 @@ export default class Game {
     this.aliens = [];
     this.aircrafts = [];
     this.explosions = [];
+    this.ammo = [];
 
     this.crosshair = new Crosshair({ parent: this, color: BLUE });
     this.background = new Background({ parent: this, x: 128, y: 220 });
@@ -261,5 +265,24 @@ export default class Game {
     this.factory.createAircraft();
 
     this.background.draw(this.buffer.background);
+
+    this.mouse = new Mouse(this.buffer.onscreen);
+
+    // const a = [
+    //   { x: 0, y: 0 },
+    //   { x: -3, y: 3 },
+    //   { x: 3, y: 3 },
+    //   { x: -6, y: 6 },
+    //   { x: 0, y: 6 },
+    //   { x: 6, y: 6 },
+    //   { x: -9, y: 9 },
+    //   { x: -3, y: 9 },
+    //   { x: 3, y: 9 },
+    //   { x: 9, y: 9 },
+    // ];
+
+    // for (let i = 0; i < a.length; i++) {
+    //   this.factory.createAmmo({ x: HALF_W - 5 + a[i].x, y: HEIGHT - 17 + a[i].y });
+    // }
   }
 }

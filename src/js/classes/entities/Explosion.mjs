@@ -1,7 +1,7 @@
 import Sprite from '../core/Sprite.mjs';
 import { COLORS, HALF_H, HALF_W } from '../../constants.mjs';
-import { createBuffer } from '../../buffer.mjs';
-import { drawCircle } from '../../canvas.mjs';
+import Buffer from '../core/Buffer.mjs';
+import Canvas from '../core/Canvas.mjs';
 import { easeOutQuad, easeInQuad } from '../../functions.mjs';
 
 export default class Explosion extends Sprite {
@@ -75,8 +75,8 @@ Explosion.GET_BUFFERS = function () {
 
     for (let b = 0; b < GROUP_SIZE; b++) {
       const size = 2 + b * 2;
-      group[b] = createBuffer(`explosion_col${c}_size${b}`, size, size);
-      drawCircle(group[b], size, color);
+      group[b] = Buffer.create(`explosion_col${c}_size${b}`, size, size);
+      Canvas.drawCircle(group[b], size, color);
     }
 
     buffers[c] = group;

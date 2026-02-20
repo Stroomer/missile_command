@@ -1,5 +1,5 @@
 import { YELLOW } from '../../constants.mjs';
-import { copyAndRecolor } from '../../canvas.mjs';
+import Canvas from '../core/Canvas.mjs';
 import Sprite from '../core/Sprite.mjs';
 
 export default class Background extends Sprite {
@@ -11,7 +11,7 @@ export default class Background extends Sprite {
       height: 23,
     });
 
-    this.sprite = copyAndRecolor(this.sheet, 0, 0, this.width, this.height, [{ from: '#999999', to: YELLOW }]);
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 0, 0, this.width, this.height, [{ from: '#999999', to: YELLOW }]);
     this.buffer = this.sprite.getContext('2d');
   }
 

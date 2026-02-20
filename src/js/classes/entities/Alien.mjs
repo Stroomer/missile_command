@@ -1,27 +1,34 @@
 import { BLUE, COLORS, RED, WIDTH } from '../../constants.mjs';
-import { copyAndRecolor } from '../../canvas.mjs';
+import Canvas from '../core/Canvas.mjs';
 import Sprite from '../core/Sprite.mjs';
 import { randomInt, randomPick } from '../../functions.mjs';
 
 export default class Alien extends Sprite {
   constructor(props) {
+    const randomPosX = randomPick([-14, WIDTH + 14]);
+    const randomPosY = randomInt(30, 120);
+    const randomSpeed = randomPick([10, 20, 30]);
+    const dirX = randomPosX < 0 ? 1 : -1;
+
     super({
       ...props,
       name: 'alien',
-      x: randomPick([-14, WIDTH + 14]),
-      y: randomInt(30, 120),
+      x: randomPosX,
+      y: randomPosY,
       width: 14,
       height: 13,
-      speed: randomPick([10, 20, 30]),
-      dirX: props.x < 0 ? 1 : -1,
+      speed: randomSpeed,
+      dirX,
     });
+
+    console.log(`Alien: x=${this.x}, y=${this.y}, speed=${this.speed}, dirX=${this.dirX}`);
 
     this.antenna = new Antenna(this, this.width, this.height);
     this.freeze = false;
     this.time = 0;
     this.freezeTime = 0.7;
 
-    this.sprite = copyAndRecolor(this.sheet, 36, 33, this.width, this.height, [
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 36, 33, this.width, this.height, [
       { from: '#999999', to: BLUE },
       { from: '#666666', to: RED },
     ]);

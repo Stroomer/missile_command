@@ -1,9 +1,9 @@
-import { createBuffer } from '../../buffer.mjs';
+import Buffer from '../core/Buffer.mjs';
 import { HALF_H, HALF_W } from '../../constants.mjs';
 
 export default class Sprite {
   constructor(props) {
-    if (!props.parent) throw new Error(`Sprite "${props.name}" requires a parent reference`);
+    if (!props.parent) throw new Error(`Sprite "${props.name}" requires a parent reference`); 
 
     this.parent = props.parent;
     this.name   = props.name    || "no_name";
@@ -18,7 +18,7 @@ export default class Sprite {
     this.halfH  = this.height === 1 ? 0 : Math.floor(this.height/2);
 
     this.garbage = false;
-    this.sprite  = createBuffer(this.name, this.width, this.height).canvas;
+    this.sprite  = Buffer.create(this.name, this.width, this.height).canvas;
     this.buffer  = this.sprite.getContext('2d');
     this.box     = { x: this.x, y: this.y, width: this.width, height: this.height };
     this.sheet   = document.getElementById('sprites');
