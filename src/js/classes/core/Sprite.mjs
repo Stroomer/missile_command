@@ -1,5 +1,4 @@
 import Buffer from '../core/Buffer.mjs';
-import { HALF_H, HALF_W } from '../../constants.mjs';
 
 export default class Sprite {
   constructor(props) {
@@ -16,12 +15,6 @@ export default class Sprite {
     this.dirY   = props.dirY    || 0;
     this.halfW  = this.width  === 1 ? 0 : Math.floor(this.width/2);
     this.halfH  = this.height === 1 ? 0 : Math.floor(this.height/2);
-
-    if (this.name === 'depot') {
-      console.log(this.halfW, this.halfH);
-      
-    }
-
 
     this.garbage = false;
     this.sprite  = Buffer.create(this.name, this.width, this.height).canvas;

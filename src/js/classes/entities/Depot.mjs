@@ -11,7 +11,7 @@ export default class Depot extends Sprite {
       height: 14,
     });
 
-    console.log('Depot', this.x, this.y, this.width, this.height);
+    //console.log('Depot', this.x, this.y, this.width, this.height);
 
     this.out = false;
     this.low = false;
@@ -43,7 +43,7 @@ export default class Depot extends Sprite {
     for (let i = 0; i < this.silos.length; i++) {
       const silo = this.silos[i];
 
-      console.log(i, silo.x, silo.y);
+      //console.log(i, silo.x, silo.y);
 
       this.buffer.drawImage(silo.sprite, silo.x, silo.y, silo.width, silo.height);
     }

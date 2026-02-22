@@ -6,6 +6,7 @@ import Target from '../entities/Target.mjs';
 import City from '../entities/City.mjs';
 import Depot from '../entities/Depot.mjs';
 import Char from '../text/Char.mjs';
+import Text from '../text/Text.mjs';
 
 /**
  * EntityFactory - Centralized entity creation
@@ -62,9 +63,20 @@ export default class Factory {
     return depot;
   }
 
-  createChar(props = {}) {
-    const char = new Char({ ...props, parent: this.game });
-    this.game.chars.push(char);
-    return char;
+  // createChar(props = {}) {
+  //   const char = new Char({ ...props });
+  //   const text = props.parent;
+
+  //   //console.log(text);
+  //   //if (text.name !== 'text') throw Error('Parent must be a class Text');
+
+  //   text.chars.push(char);
+  //   return char;
+  // }
+
+  createText(props = {}) {
+    const text = new Text({ ...props, parent: this.game });
+    this.game.texts.push(text);
+    return text;
   }
 }

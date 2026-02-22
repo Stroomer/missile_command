@@ -15,7 +15,7 @@ export default class Silo extends Sprite {
     this.sprite = Canvas.copyAndRecolor(this.sheet, 15, 24, this.width, this.height, [{ from: '#999999', to: BLUE }]);
     this.buffer = this.sprite.getContext('2d');
 
-    console.log('silo', this.x, this.y, this.width, this.height);
+    //console.log('silo', this.x, this.y, this.width, this.height);
   }
 
   update(dt) {

@@ -2,7 +2,7 @@ import { randomInt, randomPick } from '../../functions.mjs';
 import Mouse from '../input/Mouse.mjs';
 import Buffer from '../core/Buffer.mjs';
 import { start } from '../../gameloop.mjs';
-import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H } from '../../constants.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE } from '../../constants.mjs';
 
 import Collision from '../core/Collision.mjs';
 import Crosshair from '../entities/Crosshair.mjs';
@@ -15,7 +15,7 @@ import SpatialGrid from '../core/SpatialGrid.mjs';
 import PerformanceMonitor from '../helper/PerformanceMonitor.mjs';
 import Factory from '../core/Factory.mjs';
 import Audio from './Audio.mjs';
-import Depot from '../entities/Depot.mjs';
+import Text from '../text/Text.mjs';
 
 const sprites = document.getElementById('sprites');
 
@@ -94,7 +94,7 @@ export default class Game {
     this.enemy.update(dt);
 
     // Unified update + garbage collection for all entity arrays
-    const entityLists = [this.missiles, this.aliens, this.aircrafts, this.explosions, this.targets, this.depots, this.chars];
+    const entityLists = [this.texts, this.missiles, this.aliens, this.aircrafts, this.targets, this.explosions, this.depots];
 
     for (let i = 0; i < entityLists.length; i++) {
       this.updateEntities(entityLists[i], dt);
@@ -118,13 +118,13 @@ export default class Game {
     this.offscreen.drawImage(this.buffer.background.canvas, 0, 0, WIDTH, HEIGHT);
 
     // Unified draw for all entity arrays (in z-order)
+    this.drawEntities(this.texts, this.offscreen);
     this.drawEntities(this.missiles, this.offscreen);
     this.drawEntities(this.aliens, this.offscreen);
     this.drawEntities(this.aircrafts, this.offscreen);
-    this.drawEntities(this.explosions, this.offscreen);
     this.drawEntities(this.targets, this.offscreen);
+    this.drawEntities(this.explosions, this.offscreen);
     this.drawEntities(this.depots, this.offscreen);
-    this.drawEntities(this.chars, this.offscreen);
 
     //this.drawEntities(this.ammo, this.offscreen);
 
@@ -248,7 +248,7 @@ export default class Game {
     this.aircrafts = [];
     this.explosions = [];
     this.depots = [];
-    this.chars = [];
+    this.texts = [];
 
     this.crosshair = new Crosshair({ parent: this, color: BLUE });
     this.background = new Background({ parent: this, x: 128, y: 220 });
@@ -276,6 +276,6 @@ export default class Game {
 
     this.mouse = new Mouse(this.buffer.onscreen);
 
-    this.factory.createChar({ x: 50, y: 50 });
+    this.factory.createText({ parent: this, x: 0, y: 0, value: 'abcdiiiii', align: Text.ALIGN.CENTER, valign: Text.VALIGN.MIDDLE });
   }
 }
