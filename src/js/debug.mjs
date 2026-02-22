@@ -1,6 +1,8 @@
-import { YELLOW } from './constants.mjs';
+import { DEBUG, YELLOW } from './constants.mjs';
 
 export function drawBoundingBox(ctx, obj) {
+  if (!DEBUG) return;
+
   //console.log(obj);
 
   const x = obj.x;

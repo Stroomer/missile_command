@@ -1,4 +1,5 @@
 import { BLUE, WIDTH, HEIGHT } from '../../constants.mjs';
+import Buffer from '../core/Buffer.mjs';
 import Sprite from '../core/Sprite.mjs';
 import Char from './Char.mjs';
 
@@ -6,17 +7,17 @@ export default class Text extends Sprite {
   constructor(props) {
     const tracking = props.tracking ?? 1;
     const gap = props.gap ?? 16;
-    const segments = props.values ?? [props.value];
 
-    const segWidths = segments.map(s => Text.GET_WIDTH(s.split(''), tracking));
-    const totalWidth = segWidths.reduce((sum, w) => sum + w, 0) + gap * segments.length;
+    // Normalise each segment to { value, blink }
+    // Supports: string, or { value, blink } object
+    // props.blink is the fallback for every segment
+    const rawSegs = props.values ?? [props.value];
+    const segs = rawSegs.map((s) => (typeof s === 'string' ? { value: s, blink: props.blink ?? false } : { value: s.value, blink: s.blink ?? props.blink ?? false }));
 
-    super({
-      ...props,
-      name: 'text',
-      width: totalWidth,
-      height: 7,
-    });
+    const segWidths = segs.map((s) => Text.GET_WIDTH(s.value.split(''), tracking));
+    const totalWidth = segWidths.reduce((sum, w) => sum + w, 0) + gap * segs.length;
+
+    super({ ...props, name: 'text', width: totalWidth, height: 7 });
 
     this.tracking = tracking;
     this.color = props.color ?? BLUE;
@@ -24,25 +25,47 @@ export default class Text extends Sprite {
     this.valign = props.valign ?? Text.VALIGN.TOP;
     this.direction = props.direction ?? null;
     this.loop = props.loop ?? false;
+    this.blinkRate = props.blinkRate ?? 2; // Hz
+    this.blinkTimer = 0;
+    this.blinkOn = true;
 
+    // Build a separate canvas per segment so blinking can toggle them independently
+    this.segs = [];
     let posX = 0;
-    for (let s = 0; s < segments.length; s++) {
-      const chars = segments[s].split('');
-      for (let i = 0; i < chars.length; i++) {
-        const value = chars[i];
-        if (value === ' ') {
-          posX += Char.GET_RECT(' ').width + tracking;
+    for (let s = 0; s < segs.length; s++) {
+      const seg = segs[s];
+      const chars = seg.value.split('');
+      const segW = segWidths[s];
+
+      const segCtx = Buffer.create('text_seg', segW, 7);
+      let cx = 0;
+      for (const ch of chars) {
+        if (ch === ' ') {
+          cx += Char.GET_RECT(' ').width + tracking;
           continue;
         }
-        const char = new Char({ parent: this, value, color: this.color });
-        this.buffer.drawImage(char.sprite, 0, 0, char.width, char.height, posX, 0, char.width, char.height);
-        posX += char.width + tracking;
+        const char = new Char({ parent: this, value: ch, color: this.color });
+        segCtx.drawImage(char.sprite, 0, 0, char.width, char.height, cx, 0, char.width, char.height);
+        cx += char.width + tracking;
       }
-      if (s < segments.length - 1) posX += gap;
+
+      this.segs.push({ canvas: segCtx.canvas, offsetX: posX, width: segW, blink: seg.blink });
+      posX += segW + gap;
     }
+
+    this.hasBlink = this.segs.some((s) => s.blink);
   }
 
   update(dt) {
+    if (this.hasBlink) {
+      this.blinkTimer += dt;
+      const half = 0.5 / this.blinkRate;
+      if (this.blinkTimer >= half) {
+        this.blinkTimer -= half;
+        this.blinkOn = !this.blinkOn;
+      }
+    }
+
     if (!this.direction || this.speed === 0) return;
 
     const spd = this.speed * dt;
@@ -64,21 +87,24 @@ export default class Text extends Sprite {
     const right = left + this.width;
     const bottom = top + this.height;
 
-    const isOff =
-      (this.direction === Text.DIRECTION.LEFT && right < 0) ||
-      (this.direction === Text.DIRECTION.RIGHT && left > WIDTH) ||
-      (this.direction === Text.DIRECTION.UP && bottom < 0) ||
-      (this.direction === Text.DIRECTION.DOWN && top > HEIGHT);
+    const isOff = (this.direction === Text.DIRECTION.LEFT && right < 0) || (this.direction === Text.DIRECTION.RIGHT && left > WIDTH) || (this.direction === Text.DIRECTION.UP && bottom < 0) || (this.direction === Text.DIRECTION.DOWN && top > HEIGHT);
 
     if (isOff) {
       if (this.loop) {
-        if (this.direction === Text.DIRECTION.LEFT)  this.x += this.width;
+        if (this.direction === Text.DIRECTION.LEFT) this.x += this.width;
         if (this.direction === Text.DIRECTION.RIGHT) this.x -= this.width;
-        if (this.direction === Text.DIRECTION.UP)    this.y += this.height;
-        if (this.direction === Text.DIRECTION.DOWN)  this.y -= this.height;
+        if (this.direction === Text.DIRECTION.UP) this.y += this.height;
+        if (this.direction === Text.DIRECTION.DOWN) this.y -= this.height;
       } else {
         this.garbage = true;
       }
+    }
+  }
+
+  _drawSegs(ctx, ox, oy) {
+    for (const seg of this.segs) {
+      if (seg.blink && !this.blinkOn) continue;
+      ctx.drawImage(seg.canvas, (ox + seg.offsetX) | 0, oy | 0, seg.width, this.height);
     }
   }
 
@@ -96,20 +122,18 @@ export default class Text extends Sprite {
       const isH = this.direction === Text.DIRECTION.LEFT || this.direction === Text.DIRECTION.RIGHT;
 
       if (isH) {
-        // Normalize dx so the first copy starts just off the left edge
-        const startX = ((dx % this.width) + this.width) % this.width - this.width;
+        const startX = (((dx % this.width) + this.width) % this.width) - this.width;
         for (let cx = startX; cx < WIDTH; cx += this.width) {
-          ctx.drawImage(this.sprite, cx | 0, dy | 0, this.width, this.height);
+          this._drawSegs(ctx, cx, dy);
         }
       } else {
-        // Normalize dy so the first copy starts just off the top edge
-        const startY = ((dy % this.height) + this.height) % this.height - this.height;
+        const startY = (((dy % this.height) + this.height) % this.height) - this.height;
         for (let cy = startY; cy < HEIGHT; cy += this.height) {
-          ctx.drawImage(this.sprite, dx | 0, cy | 0, this.width, this.height);
+          this._drawSegs(ctx, dx, cy);
         }
       }
     } else {
-      ctx.drawImage(this.sprite, dx | 0, dy | 0, this.width, this.height);
+      this._drawSegs(ctx, dx, dy);
     }
   }
 }

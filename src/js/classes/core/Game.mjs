@@ -300,7 +300,11 @@ export default class Game {
       parent: this,
       x: 0,
       y: HEIGHT,
-      values: ['insert coin', 'game over'],
+      values: [
+        { value: 'insert coin', blink: false },
+        { value: 'insert coin', blink: false },
+      ],
+      blinkRate: null,
       gap: 40,
       align: Text.ALIGN.LEFT,
       valign: Text.VALIGN.BOTTOM,
