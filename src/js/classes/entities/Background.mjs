@@ -8,7 +8,7 @@ export default class Background extends Sprite {
       ...props,
       name: 'background',
       width: 256,
-      height: 23,
+      height: 27,
     });
 
     this.sprite = Canvas.copyAndRecolor(this.sheet, 0, 0, this.width, this.height, [{ from: '#999999', to: YELLOW }]);

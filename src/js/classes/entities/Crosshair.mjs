@@ -13,7 +13,7 @@ export default class Crosshair extends Sprite {
       height: 7,
     });
 
-    this.sprite = Canvas.copyAndRecolor(this.sheet, 1, 24, this.width, this.height, [{ from: '#999999', to: BLUE }]);
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 1, 28, this.width, this.height, [{ from: '#999999', to: BLUE }]);
     this.buffer = this.sprite.getContext('2d');
     this.color = props.color;
   }

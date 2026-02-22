@@ -5,7 +5,8 @@ export const HEIGHT = 231;
 export const HALF_W = (WIDTH / 2)  | 0;
 export const HALF_H = (HEIGHT / 2) | 0;
 
-export const BLACK  = '#000000';
+export const BLACK = '#000000';
+export const BLACKISH = '#070000';
 export const GREY   = '#999999';
 export const WHITE  = '#ffffff';
 

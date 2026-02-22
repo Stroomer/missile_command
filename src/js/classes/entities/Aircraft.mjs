@@ -28,7 +28,7 @@ export default class Aircraft extends Sprite {
     this.time = 0;
     this.freezeTime = 0.7;
 
-    this.sprite = Canvas.copyAndRecolor(this.sheet, 19, 24, this.width, this.height, [{ from: '#999999', to: GREEN }]);
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 19, 28, this.width, this.height, [{ from: '#999999', to: GREEN }]);
     this.sprites = [Canvas.copySprite(this.sprite), Buffer.flip(Canvas.copySprite(this.sprite))];
     this.sprite = this.sprites[this.dirX === DIRECTION.LEFT ? 1 : 0];
     this.buffer = this.sprite.getContext('2d');

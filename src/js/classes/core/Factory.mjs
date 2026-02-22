@@ -63,17 +63,6 @@ export default class Factory {
     return depot;
   }
 
-  // createChar(props = {}) {
-  //   const char = new Char({ ...props });
-  //   const text = props.parent;
-
-  //   //console.log(text);
-  //   //if (text.name !== 'text') throw Error('Parent must be a class Text');
-
-  //   text.chars.push(char);
-  //   return char;
-  // }
-
   createText(props = {}) {
     const text = new Text({ ...props, parent: this.game });
     this.game.texts.push(text);

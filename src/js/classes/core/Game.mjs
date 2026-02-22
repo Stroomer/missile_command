@@ -2,7 +2,7 @@ import { randomInt, randomPick } from '../../functions.mjs';
 import Mouse from '../input/Mouse.mjs';
 import Buffer from '../core/Buffer.mjs';
 import { start } from '../../gameloop.mjs';
-import { WIDTH, HEIGHT, COLORS, BLACK, BLUE } from '../../constants.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H, BLACKISH } from '../../constants.mjs';
 
 import Collision from '../core/Collision.mjs';
 import Crosshair from '../entities/Crosshair.mjs';
@@ -251,7 +251,7 @@ export default class Game {
     this.texts = [];
 
     this.crosshair = new Crosshair({ parent: this, color: BLUE });
-    this.background = new Background({ parent: this, x: 128, y: 220 });
+    this.background = new Background({ parent: this, x: 128, y: 217 });
     this.launcher = new Launcher(this);
     this.enemy = new Enemy(this);
 
@@ -268,14 +268,46 @@ export default class Game {
     this.factory.createAircraft();
 
     // Create depot with missile silos
-    this.factory.createDepot({ parent: this, x: 13, y: 211 });
-    this.factory.createDepot({ parent: this, x: 113, y: 212 });
-    this.factory.createDepot({ parent: this, x: 232, y: 211 });
+    this.factory.createDepot({ parent: this, x: 13, y: 205 });
+    this.factory.createDepot({ parent: this, x: 113, y: 206 });
+    this.factory.createDepot({ parent: this, x: 232, y: 205 });
 
     this.background.draw(this.buffer.background);
 
     this.mouse = new Mouse(this.buffer.onscreen);
 
-    this.factory.createText({ parent: this, x: 0, y: 0, value: 'abcdiiiii', align: Text.ALIGN.CENTER, valign: Text.VALIGN.MIDDLE });
+    this.factory.createText({
+      parent: this,
+      x: 84,
+      y: 170,
+      value: 'defend',
+      align: Text.ALIGN.CENTER,
+      valign: Text.VALIGN.MIDDLE,
+      color: BLUE,
+    });
+
+    this.factory.createText({
+      parent: this,
+      x: 190,
+      y: 170,
+      value: 'cities',
+      align: Text.ALIGN.CENTER,
+      valign: Text.VALIGN.MIDDLE,
+      color: BLUE,
+    });
+
+    this.factory.createText({
+      parent: this,
+      x: 0,
+      y: HEIGHT,
+      values: ['insert coin', 'game over'],
+      gap: 40,
+      align: Text.ALIGN.LEFT,
+      valign: Text.VALIGN.BOTTOM,
+      color: BLACKISH,
+      direction: Text.DIRECTION.LEFT,
+      loop: true,
+      speed: 30,
+    });
   }
 }

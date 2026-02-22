@@ -28,7 +28,7 @@ export default class Alien extends Sprite {
     this.time = 0;
     this.freezeTime = 0.7;
 
-    this.sprite = Canvas.copyAndRecolor(this.sheet, 36, 33, this.width, this.height, [
+    this.sprite = Canvas.copyAndRecolor(this.sheet, 36, 37, this.width, this.height, [
       { from: '#999999', to: BLUE },
       { from: '#666666', to: RED },
     ]);

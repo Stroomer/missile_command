@@ -1,5 +1,5 @@
 import Canvas from '../core/Canvas.mjs';
-import { BLACK, BLUE, RED } from '../../constants.mjs';
+import { BLACK, BLUE } from '../../constants.mjs';
 import Sprite from '../core/Sprite.mjs';
 
 export default class Char extends Sprite {
@@ -19,16 +19,14 @@ export default class Char extends Sprite {
     this.color = props.color ?? BLUE;
     this.sprite = Canvas.copyAndRecolor(this.sheet, x, y, width, height, [{ from: BLACK, to: this.color }]);
     this.buffer = this.sprite.getContext('2d');
-
-    console.log('-----------------');
-    console.log(this.x, this.y, this.width, this.height);
-    console.log(this.sprite.width, this.sprite.height);
   }
 }
 
 Char.GET_RECT = (ch) => {
+  if (ch === ' ') return { x: 0, y: 0, width: 4, height: 7 };
+
   const x0 = 62,
-    y0 = 24,
+    y0 = 28,
     width = 7,
     height = 7,
     s = width + 1;

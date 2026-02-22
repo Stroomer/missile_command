@@ -25,7 +25,7 @@ export default class Launcher {
     this.launch({
       parent: this.parent,
       x: 123,
-      y: 211,
+      y: 205,
       destX: this.parent.mouse.x,
       destY: this.parent.mouse.y,
       speed: 110,
