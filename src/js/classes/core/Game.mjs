@@ -2,7 +2,7 @@ import { randomInt, randomPick } from '../../functions.mjs';
 import Mouse from '../input/Mouse.mjs';
 import Buffer from '../core/Buffer.mjs';
 import { start } from '../../gameloop.mjs';
-import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H, BLACKISH } from '../../constants.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H, BLACKISH, RED } from '../../constants.mjs';
 
 import Collision from '../core/Collision.mjs';
 import Crosshair from '../entities/Crosshair.mjs';
@@ -94,7 +94,7 @@ export default class Game {
     this.enemy.update(dt);
 
     // Unified update + garbage collection for all entity arrays
-    const entityLists = [this.texts, this.missiles, this.aliens, this.aircrafts, this.targets, this.explosions, this.depots];
+    const entityLists = [this.texts, this.cities, this.missiles, this.aliens, this.aircrafts, this.targets, this.explosions, this.depots];
 
     for (let i = 0; i < entityLists.length; i++) {
       this.updateEntities(entityLists[i], dt);
@@ -119,6 +119,7 @@ export default class Game {
 
     // Unified draw for all entity arrays (in z-order)
     this.drawEntities(this.texts, this.offscreen);
+    this.drawEntities(this.cities, this.offscreen);
     this.drawEntities(this.missiles, this.offscreen);
     this.drawEntities(this.aliens, this.offscreen);
     this.drawEntities(this.aircrafts, this.offscreen);
@@ -250,67 +251,99 @@ export default class Game {
     this.depots = [];
     this.texts = [];
 
-    this.crosshair = new Crosshair({ parent: this, color: BLUE });
-    this.background = new Background({ parent: this, x: 128, y: 217 });
-    this.launcher = new Launcher(this);
-    this.enemy = new Enemy(this);
+    const parent = this;
+
+    this.crosshair = new Crosshair({ parent, color: BLUE });
+    this.background = new Background({ parent, x: 128, y: 217 });
+    this.launcher = new Launcher(parent);
+    this.enemy = new Enemy(parent);
 
     // Create cities using factory
-    this.factory.createCity({ x: 48, y: 215 });
-    this.factory.createCity({ x: 78, y: 216 });
-    this.factory.createCity({ x: 108, y: 216 });
-    this.factory.createCity({ x: 138, y: 216 });
-    this.factory.createCity({ x: 168, y: 216 });
-    this.factory.createCity({ x: 218, y: 216 });
+    this.factory.createCity({ parent, x: 39, y: 206 });
+    this.factory.createCity({ parent, x: 66, y: 207 });
+    this.factory.createCity({ parent, x: 91, y: 208 });
+
+    this.factory.createCity({ parent, x: 142, y: 207 });
+    this.factory.createCity({ parent, x: 173, y: 204 });
+    this.factory.createCity({ parent, x: 203, y: 208 });
 
     // Create initial entities
     this.factory.createAlien();
     this.factory.createAircraft();
 
     // Create depot with missile silos
-    this.factory.createDepot({ parent: this, x: 13, y: 205 });
-    this.factory.createDepot({ parent: this, x: 113, y: 206 });
-    this.factory.createDepot({ parent: this, x: 232, y: 205 });
+    this.factory.createDepot({ parent, x: 13, y: 205 });
+    this.factory.createDepot({ parent, x: 113, y: 206 });
+    this.factory.createDepot({ parent, x: 232, y: 205 });
 
     this.background.draw(this.buffer.background);
 
     this.mouse = new Mouse(this.buffer.onscreen);
 
     this.factory.createText({
-      parent: this,
-      x: 84,
-      y: 170,
-      value: 'defend',
-      align: Text.ALIGN.CENTER,
-      valign: Text.VALIGN.MIDDLE,
-      color: BLUE,
-    });
-
-    this.factory.createText({
-      parent: this,
-      x: 190,
-      y: 170,
-      value: 'cities',
-      align: Text.ALIGN.CENTER,
-      valign: Text.VALIGN.MIDDLE,
-      color: BLUE,
-    });
-
-    this.factory.createText({
-      parent: this,
+      parent,
       x: 0,
       y: HEIGHT,
       values: [
         { value: 'insert coin', blink: false },
         { value: 'insert coin', blink: false },
       ],
-      blinkRate: null,
       gap: 40,
       align: Text.ALIGN.LEFT,
       valign: Text.VALIGN.BOTTOM,
       color: BLACKISH,
       direction: Text.DIRECTION.LEFT,
       loop: true,
+      speed: 30,
+    });
+
+    this.factory.createText({
+      parent,
+      x: 150,
+      y: 160,
+      values: [
+        { value: 'defend', blink: false },
+        { value: 'cities', blink: false },
+      ],
+      gap: 40,
+      align: Text.ALIGN.CENTER,
+      valign: Text.VALIGN.MIDDLE,
+      color: BLUE,
+    });
+
+    this.factory.createText({
+      parent,
+      x: 44,
+      y: 188,
+      values: [
+        { value: '↓', blink: true },
+        { value: '↓', blink: true },
+        { value: '↓', blink: true },
+      ],
+      gap: 19,
+      align: Text.ALIGN.LEFT,
+      valign: Text.VALIGN.BOTTOM,
+      color: RED,
+      direction: 0,
+      loop: false,
+      speed: 30,
+    });
+
+    this.factory.createText({
+      parent,
+      x: 148,
+      y: 188,
+      values: [
+        { value: '↓', blink: true },
+        { value: '↓', blink: true },
+        { value: '↓', blink: true },
+      ],
+      gap: 23,
+      align: Text.ALIGN.LEFT,
+      valign: Text.VALIGN.BOTTOM,
+      color: RED,
+      direction: 0,
+      loop: false,
       speed: 30,
     });
   }
