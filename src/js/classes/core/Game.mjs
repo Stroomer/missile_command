@@ -2,12 +2,12 @@ import { randomInt, randomPick } from '../../functions.mjs';
 import Mouse from '../input/Mouse.mjs';
 import Buffer from '../core/Buffer.mjs';
 import { start } from '../../gameloop.mjs';
-import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H, BLACKISH, RED } from '../../constants.mjs';
+import { WIDTH, HEIGHT, COLORS, BLACK, BLUE, HALF_W, HALF_H, BLACKISH, RED, YELLOW } from '../../constants.mjs';
 
 import Collision from '../core/Collision.mjs';
 import Crosshair from '../entities/Crosshair.mjs';
 import Background from '../entities/Background.mjs';
-import Launcher from '../core/Launcher.mjs';
+import Launcher from './MissionControl.mjs';
 import Enemy from '../Enemy.mjs';
 import { drawBoundingBox } from '../../debug.mjs';
 import Explosion from '../entities/Explosion.mjs';
@@ -16,6 +16,7 @@ import PerformanceMonitor from '../helper/PerformanceMonitor.mjs';
 import Factory from '../core/Factory.mjs';
 import Audio from './Audio.mjs';
 import Text from '../text/Text.mjs';
+import MissionControl from './MissionControl.mjs';
 
 const sprites = document.getElementById('sprites');
 
@@ -89,7 +90,7 @@ export default class Game {
     this.colorId = randomInt(0, COLORS.length - 1);
 
     // Update singleton entities
-    this.launcher.update();
+    this.missioncontrol.update();
     this.crosshair.update();
     this.enemy.update(dt);
 
@@ -214,9 +215,9 @@ export default class Game {
 
   createBuffers() {
     this.buffer = {};
-    this.buffer.onscreen = Buffer.create('onscreen');
+    this.buffer.onscreen = Buffer.create('onscreen', WIDTH, HEIGHT, YELLOW);
 
-    this.buffer.offscreen = Buffer.create('offscreen');
+    this.buffer.offscreen = Buffer.create('offscreen', WIDTH, HEIGHT, YELLOW);
     this.buffer.background = Buffer.create('background');
 
     //this.buffer.ui = Buffer.create('ui');
@@ -255,7 +256,7 @@ export default class Game {
 
     this.crosshair = new Crosshair({ parent, color: BLUE });
     this.background = new Background({ parent, x: 128, y: 217 });
-    this.launcher = new Launcher(parent);
+    this.missioncontrol = new MissionControl(parent);
     this.enemy = new Enemy(parent);
 
     // Create cities using factory
@@ -280,71 +281,71 @@ export default class Game {
 
     this.mouse = new Mouse(this.buffer.onscreen);
 
-    this.factory.createText({
-      parent,
-      x: 0,
-      y: HEIGHT,
-      values: [
-        { value: 'insert coin', blink: false },
-        { value: 'insert coin', blink: false },
-      ],
-      gap: 40,
-      align: Text.ALIGN.LEFT,
-      valign: Text.VALIGN.BOTTOM,
-      color: BLACKISH,
-      direction: Text.DIRECTION.LEFT,
-      loop: true,
-      speed: 30,
-    });
+    // this.factory.createText({
+    //   parent,
+    //   x: 0,
+    //   y: HEIGHT,
+    //   values: [
+    //     { value: 'insert coin', blink: false },
+    //     { value: 'insert coin', blink: false },
+    //   ],
+    //   gap: 40,
+    //   align: Text.ALIGN.LEFT,
+    //   valign: Text.VALIGN.BOTTOM,
+    //   color: BLACKISH,
+    //   direction: Text.DIRECTION.LEFT,
+    //   loop: true,
+    //   speed: 30,
+    // });
 
-    this.factory.createText({
-      parent,
-      x: 150,
-      y: 160,
-      values: [
-        { value: 'defend', blink: false },
-        { value: 'cities', blink: false },
-      ],
-      gap: 40,
-      align: Text.ALIGN.CENTER,
-      valign: Text.VALIGN.MIDDLE,
-      color: BLUE,
-    });
+    // this.factory.createText({
+    //   parent,
+    //   x: 150,
+    //   y: 160,
+    //   values: [
+    //     { value: 'defend', blink: false },
+    //     { value: 'cities', blink: false },
+    //   ],
+    //   gap: 40,
+    //   align: Text.ALIGN.CENTER,
+    //   valign: Text.VALIGN.MIDDLE,
+    //   color: BLUE,
+    // });
 
-    this.factory.createText({
-      parent,
-      x: 44,
-      y: 188,
-      values: [
-        { value: '↓', blink: true },
-        { value: '↓', blink: true },
-        { value: '↓', blink: true },
-      ],
-      gap: 19,
-      align: Text.ALIGN.LEFT,
-      valign: Text.VALIGN.BOTTOM,
-      color: RED,
-      direction: 0,
-      loop: false,
-      speed: 30,
-    });
+    // this.factory.createText({
+    //   parent,
+    //   x: 44,
+    //   y: 188,
+    //   values: [
+    //     { value: '↓', blink: true },
+    //     { value: '↓', blink: true },
+    //     { value: '↓', blink: true },
+    //   ],
+    //   gap: 19,
+    //   align: Text.ALIGN.LEFT,
+    //   valign: Text.VALIGN.BOTTOM,
+    //   color: RED,
+    //   direction: 0,
+    //   loop: false,
+    //   speed: 30,
+    // });
 
-    this.factory.createText({
-      parent,
-      x: 148,
-      y: 188,
-      values: [
-        { value: '↓', blink: true },
-        { value: '↓', blink: true },
-        { value: '↓', blink: true },
-      ],
-      gap: 23,
-      align: Text.ALIGN.LEFT,
-      valign: Text.VALIGN.BOTTOM,
-      color: RED,
-      direction: 0,
-      loop: false,
-      speed: 30,
-    });
+    // this.factory.createText({
+    //   parent,
+    //   x: 148,
+    //   y: 188,
+    //   values: [
+    //     { value: '↓', blink: true },
+    //     { value: '↓', blink: true },
+    //     { value: '↓', blink: true },
+    //   ],
+    //   gap: 23,
+    //   align: Text.ALIGN.LEFT,
+    //   valign: Text.VALIGN.BOTTOM,
+    //   color: RED,
+    //   direction: 0,
+    //   loop: false,
+    //   speed: 30,
+    // });
   }
 }

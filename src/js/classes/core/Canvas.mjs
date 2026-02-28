@@ -95,10 +95,4 @@ export default class Canvas {
       ctx.fillRect(x1, y, x2 - x1 + 1, 1);
     }
   }
-
-  // static applyIntegerScale(canvas) {
-  //   const scale = Math.max(1, Math.floor(Math.min(window.innerWidth / canvas.width, window.innerHeight / canvas.height)));
-  //   canvas.style.width = canvas.width * scale + 'px';
-  //   canvas.style.height = canvas.height * scale + 'px';
-  // }
 }

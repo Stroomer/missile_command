@@ -1,7 +1,7 @@
-import { BLACK, DEBUG, WIDTH, HEIGHT } from '../../constants.mjs';
+import { BLACK, DEBUG, WIDTH, HEIGHT, YELLOW } from '../../constants.mjs';
 
 export default class Buffer {
-  static create(id, w = null, h = null) {
+  static create(id, w = null, h = null, color = null) {
     let canvas, ctx;
     const isScreenBuffer = id === 'onscreen' ? true : false;
     const isAlphaBuffer = isScreenBuffer ? false : true;
@@ -17,7 +17,7 @@ export default class Buffer {
       canvas.width = bufferWidth;
       canvas.height = bufferHeight;
       canvas.style.display = 'block';
-      canvas.style.backgroundColor = BLACK;
+      canvas.style.backgroundColor = color;
     } else {
       //console.log(`create offscreenbuffer: ${id}`);
       canvas = offscreen ? new OffscreenCanvas(bufferWidth, bufferHeight) : document.createElement('canvas');
@@ -25,6 +25,12 @@ export default class Buffer {
 
     ctx = canvas.getContext('2d', { alpha: isAlphaBuffer, willReadFrequently, desynchronized });
     ctx.imageSmoothingEnabled = false;
+
+    if (color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
     if (DEBUG) Buffer._showAttributes(ctx);
 
     return ctx;

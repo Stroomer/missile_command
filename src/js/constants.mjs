@@ -32,3 +32,23 @@ export const RIGHT  = 'right';
 export const DIRECTION = { LEFT:-1, RIGHT:1, UP:-1, DOWN:1 };
 
 export const HAS_OFFSCREEN_CANVAS_CAPABILITIES = typeof OffscreenCanvas !== 'undefined';
+
+export const KEY_W     = 'w';
+export const KEY_A     = 'a';
+export const KEY_S     = 's';
+export const KEY_D     = 'd';
+export const KEY_UP    = 'ArrowUp';
+export const KEY_LEFT  = 'ArrowLeft';
+export const KEY_DOWN  = 'ArrowDown';
+export const KEY_RIGHT = 'ArrowRight';
+
+export const KEY_1  = '1';
+export const KEY_2  = '2';
+export const KEY_3  = '3';
+export const KEY_4  = '4';
+export const KEY_5  = '5';
+export const KEY_6  = '6';
+export const KEY_7  = '7';
+export const KEY_8  = '8';
+export const KEY_9  = '9';
+export const KEY_10 = '0';

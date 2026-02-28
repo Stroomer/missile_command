@@ -6,7 +6,7 @@
 /src/js/constants.mjs
 /src/js/canvas.mjs
 /src/js/mouse.mjs
-/src/js/classes/Launcher.mjs
+/src/js/classes/missionControlCenter.mjs
 /src/js/classes/Background.mjs
 /src/js/classes/Alien.mjs
 /src/js/classes/Aircraft.mjs
