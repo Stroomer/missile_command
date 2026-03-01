@@ -95,7 +95,7 @@ export default class Game {
     this.enemy.update(dt);
 
     // Unified update + garbage collection for all entity arrays
-    const entityLists = [this.texts, this.cities, this.missiles, this.aliens, this.aircrafts, this.targets, this.explosions, this.depots];
+    const entityLists = [this.particles, this.texts, this.cities, this.missiles, this.aliens, this.aircrafts, this.targets, this.explosions, this.depots];
 
     for (let i = 0; i < entityLists.length; i++) {
       this.updateEntities(entityLists[i], dt);
@@ -125,6 +125,7 @@ export default class Game {
     this.drawEntities(this.aliens, this.offscreen);
     this.drawEntities(this.aircrafts, this.offscreen);
     this.drawEntities(this.targets, this.offscreen);
+    this.drawEntities(this.particles, this.offscreen);
     this.drawEntities(this.explosions, this.offscreen);
     this.drawEntities(this.depots, this.offscreen);
 
@@ -249,6 +250,7 @@ export default class Game {
     this.aliens = [];
     this.aircrafts = [];
     this.explosions = [];
+    this.particles  = [];
     this.depots = [];
     this.texts = [];
 

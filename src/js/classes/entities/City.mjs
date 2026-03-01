@@ -18,6 +18,13 @@ export default class City extends Sprite {
     this.buffer = this.sprite.getContext('2d');
   }
 
+  hit() {
+    this.parent.factory.createParticles({
+      x: this.x + (this.width >> 1),
+      y: this.y + (this.height >> 1),
+    });
+  }
+
   update() {}
 
   draw(ctx) {

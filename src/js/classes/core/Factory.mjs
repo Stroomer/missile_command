@@ -2,6 +2,7 @@ import Alien from '../entities/Alien.mjs';
 import Aircraft from '../entities/Aircraft.mjs';
 import Missile from '../entities/Missile.mjs';
 import Explosion from '../entities/Explosion.mjs';
+import Particles from '../entities/Particles.mjs';
 import Target from '../entities/Target.mjs';
 import City from '../entities/City.mjs';
 import Depot from '../entities/Depot.mjs';
@@ -61,6 +62,12 @@ export default class Factory {
     const depot = new Depot({ ...props, parent: this.game });
     this.game.depots.push(depot);
     return depot;
+  }
+
+  createParticles(props = {}) {
+    const particles = new Particles({ ...props, parent: this.game });
+    this.game.particles.push(particles);
+    return particles;
   }
 
   createText(props = {}) {

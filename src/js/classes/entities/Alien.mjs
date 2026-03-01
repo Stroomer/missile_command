@@ -61,6 +61,7 @@ export default class Alien extends Sprite {
     if (this.freeze) return;
 
     this.freeze = true;
+    this.parent.factory.createParticles({ x: this.x, y: this.y });
     this.parent.spawnExplosionBatch(this);
   }
 }

@@ -6,40 +6,34 @@ import Char from './Char.mjs';
 export default class Text extends Sprite {
   constructor(props) {
     const tracking = props.tracking ?? 1;
-    const gap      = props.gap ?? 16;
+    const gap = props.gap ?? 16;
 
     // Compute initial width before super() since Sprite needs it
     const rawSegs = props.values ?? [props.value];
-    const initSegs = rawSegs.map((s) =>
-      typeof s === 'string'
-        ? { value: s, blink: props.blink ?? false }
-        : { value: s.value, blink: s.blink ?? props.blink ?? false }
-    );
-    const totalWidth = initSegs
-      .map((s) => Text.GET_WIDTH(s.value.split(''), tracking))
-      .reduce((sum, w) => sum + w, 0) + gap * initSegs.length;
+    const initSegs = rawSegs.map((s) => (typeof s === 'string' ? { value: s, blink: props.blink ?? false } : { value: s.value, blink: s.blink ?? props.blink ?? false }));
+    const totalWidth = initSegs.map((s) => Text.GET_WIDTH(s.value.split(''), tracking)).reduce((sum, w) => sum + w, 0) + gap * initSegs.length;
 
     super({ ...props, name: 'text', width: totalWidth, height: 7 });
 
-    this.tracking  = tracking;
-    this.gap       = gap;
-    this.color     = props.color ?? BLUE;
-    this.align     = props.align ?? Text.ALIGN.LEFT;
-    this.valign    = props.valign ?? Text.VALIGN.TOP;
+    this.tracking = tracking;
+    this.gap = gap;
+    this.color = props.color ?? BLUE;
+    this.align = props.align ?? Text.ALIGN.LEFT;
+    this.valign = props.valign ?? Text.VALIGN.TOP;
     this.direction = props.direction ?? null;
-    this.loop      = props.loop ?? false;
+    this.loop = props.loop ?? false;
     this.blinkRate = props.blinkRate ?? 2; // Hz
     this.blinkTimer = 0;
-    this.blinkOn    = true;
+    this.blinkOn = true;
 
-    this._buildSegs(initSegs);
+    this.buildSegs(initSegs);
   }
 
   /**
    * Rebuild rendered segments from a normalised array of { value, blink } objects.
    * Updates this.width, this.segs, and this.hasBlink in-place.
    */
-  _buildSegs(segs) {
+  buildSegs(segs) {
     const segWidths = segs.map((s) => Text.GET_WIDTH(s.value.split(''), this.tracking));
     this.width = segWidths.reduce((sum, w) => sum + w, 0) + this.gap * segs.length;
 
@@ -47,7 +41,7 @@ export default class Text extends Sprite {
     let posX = 0;
 
     for (let s = 0; s < segs.length; s++) {
-      const seg  = segs[s];
+      const seg = segs[s];
       const segW = segWidths[s];
       const chars = seg.value.split('');
 
@@ -76,17 +70,13 @@ export default class Text extends Sprite {
    * an array of strings or { value, blink } objects.
    */
   setValues(values) {
-    const segs = values.map((s) =>
-      typeof s === 'string'
-        ? { value: s, blink: false }
-        : { value: s.value, blink: s.blink ?? false }
-    );
-    this._buildSegs(segs);
+    const segs = values.map((s) => (typeof s === 'string' ? { value: s, blink: false } : { value: s.value, blink: s.blink ?? false }));
+    this.buildSegs(segs);
   }
 
   /** Replace the text with a single plain string. */
   setValue(str) {
-    this._buildSegs([{ value: str, blink: false }]);
+    this.buildSegs([{ value: str, blink: false }]);
   }
 
   update(dt) {
@@ -103,35 +93,31 @@ export default class Text extends Sprite {
 
     const spd = this.speed * dt;
 
-    if (this.direction === Text.DIRECTION.LEFT)  this.x -= spd;
+    if (this.direction === Text.DIRECTION.LEFT) this.x -= spd;
     if (this.direction === Text.DIRECTION.RIGHT) this.x += spd;
-    if (this.direction === Text.DIRECTION.UP)    this.y -= spd;
-    if (this.direction === Text.DIRECTION.DOWN)  this.y += spd;
+    if (this.direction === Text.DIRECTION.UP) this.y -= spd;
+    if (this.direction === Text.DIRECTION.DOWN) this.y += spd;
 
     // Compute effective render edges accounting for alignment
     let left = this.x;
-    if (this.align === Text.ALIGN.CENTER)     left -= this.width >> 1;
+    if (this.align === Text.ALIGN.CENTER) left -= this.width >> 1;
     else if (this.align === Text.ALIGN.RIGHT) left -= this.width;
 
     let top = this.y;
-    if (this.valign === Text.VALIGN.MIDDLE)    top -= this.height >> 1;
+    if (this.valign === Text.VALIGN.MIDDLE) top -= this.height >> 1;
     else if (this.valign === Text.VALIGN.BOTTOM) top -= this.height;
 
-    const right  = left + this.width;
-    const bottom = top  + this.height;
+    const right = left + this.width;
+    const bottom = top + this.height;
 
-    const isOff =
-      (this.direction === Text.DIRECTION.LEFT  && right  < 0)    ||
-      (this.direction === Text.DIRECTION.RIGHT && left   > WIDTH) ||
-      (this.direction === Text.DIRECTION.UP    && bottom < 0)    ||
-      (this.direction === Text.DIRECTION.DOWN  && top    > HEIGHT);
+    const isOff = (this.direction === Text.DIRECTION.LEFT && right < 0) || (this.direction === Text.DIRECTION.RIGHT && left > WIDTH) || (this.direction === Text.DIRECTION.UP && bottom < 0) || (this.direction === Text.DIRECTION.DOWN && top > HEIGHT);
 
     if (isOff) {
       if (this.loop) {
-        if (this.direction === Text.DIRECTION.LEFT)  this.x += this.width;
+        if (this.direction === Text.DIRECTION.LEFT) this.x += this.width;
         if (this.direction === Text.DIRECTION.RIGHT) this.x -= this.width;
-        if (this.direction === Text.DIRECTION.UP)    this.y += this.height;
-        if (this.direction === Text.DIRECTION.DOWN)  this.y -= this.height;
+        if (this.direction === Text.DIRECTION.UP) this.y += this.height;
+        if (this.direction === Text.DIRECTION.DOWN) this.y -= this.height;
       } else {
         this.garbage = true;
       }
@@ -149,10 +135,10 @@ export default class Text extends Sprite {
     let dx = this.x;
     let dy = this.y;
 
-    if (this.align === Text.ALIGN.CENTER)     dx -= this.width >> 1;
+    if (this.align === Text.ALIGN.CENTER) dx -= this.width >> 1;
     else if (this.align === Text.ALIGN.RIGHT) dx -= this.width;
 
-    if (this.valign === Text.VALIGN.MIDDLE)      dy -= this.height >> 1;
+    if (this.valign === Text.VALIGN.MIDDLE) dy -= this.height >> 1;
     else if (this.valign === Text.VALIGN.BOTTOM) dy -= this.height;
 
     if (this.loop && this.direction) {
@@ -188,20 +174,20 @@ Text.GET_WIDTH = (charsArray, tracking) => {
 };
 
 Text.ALIGN = {
-  LEFT:   'left',
+  LEFT: 'left',
   CENTER: 'center',
-  RIGHT:  'right',
+  RIGHT: 'right',
 };
 
 Text.VALIGN = {
-  TOP:    'top',
+  TOP: 'top',
   MIDDLE: 'middle',
   BOTTOM: 'bottom',
 };
 
 Text.DIRECTION = {
-  LEFT:  'left',
+  LEFT: 'left',
   RIGHT: 'right',
-  UP:    'up',
-  DOWN:  'down',
+  UP: 'up',
+  DOWN: 'down',
 };

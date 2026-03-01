@@ -1,16 +1,14 @@
 import MissileLaunchSound from '../audio/MissileLaunchSound.mjs';
 import ExplosionSound from '../audio/ExplosionSound.mjs';
 import IncomingMissileSound from '../audio/IncomingMissileSound.mjs';
-import DepotOutSound from '../audio/DepotOutSound.mjs';
 
 export default class Audio {
   constructor() {
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-    this.missileLaunchSound = new MissileLaunchSound(this.ctx);
-    this.explosionSound = new ExplosionSound(this.ctx);
+    this.missileLaunchSound   = new MissileLaunchSound(this.ctx);
+    this.explosionSound       = new ExplosionSound(this.ctx);
     this.incomingMissileSound = new IncomingMissileSound(this.ctx);
-    this.depotOutSound = new DepotOutSound(this.ctx);
   }
 
   playMissileLaunch() {
@@ -23,9 +21,5 @@ export default class Audio {
 
   playIncomingMissile() {
     this.incomingMissileSound.play();
-  }
-
-  playDepotOut() {
-    this.depotOutSound.play();
   }
 }

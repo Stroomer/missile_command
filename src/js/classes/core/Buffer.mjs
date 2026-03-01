@@ -1,4 +1,4 @@
-import { BLACK, DEBUG, WIDTH, HEIGHT, YELLOW } from '../../constants.mjs';
+import { DEBUG, WIDTH, HEIGHT } from '../../constants.mjs';
 
 export default class Buffer {
   static create(id, w = null, h = null, color = null) {
@@ -31,12 +31,12 @@ export default class Buffer {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    if (DEBUG) Buffer._showAttributes(ctx);
+    if (DEBUG) Buffer.showAttributes(ctx);
 
     return ctx;
   }
 
-  static _showAttributes(ctx) {
+  static showAttributes(ctx) {
     const supported = ctx.getContextAttributes;
     const message = supported ? JSON.stringify(ctx.getContextAttributes()) : 'feature not supported';
   }

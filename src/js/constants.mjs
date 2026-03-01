@@ -16,7 +16,7 @@ export const BLUE   = '#0000ff';
 export const PURPLE = '#800080 ';
 export const ORANGE = '#ffa500';
 export const YELLOW = '#ffff00';
-export const CYAN   = '#00ffff';
+export const CYAN = '#00ffff';
 
 export const COLORS = [RED, PURPLE, WHITE, GREEN, YELLOW, BLUE, ORANGE, CYAN];
 
